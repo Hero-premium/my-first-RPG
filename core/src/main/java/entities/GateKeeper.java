@@ -1,0 +1,51 @@
+package entities;
+import java.util.Random;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+
+import combat.CombatLogic;
+public class GateKeeper extends CombatEntity {
+	GateKeeper() {
+	super(20,"GateKeeper", false, false, new Texture ("badlogic.jpg"), new Vector2 (200,200), 12f, new Vector2 (0,0), new Rectangle (0f,0f,64f,64f), 250,250,0,false,false,false) ;
+	} //  hp,maxhp,pd,gold,name,,,,
+	
+	@Override
+	public void taketurn(CombatEntity Player, Random rand) {
+		        
+		        int choice = !isfocused ? rand.nextInt(3) :  rand.nextInt(2) + 1 ;
+                int damage = 0;
+                  
+		        		   switch (choice) {
+		        		   case 0 :
+		        			   System.out.println(name + " used focus");
+		        			   isfocused = true ;
+			                    System.out.println(name + " is focusing on his attack... you may atack.") ; 
+			                    break ;
+		        			 
+		        				  
+		        		   case 1 :
+		        			   System.out.println(name + " used fireWand");
+		                damage += 2;
+		                CombatLogic.applyDamage(Player,this,damage,rand);
+		                    Player.setPoisonDur(3);
+		              
+		             break ;
+		   
+		               
+		        	       case 2: 
+		        	    	   System.out.println(name + " used Sheild");
+		            	damage += 2;
+		            	 CombatLogic.applyDamage(Player,this,damage,rand);
+		            	 isDefending = true;
+		                break;
+
+		                
+		        		   }   
+		 }
+		 }
+
+
+
+
