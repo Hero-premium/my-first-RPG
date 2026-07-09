@@ -76,6 +76,7 @@ public class MainGame implements Screen {
 			
 			
 		}
+		
 		objects.removeIf(object -> !object.isAlive);
 		
 		springTrap.springTrap(player);

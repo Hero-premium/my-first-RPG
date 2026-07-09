@@ -1,5 +1,6 @@
 package entities;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 public class Entity {
@@ -14,9 +15,9 @@ public class Entity {
 	public Vector2 velocity;
 	public Rectangle hitBox;
 	public float speed;
-	 
+    public Texture texture;
 	protected Entity(int gold, String name , boolean facingLeft, boolean onGround, boolean isAlive, Vector2 position, float speed, 
-	       Vector2 velocity, Rectangle hitBox) {  
+	       Vector2 velocity, Rectangle hitBox, Texture texture) {  
 
 		
 		this.gold = gold; 
@@ -28,6 +29,7 @@ public class Entity {
         this.velocity = velocity;
         this.speed = speed;
         this.hitBox = hitBox;
+        this.texture = texture;
 	}
 	
 	

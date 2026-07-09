@@ -3,11 +3,14 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Textures;
 
 import combat.CombatLogic;
 public class GateKeeper extends CombatEntity {
 	GateKeeper() {
-	super(20,"GateKeeper", false, false, true, new Vector2 (200,200), 12f, new Vector2 (0,0), new Rectangle (0f,0f,64f,64f), 250,250,0,false,false,false) ;
+	super(20,"GateKeeper", false, false, true, new Vector2 (200,200), 12f,
+			new Vector2 (0,0), new Rectangle (0f,0f,64f,64f),
+			250,250,0,false,false,false,Textures.player) ;
 	} //  hp,maxhp,pd,gold,name,,,,
 	
 	@Override

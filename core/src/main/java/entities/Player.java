@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Textures;
 
 import combat.CombatLogic;
 import world.Physics;
@@ -16,7 +17,7 @@ public class Player extends CombatEntity {
 		  super(10, "Hero", false, false, true, 
 	              new Vector2(0, 0), 128f, new Vector2(0, 0), 
 	              new Rectangle(0f, 0f, 50f, 60f),
-	              200, 200, 0, false, false, false); // combat stats
+	              200, 200, 0, false, false, false,Textures.player); // combat stats
 	}
      //  gold,name,                                                          texture         position at start    speed     velocity             hitbox           
 	
