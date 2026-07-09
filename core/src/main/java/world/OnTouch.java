@@ -1,7 +1,7 @@
-package com.mygdx.game;
+package world;
 
 import entities.Entity;
 
-public interface Intefer {
+public interface OnTouch {
 public void interact(Entity player) ;
 }

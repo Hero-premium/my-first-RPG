@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package world;
 
 import entities.Entity;
 

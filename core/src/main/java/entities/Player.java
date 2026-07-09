@@ -4,17 +4,17 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.Physics;
 
 import combat.CombatLogic;
+import world.Physics;
 
 public class Player extends CombatEntity {
+	public boolean isAllowedToMove = true;
 	public Player() {
-		  super(10, "Hero", false, false, new Texture("hollowKnight.png"), 
-	              new Vector2(180, 180), 128f, new Vector2(0, 0), 
+		  super(10, "Hero", false, false, true, 
+	              new Vector2(0, 0), 128f, new Vector2(0, 0), 
 	              new Rectangle(0f, 0f, 50f, 60f),
 	              200, 200, 0, false, false, false); // combat stats
 	}
@@ -54,7 +54,7 @@ public class Player extends CombatEntity {
 	           
 	           
 	           public void move(float deltaTime, Physics physics) {
-	      
+	      if (isAllowedToMove) {
 	       		if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 	       			facingLeft = true;
 	       			position.x -= speed * deltaTime;
@@ -70,7 +70,7 @@ public class Player extends CombatEntity {
 	       	    if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
 	       	    	velocity.x += facingLeft ? -450 : 450;       		   
 	       	    }
-	          	       	    
+	      }     	    
 	       	    
 	 }
 }

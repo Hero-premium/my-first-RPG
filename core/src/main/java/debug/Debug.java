@@ -1,44 +1,67 @@
 package debug;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import entities.Entity;
-import entities.Traps;
 
 public class Debug {
-    public boolean isdebug = true; 
-	public void showDebug(SpriteBatch batch,Entity player, BitmapFont debugfont,FitViewport viewport,ShapeRenderer shapeRenderer,Traps trap,OrthographicCamera camera) {
+	
+	BitmapFont debugfont = new BitmapFont() ;
+	ShapeRenderer shapeRenderer = new ShapeRenderer();
+	public boolean isdebug = true; 
+	static Vector2 textPos = new Vector2();
+	static Vector2 getCamera(OrthographicCamera camera, FitViewport viewport, int position) {
+		float x = camera.position.x - viewport.getWorldWidth() / 2 + 20;
+        float y = camera.position.y + viewport.getWorldHeight() / 2 - position;
+        return textPos.set(x,y);
+	}
+	
+	public void showDebug(SpriteBatch batch, Entity player, FitViewport viewport, List<Entity> objects, OrthographicCamera camera) {
+		textPos = getCamera(camera,viewport,0);
 		if (isdebug) {
 		batch.begin();
-		debugfont.draw(batch, "Player x " + player.position.x + " / Player y " + player.position.y , 20f, viewport.getWorldHeight() - 20f);
-		debugfont.draw(batch, "FPS " + Gdx.graphics.getFramesPerSecond(), 20f, viewport.getWorldHeight() - 35f);
-		debugfont.draw(batch, "Player velocityX " + player.velocity.x + " / Player velocityY " + player.velocity.y , 20f, viewport.getWorldHeight() - 50f);
+		
+		debugfont.draw(batch, "Player x " + player.position.x + " / Player y " + player.position.y,
+				textPos.x,
+		     	textPos.y = getCamera(camera,viewport,20).y);
+		
+		debugfont.draw(batch, "FPS " + Gdx.graphics.getFramesPerSecond(),
+				textPos.x,
+		     	textPos.y = getCamera(camera,viewport,35).y);
+		debugfont.draw(batch, "Player velocityX " + player.velocity.x + " / Player velocityY " + player.velocity.y ,
+				textPos.x,
+		     	textPos.y = getCamera(camera,viewport,50).y);
+		
         batch.end();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 		
 		shapeRenderer.setColor(Color.RED);
+		
+		for (Entity object : objects) {
 		shapeRenderer.rect(
-		    player.position.x,
-		    player.position.y,
-		    player.hitBox.width,
-		    player.hitBox.height
+		    object.position.x,
+		    object.position.y,
+		    object.hitBox.width,
+		    object.hitBox.height
 		);
 		
-		shapeRenderer.rect(
-			    trap.position.x,
-			    trap.position.y,
-			    trap.hitBox.width,
-			    trap.hitBox.height
-			);
-  
+		}
 		shapeRenderer.end();
 	}
 	}
+
+	public void dispose () {
+		debugfont.dispose();
+		shapeRenderer.dispose();
+}
 }
