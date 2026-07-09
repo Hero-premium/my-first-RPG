@@ -2,6 +2,7 @@ package world;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Textures;
 
 import entities.Entity;
 import entities.Player;
@@ -9,7 +10,7 @@ import entities.Player;
 public class Touch extends Entity{
     
 	public Touch() {
-	super( 10, "Hero", false, false, true,  new Vector2 (400,50), 0, new Vector2 (0,0), new Rectangle (0f,0f,50f,60f)) ;
+	super( 1, "Hero", false, false, true,  new Vector2 (400,50), 0, new Vector2 (0,0), new Rectangle (0f,0f,50f,60f), Textures.closedSpringTrap) ;
 	}
 	 //   gold,name                                     speed      position at start        velocity             hitbox            
 		boolean playerisinside = false;
@@ -19,16 +20,12 @@ public class Touch extends Entity{
 		}
 		
 		public void springTrap(Entity entity) {
-			 if (!isEntityInside(entity)) {
-				 playerisinside = false;
-			 }
-			 if (playerisinside) {
-				 return; }
+			 if (gold < 0) return; 
 			 
 			 if (isEntityInside(entity)) {
-				 playerisinside = true;
-				 entity.velocity.y += 1000;
-				  
+				 gold--;
+				 entity.velocity.y += 100;
+				 texture = Textures.openedSpringTrap;
 			 }
 			
 		}

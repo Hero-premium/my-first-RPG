@@ -37,15 +37,18 @@ public class MainGame implements Screen {
 		player = new Player();
 		springTrap = new Touch();
 		stopPlayer = new Touch();
+		stopPlayer.position.add(50,100);
 		debug = new Debug();
 	    physics = new Physics();
 		batch = new SpriteBatch();
 		floorLevel = 50;
 		
+		
 		objects = new ArrayList<Entity>();
 		objects.add(player);
 		objects.add(springTrap);
 		objects.add(stopPlayer);
+		
 	}
 	
 	@Override
@@ -99,7 +102,13 @@ public class MainGame implements Screen {
 			    !player.facingLeft,         // 10. Flip horizontally? (True if NOT facing right)
 			    false                       // 11. Flip vertically? (False, keep right-side up)
 			);
-		 
+		batch.draw(
+			    springTrap.texture,             // 1. The texture
+			    springTrap.position.x,          // 2. Target X on screen
+			    springTrap.position.y,          // 3. Target Y on screen
+			    64f,                        // 4. Width to draw on screen (adjust as needed)
+			    64f                        // 5. Height to draw on screen (adjust as needed)
+			    );
 		batch.end();
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
