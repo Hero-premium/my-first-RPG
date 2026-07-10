@@ -7,10 +7,10 @@ import com.mygdx.game.Textures;
 import entities.Entity;
 import entities.Player;
 
-public class Touch extends Entity{
+public class Touch extends Entity {
     
 	public Touch() {
-	super( 1, "Hero", false, false, true,  new Vector2 (400,50), 0, new Vector2 (0,0), new Rectangle (0f,0f,50f,60f), Textures.closedSpringTrap) ;
+	super( 1, "Hero", false, false, true, 0, new Vector2 (0,0), new Rectangle (400f,500f,50f,60f), Textures.closedSpringTrap) ;
 	}
 	 //   gold,name                                     speed      position at start        velocity             hitbox            
 		boolean playerisinside = false;
@@ -33,6 +33,13 @@ public class Touch extends Entity{
 			if (isEntityInside(entity)) {
 				entity.isAllowedToMove = false;
 				isAlive = false;
+			}
+		}
+		
+		public void wall(Entity entity) {
+			if (isEntityInside(entity)) {
+				entity.hitBox.x = hitBox.x - entity.hitBox.width;
+				
 			}
 		}
 }

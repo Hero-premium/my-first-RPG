@@ -14,8 +14,8 @@ import world.Physics;
 public class Player extends CombatEntity {
 	public boolean isAllowedToMove = true;
 	public Player() {
-		  super(10, "Hero", false, false, true, 
-	              new Vector2(0, 0), 128f, new Vector2(0, 0), 
+		  super(10, "Hero", false, false, true 
+	              , 128f, new Vector2(0, 0), 
 	              new Rectangle(0f, 0f, 50f, 60f),
 	              200, 200, 0, false, false, false,Textures.player); // combat stats
 	}
@@ -53,23 +53,32 @@ public class Player extends CombatEntity {
 	            CombatLogic.applyDamage(enemy,this,damage,rand);
 	        	}
 	           
+	           //--------- this handle movement ----------//
 	           
+	           float velocityClamp() {
+	        	   if (facingLeft) {
+	        		  return Math.max(velocity.x , -5000);
+	        	   } else {
+	        		   return Math.min(velocity.x, 5000);
+	        	   }
+	           }
 	           public void move(float deltaTime, Physics physics) {
 	      if (isAllowedToMove) {
 	       		if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 	       			facingLeft = true;
-	       			position.x -= speed * deltaTime;
+	       			hitBox.x -= speed * deltaTime;
 	       		}
 	       		if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 	       			facingLeft = false;
-	       			position.x += speed * deltaTime;
+	       			hitBox.x += speed * deltaTime;
 	       		}
 	         	if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && onGround) {
 	       		    velocity.y = 450;
 	       	        onGround = false;
 	         	}
 	       	    if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-	       	    	velocity.x += facingLeft ? -450 : 450;       		   
+	       	    	velocity.x += facingLeft ? -450 : 450;  
+	       	    	velocity.x = velocityClamp();
 	       	    }
 	      }     	    
 	       	    

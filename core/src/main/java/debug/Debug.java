@@ -17,7 +17,7 @@ public class Debug {
 	
 	BitmapFont debugfont = new BitmapFont() ;
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
-	public boolean isdebug = true; 
+	public boolean isdebug = false; 
 	static Vector2 textPos = new Vector2();
 	static Vector2 getCamera(OrthographicCamera camera, FitViewport viewport, int position) {
 		float x = camera.position.x - viewport.getWorldWidth() / 2 + 20;
@@ -30,7 +30,7 @@ public class Debug {
 		if (isdebug) {
 		batch.begin();
 		
-		debugfont.draw(batch, "Player x " + player.position.x + " / Player y " + player.position.y,
+		debugfont.draw(batch, "Player x " + player.hitBox.x + " / Player y " + player.hitBox.y,
 				textPos.x,
 		     	textPos.y = getCamera(camera,viewport,20).y);
 		
@@ -49,8 +49,8 @@ public class Debug {
 		
 		for (Entity object : objects) {
 		shapeRenderer.rect(
-		    object.position.x,
-		    object.position.y,
+		    object.hitBox.x,
+		    object.hitBox.y,
 		    object.hitBox.width,
 		    object.hitBox.height
 		);

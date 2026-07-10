@@ -3,7 +3,7 @@ package entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-public class Entity {
+public abstract class Entity {
     
 	
 	public int gold;
@@ -11,12 +11,11 @@ public class Entity {
 	public boolean facingLeft;
 	public boolean onGround ;
 	public boolean isAlive;
-	public Vector2 position;
 	public Vector2 velocity;
 	public Rectangle hitBox;
 	public float speed;
     public Texture texture;
-	protected Entity(int gold, String name , boolean facingLeft, boolean onGround, boolean isAlive, Vector2 position, float speed, 
+	protected Entity(int gold, String name , boolean facingLeft, boolean onGround, boolean isAlive, float speed, 
 	       Vector2 velocity, Rectangle hitBox, Texture texture) {  
 
 		
@@ -25,16 +24,9 @@ public class Entity {
         this.facingLeft = facingLeft;
         this.onGround = onGround;
         this.isAlive = isAlive;
-        this.position = position;
         this.velocity = velocity;
         this.speed = speed;
         this.hitBox = hitBox;
         this.texture = texture;
 	}
-	
-	
-	
-	 public void syncHitBox(Rectangle hitBox) {
-		 hitBox.set(this.position.x,this.position.y,this.hitBox.width,this.hitBox.height);
-	 }
 }

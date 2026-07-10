@@ -30,23 +30,26 @@ public class MainGame implements Screen {
 	FitViewport viewport;
 	OrthographicCamera camera;
 	Touch springTrap;
+	Touch wall;
 	Touch stopPlayer;
 	List<Entity> objects;
 	
 	public MainGame(){
 		player = new Player();
-		springTrap = new Touch();
+		//springTrap = new Touch();
+		wall = new Touch();
 		stopPlayer = new Touch();
-		stopPlayer.position.add(50,100);
 		debug = new Debug();
 	    physics = new Physics();
 		batch = new SpriteBatch();
 		floorLevel = 50;
-		
+		wall.hitBox.setSize(200 , 700);
+		stopPlayer.hitBox.set(-350,50,200,700);
 		
 		objects = new ArrayList<Entity>();
 		objects.add(player);
-		objects.add(springTrap);
+		//objects.add(springTrap);
+		objects.add(wall);
 		objects.add(stopPlayer);
 		
 	}
@@ -63,25 +66,22 @@ public class MainGame implements Screen {
 		ScreenUtils.clear(0, 0, 0, 1);
 		
 		
-		final float deltaTime = Gdx.graphics.getDeltaTime();
-		
-		player.move(deltaTime, physics);
+		player.move(delta, physics);
 		
 		
 		for (Entity object : objects) {
 			
-			object.syncHitBox(object.hitBox);
-			physics.airRis(object, deltaTime);
-			physics.gravity(object, deltaTime, floorLevel);
-			
+			physics.airRis(object, delta);
+			physics.gravity(object, delta, floorLevel);
 			
 		}
 		
 		objects.removeIf(object -> !object.isAlive);
-		
-		springTrap.springTrap(player);
+		wall.wall(player);
+		//springTrap.springTrap(player);
 		stopPlayer.stopPLayerMovment(player);
-		camera.position.set(player.position.x + 350, 300 ,0);
+		
+		camera.position.set(player.hitBox.x + 350, 300 ,0);
 		camera.update();
 		
 		batch.setProjectionMatrix(camera.combined);
@@ -89,27 +89,26 @@ public class MainGame implements Screen {
 		
 		batch.begin();
 		
-		batch.draw(Textures.backGround, player.position.x - 50 ,0, viewport.getWorldWidth(), viewport.getWorldHeight());
+		batch.draw(Textures.backGround, player.hitBox.x - 50 ,0, viewport.getWorldWidth(), viewport.getWorldHeight());
 		batch.draw(
-			    Textures.player,             // 1. The texture
-			    player.position.x,          // 2. Target X on screen
-			    player.position.y,          // 3. Target Y on screen
+			    player.texture,             // 1. The texture
+			    player.hitBox.x,          // 2. Target X on screen
+			    player.hitBox.y,          // 3. Target Y on screen
 			    64f,                        // 4. Width to draw on screen (adjust as needed)
 			    64f,                        // 5. Height to draw on screen (adjust as needed)
 			    0,                          // 6. Source X start (left side of texture)
 			    0,                          // 7. Source Y start (top side of texture)
-			    Textures.player.getWidth(),             // 8. Source Width (use full texture width)
-			    Textures.player.getHeight(),            // 9. Source Height (use full texture height)
+			    player.texture.getWidth(),             // 8. Source Width (use full texture width)
+			    player.texture.getHeight(),            // 9. Source Height (use full texture height)
 			    !player.facingLeft,         // 10. Flip horizontally? (True if NOT facing right)
 			    false                       // 11. Flip vertically? (False, keep right-side up)
 			);
-		batch.draw(
-			    springTrap.texture,             // 1. The texture
-			    springTrap.position.x,          // 2. Target X on screen
-			    springTrap.position.y,          // 3. Target Y on screen
-			    64f,                        // 4. Width to draw on screen (adjust as needed)
-			    64f                        // 5. Height to draw on screen (adjust as needed)
-			    );
+			/*
+			 * batch.draw( springTrap.texture, // 1. The texture springTrap.position.x, //
+			 * 2. Target X on screen springTrap.position.y, // 3. Target Y on screen 64f, //
+			 * 4. Width to draw on screen (adjust as needed) 64f // 5. Height to draw on
+			 * screen (adjust as needed) );
+			 */
 		batch.end();
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
@@ -142,9 +141,7 @@ public class MainGame implements Screen {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		Textures.backGround.dispose();
-		Textures.player.dispose();
 		debug.dispose();
-		//trap.texture.dispose();
+		Textures.dispose();
 	}
 }

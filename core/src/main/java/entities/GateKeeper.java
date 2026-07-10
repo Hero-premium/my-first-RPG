@@ -8,10 +8,14 @@ import com.mygdx.game.Textures;
 import combat.CombatLogic;
 public class GateKeeper extends CombatEntity {
 	GateKeeper() {
-	super(20,"GateKeeper", false, false, true, new Vector2 (200,200), 12f,
-			new Vector2 (0,0), new Rectangle (0f,0f,64f,64f),
+	super(20,"GateKeeper", false, false, true, 12f,
+			new Vector2 (0,0), new Rectangle (200f,200f,64f,64f),
 			250,250,0,false,false,false,Textures.player) ;
 	} //  hp,maxhp,pd,gold,name,,,,
+	
+	// TODO refactor the moves into classes
+	// TODO replace the switches from : to ->
+	// Priority: low
 	
 	@Override
 	public void taketurn(CombatEntity Player, Random rand) {

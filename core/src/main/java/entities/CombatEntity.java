@@ -17,10 +17,10 @@ public class CombatEntity extends Entity {
     
 
     public CombatEntity(int gold, String name, boolean facingLeft, boolean onGround, boolean isAlive,
-                          Vector2 position, float speed, Vector2 velocity, 
+                           float speed, Vector2 velocity, 
                          Rectangle hitbox, int hp, int maxhp, int poisonDuration, 
                          boolean isDodging, boolean isDefending, boolean isfocused,Texture texture) {
-        super(gold, name, facingLeft, onGround, isAlive, position, speed, velocity, hitbox,texture);
+        super(gold, name, facingLeft, onGround, isAlive, speed, velocity, hitbox,texture);
         
         this.hp = hp;
         this.maxhp = maxhp;

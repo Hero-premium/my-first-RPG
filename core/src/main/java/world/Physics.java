@@ -11,10 +11,10 @@ public class Physics {
 		entity.velocity.y += gravity * deltaTime;
 
 		
-		entity.position.y += entity.velocity.y * deltaTime;
+		entity.hitBox.y += entity.velocity.y * deltaTime;
 
-		if (entity.position.y < floorLevel) {
-		    entity.position.y = floorLevel; 
+		if (entity.hitBox.y < floorLevel) {
+			entity.hitBox.y = floorLevel; 
 		    entity.velocity.y = 0f;  
 		    entity.onGround = true;
 		}
@@ -34,9 +34,10 @@ public class Physics {
 			entity.velocity.x = 0;
 	        return;
 	    }
+		
 	       entity.velocity.x -= air * deltaTime ;
 		}
-		   entity.position.x += entity.velocity.x * deltaTime;
+	       entity.hitBox.x += entity.velocity.x * deltaTime;
 
 	}
 	
