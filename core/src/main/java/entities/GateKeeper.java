@@ -49,7 +49,12 @@ public class GateKeeper extends CombatEntity {
 
 		                
 		        		   }   
+    
 		 }
+	
+    public void dialog() {
+    	String[] dialog = {};
+    }
 		 }
 
 

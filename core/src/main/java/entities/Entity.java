@@ -34,9 +34,7 @@ public abstract class Entity {
 	/**
 	 * clapms all entities velocity to 5000
 	 */
-	//FIXME add a proper y velocity cap
-	 public void VelocityClamp() {
-	        //velocity.x  = (facingLeft)  ? Math.max(velocity.x , -5000) :  Math.min(velocity.x, 5000); 
+	 public void velocityClamp() {
 		    velocity.x = Math.clamp(velocity.x, -5000, 5000);
 			velocity.y = Math.clamp(velocity.y, -5000, 5000);
 	           }
