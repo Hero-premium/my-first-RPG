@@ -52,8 +52,13 @@ public class GateKeeper extends CombatEntity {
     
 		 }
 	
-    public void dialog() {
-    	String[] dialog = {};
+    public void dialog(Entity pl) {
+    	@SuppressWarnings("unused")
+    	String[] dialog = {"gatekeeper: welcome to this dungeon; but coming here was a big mistake! as there's an angry dragon ready to hunt whoever enters.",
+    			"gatekeeper: what do I call you, hunter?",
+    			"gatekeeper: but " + pl.name + ", that is such a dangerous mission, how are you planning on doing it?",
+    			"gatekeeper: and what are they...?",
+    			"gatekeeper: oh you shouldn't have told me that, as I'll be your first foe, I'll defend my lord with my life!"};
     }
 		 }
 

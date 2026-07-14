@@ -120,6 +120,7 @@ public class MainGame implements Screen {
 			 */
 		batch.end();
 		
+		//TEMP for me to debug remove when you send to someone
 		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
    	    	debug.isdebug = !debug.isdebug;
    	    
