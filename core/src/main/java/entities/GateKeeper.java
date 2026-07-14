@@ -13,7 +13,7 @@ public class GateKeeper extends CombatEntity {
 			250,250,0,false,false,false,Textures.player) ;
 	} //  hp,maxhp,pd,gold,name,,,,
 	
-	// TODO refactor the moves into classes
+	// TODO refactor the moves into methods
 	// TODO replace the switches from : to ->
 	// Priority: low
 	
@@ -54,11 +54,12 @@ public class GateKeeper extends CombatEntity {
 	
     public void dialog(Entity pl) {
     	@SuppressWarnings("unused")
-    	String[] dialog = {"gatekeeper: welcome to this dungeon; but coming here was a big mistake! as there's an angry dragon ready to hunt whoever enters.",
-    			"gatekeeper: what do I call you, hunter?",
-    			"gatekeeper: but " + pl.name + ", that is such a dangerous mission, how are you planning on doing it?",
-    			"gatekeeper: and what are they...?",
-    			"gatekeeper: oh you shouldn't have told me that, as I'll be your first foe, I'll defend my lord with my life!"};
+    	String[] dialog = {
+/*1*/    			"gatekeeper: welcome to this dungeon; but coming here was a big mistake! as there's an angry dragon ready to hunt whoever enters.",
+/*2*/    			"gatekeeper: what do I call you, hunter?",
+/*3*/    			"gatekeeper: but " + pl.name + ", that is such a dangerous mission, how are you planning on doing it?",
+/*4*/    			"gatekeeper: and what are they...?",
+/*5*/    			"gatekeeper: oh you shouldn't have told me that, as I'll be your first foe, I'll defend my lord with my life!"};
     }
 		 }
 

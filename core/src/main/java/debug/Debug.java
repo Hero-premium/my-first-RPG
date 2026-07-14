@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import entities.Entity;
+import touchables.Touchable;
 
 public class Debug {
 	
@@ -25,7 +26,7 @@ public class Debug {
         return textPos.set(x,y);
 	}
 	
-	public void showDebug(SpriteBatch batch, Entity player, FitViewport viewport, List<Entity> objects, OrthographicCamera camera) {
+	public void showDebug(SpriteBatch batch, Entity player, FitViewport viewport, List<Entity> objects, List<Touchable> touchables, OrthographicCamera camera) {
 		textPos = getCamera(camera,viewport,0);
 		if (isdebug) {
 		batch.begin();
@@ -56,6 +57,13 @@ public class Debug {
 		);
 		
 		}
+		for (Touchable object : touchables) {
+			shapeRenderer.rect(
+				    object.hitBox.x,
+				    object.hitBox.y,
+				    object.hitBox.width,
+				    object.hitBox.height
+				);}
 		shapeRenderer.end();
 	}
 	}

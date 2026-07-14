@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Textures;
@@ -16,8 +17,9 @@ import debug.Debug;
 import entities.Entity;
 import entities.GateKeeper;
 import entities.Player;
+import touchables.Touchable;
+import touchables.Wall;
 import world.Physics;
-import world.Touch;
 
 
 public class MainGame implements Screen {
@@ -31,16 +33,15 @@ public class MainGame implements Screen {
 	final static float floorLevel = 50 ; 
 	FitViewport viewport;
 	OrthographicCamera camera;
-	Touch springTrap;
-	Touch wall;
-	Touch stopPlayer;
+	Wall wall;
+	Touchable stopPlayer;
 	List<Entity> objects;
+	List<Touchable> touchables;
 	
 	public MainGame(){
 		player = new Player();
-		springTrap = new Touch();
-		wall = new Touch();
-		stopPlayer = new Touch();
+		wall = new Wall();
+		stopPlayer = new Touchable(Textures.PlaceHolder,1,0, (new Rectangle(100, 100,200,700)));
 		gatekeeper = new GateKeeper();
 		
 		debug = new Debug();
@@ -51,10 +52,10 @@ public class MainGame implements Screen {
 		
 		objects = new ArrayList<Entity>();
 		objects.add(player);
-		//objects.add(springTrap);
-		objects.add(wall);
-		objects.add(stopPlayer);
 		objects.add(gatekeeper);
+		touchables = new ArrayList<Touchable>();
+		touchables.add(wall);
+		touchables.add(stopPlayer);
 		
 	}
 	
@@ -81,14 +82,20 @@ public class MainGame implements Screen {
 		}
 		
 		objects.removeIf(object -> !object.isAlive);
-		wall.wall(player);
-		//springTrap.springTrap(player);
-		stopPlayer.stopPlayerMovement(player);
 		
-		// TODO make this the way to trigger the gate keeper dialog
-		if (stopPlayer.stopPlayerMovement(player)) {
+		// FIXME add a way to loop through all entities 
+        for (Touchable object : touchables) {
+			object.update(player);
+		}
+        
+        touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
+        
+		if (stopPlayer.isEntityInside(player)) {
 			
 		}
+		
+		// TODO make this the way to trigger the gatekeeper dialog after adding it TvT
+		
 		
 		camera.position.set(player.hitBox.x + 350, 300 ,0);
 		camera.update();
@@ -112,12 +119,16 @@ public class MainGame implements Screen {
 			    !player.facingLeft,         // 10. Flip horizontally? (True if NOT facing right)
 			    false                       // 11. Flip vertically? (False, keep right-side up)
 			);
-			/*
-			 * batch.draw( springTrap.texture, // 1. The texture springTrap.position.x, //
-			 * 2. Target X on screen springTrap.position.y, // 3. Target Y on screen 64f, //
-			 * 4. Width to draw on screen (adjust as needed) 64f // 5. Height to draw on
-			 * screen (adjust as needed) );
-			 */
+		for (Touchable object : touchables) {
+        batch.draw(
+        		    object.texture,
+				    object.hitBox.x,
+				    object.hitBox.y,
+				    object.hitBox.width,
+				    object.hitBox.height
+				);
+		}
+			
 		batch.end();
 		
 		//TEMP for me to debug remove when you send to someone
@@ -125,7 +136,7 @@ public class MainGame implements Screen {
    	    	debug.isdebug = !debug.isdebug;
    	    
    	   }
-		debug.showDebug(batch, player, viewport, objects, camera);
+		debug.showDebug(batch, player, viewport, objects, touchables, camera);
 		
 	
 	}
