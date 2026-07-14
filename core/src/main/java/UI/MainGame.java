@@ -77,16 +77,16 @@ public class MainGame implements Screen {
 			
 			physics.airRis(object, delta);
 			physics.gravity(object, delta, floorLevel);
-			object.VelocityClamp();
+			object.velocityClamp();
 		}
 		
 		objects.removeIf(object -> !object.isAlive);
 		wall.wall(player);
 		//springTrap.springTrap(player);
-		stopPlayer.stopPLayerMovment(player);
+		stopPlayer.stopPlayerMovement(player);
 		
 		// TODO make this the way to trigger the gate keeper dialog
-		if (stopPlayer.stopPLayerMovment(player)) {
+		if (stopPlayer.stopPlayerMovement(player)) {
 			
 		}
 		

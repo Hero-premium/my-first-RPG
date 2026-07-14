@@ -20,7 +20,7 @@ public class Touch extends Entity {
 		}
 		
 		public void springTrap(Entity entity) {
-			 if (gold < 0) return; 
+			 if (gold <= 0) return; 
 			 
 			 if (isEntityInside(entity)) {
 				 gold--;
@@ -29,16 +29,17 @@ public class Touch extends Entity {
 			 }
 			
 		}
-		public boolean stopPLayerMovment(Player entity) {
-			if (isEntityInside(entity)) {
+		
+		public boolean stopPlayerMovement(Player entity) {
+			if (!isEntityInside(entity)) {
+				return false;
+			}
 				entity.isAllowedToMove = false;
 				isAlive = false;
 				return true;
-			} else {
-			return false;
-		}
 		}
 		
+		//TODO implement a wall that acts like a wall from all sides and remove this
 		public void wall(Entity entity) {
 			if (isEntityInside(entity)) {
 				entity.hitBox.x = hitBox.x - entity.hitBox.width;
