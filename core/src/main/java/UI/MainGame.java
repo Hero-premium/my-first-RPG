@@ -14,6 +14,7 @@ import com.mygdx.game.Textures;
 
 import debug.Debug;
 import entities.Entity;
+import entities.GateKeeper;
 import entities.Player;
 import world.Physics;
 import world.Touch;
@@ -24,9 +25,10 @@ public class MainGame implements Screen {
 	
 	SpriteBatch batch;
 	Player player;
+	GateKeeper gatekeeper;
 	Debug debug;
 	Physics physics;
-	float floorLevel; 
+	final static float floorLevel = 50 ; 
 	FitViewport viewport;
 	OrthographicCamera camera;
 	Touch springTrap;
@@ -36,21 +38,23 @@ public class MainGame implements Screen {
 	
 	public MainGame(){
 		player = new Player();
-		//springTrap = new Touch();
+		springTrap = new Touch();
 		wall = new Touch();
 		stopPlayer = new Touch();
+		gatekeeper = new GateKeeper();
+		
 		debug = new Debug();
 	    physics = new Physics();
 		batch = new SpriteBatch();
-		floorLevel = 50;
-		wall.hitBox.setSize(200 , 700);
-		stopPlayer.hitBox.set(-350,50,200,700);
+		stopPlayer.hitBox.setSize(200 , 700);
+		wall.hitBox.set(-350,50,200,700);
 		
 		objects = new ArrayList<Entity>();
 		objects.add(player);
 		//objects.add(springTrap);
 		objects.add(wall);
 		objects.add(stopPlayer);
+		objects.add(gatekeeper);
 		
 	}
 	
@@ -66,20 +70,25 @@ public class MainGame implements Screen {
 		ScreenUtils.clear(0, 0, 0, 1);
 		
 		
-		player.move(delta, physics);
+		player.move(delta);
 		
 		
 		for (Entity object : objects) {
 			
 			physics.airRis(object, delta);
 			physics.gravity(object, delta, floorLevel);
-			
+			object.VelocityClamp();
 		}
 		
 		objects.removeIf(object -> !object.isAlive);
 		wall.wall(player);
 		//springTrap.springTrap(player);
 		stopPlayer.stopPLayerMovment(player);
+		
+		// TODO make this the way to trigger the gate keeper dialog
+		if (stopPlayer.stopPLayerMovment(player)) {
+			
+		}
 		
 		camera.position.set(player.hitBox.x + 350, 300 ,0);
 		camera.update();

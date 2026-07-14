@@ -3,9 +3,11 @@ package entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+
 public abstract class Entity {
     
-	
+
 	public int gold;
 	public String name ;
 	public boolean facingLeft;
@@ -16,7 +18,7 @@ public abstract class Entity {
 	public float speed;
     public Texture texture;
 	protected Entity(int gold, String name , boolean facingLeft, boolean onGround, boolean isAlive, float speed, 
-	       Vector2 velocity, Rectangle hitBox, Texture texture) {  
+	                 Vector2 velocity, Rectangle hitBox, Texture texture) {  
 
 		
 		this.gold = gold; 
@@ -29,4 +31,16 @@ public abstract class Entity {
         this.hitBox = hitBox;
         this.texture = texture;
 	}
+	/**
+	 * clapms all entities velocity to 5000
+	 */
+	//FIXME add a proper y velocity cap
+	 public void VelocityClamp() {
+	        //velocity.x  = (facingLeft)  ? Math.max(velocity.x , -5000) :  Math.min(velocity.x, 5000); 
+		    velocity.x = Math.clamp(velocity.x, -5000, 5000);
+			velocity.y = Math.clamp(velocity.y, -5000, 5000);
+	           }
+	 // to be overridden by other classes
+	 public void passiveAbility() {}
+	 
 }

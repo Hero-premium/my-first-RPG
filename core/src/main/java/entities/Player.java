@@ -9,10 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Textures;
 
 import combat.CombatLogic;
-import world.Physics;
 
 public class Player extends CombatEntity {
 	public boolean isAllowedToMove = true;
+	
+	
+	
 	public Player() {
 		  super(10, "Hero", false, false, true 
 	              , 128f, new Vector2(0, 0), 
@@ -21,7 +23,6 @@ public class Player extends CombatEntity {
 	}
      //  gold,name,                                                          texture         position at start    speed     velocity             hitbox           
 	
-		
 		
 	          public void kick(Random rand, CombatEntity enemy) {
 		        System.out.println(name + " used kick");
@@ -55,14 +56,9 @@ public class Player extends CombatEntity {
 	           
 	           //--------- this handle movement ----------//
 	           
-	           float velocityClamp() {
-	        	   if (facingLeft) {
-	        		  return Math.max(velocity.x , -5000);
-	        	   } else {
-	        		   return Math.min(velocity.x, 5000);
-	        	   }
-	           }
-	           public void move(float deltaTime, Physics physics) {
+	          
+	          
+	           public void move(float deltaTime) {
 	      if (isAllowedToMove) {
 	       		if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 	       			facingLeft = true;
@@ -78,7 +74,7 @@ public class Player extends CombatEntity {
 	         	}
 	       	    if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
 	       	    	velocity.x += facingLeft ? -450 : 450;  
-	       	    	velocity.x = velocityClamp();
+	       	    	
 	       	    }
 	      }     	    
 	       	    

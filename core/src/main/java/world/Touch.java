@@ -12,11 +12,11 @@ public class Touch extends Entity {
 	public Touch() {
 	super( 1, "Hero", false, false, true, 0, new Vector2 (0,0), new Rectangle (400f,500f,50f,60f), Textures.closedSpringTrap) ;
 	}
-	 //   gold,name                                     speed      position at start        velocity             hitbox            
+	 //   gold,name                    speed           velocity             hitbox                   
 		boolean playerisinside = false;
 		
 		 boolean isEntityInside(Entity entity) {
-			return  (entity.hitBox.overlaps(hitBox));
+			return (entity.hitBox.overlaps(hitBox));
 		}
 		
 		public void springTrap(Entity entity) {
@@ -29,11 +29,14 @@ public class Touch extends Entity {
 			 }
 			
 		}
-		public void stopPLayerMovment(Player entity) {
+		public boolean stopPLayerMovment(Player entity) {
 			if (isEntityInside(entity)) {
 				entity.isAllowedToMove = false;
 				isAlive = false;
-			}
+				return true;
+			} else {
+			return false;
+		}
 		}
 		
 		public void wall(Entity entity) {
@@ -42,4 +45,5 @@ public class Touch extends Entity {
 				
 			}
 		}
+		
 }
