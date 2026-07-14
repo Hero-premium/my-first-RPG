@@ -13,6 +13,6 @@ public class Textures {
 		player.dispose();
 		backGround.dispose();
 		closedSpringTrap.dispose();
-		closedSpringTrap.dispose();
+		openedSpringTrap.dispose();
 	}
 }
