@@ -6,10 +6,8 @@ import UI.MainGame;
 
 public class Main extends Game {
 
-    @Override
-    public void create() {
-        this.setScreen(new MainGame());
-    }
+	@Override
+	public void create() {
+		this.setScreen(new MainGame());
+	}
 }
-    
-    
