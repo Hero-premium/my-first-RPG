@@ -11,10 +11,20 @@ import com.mygdx.game.Textures;
 import combat.CombatLogic;
 
 public class Player extends CombatEntity {
-	public boolean isAllowedToMove = true;
+	private boolean isAllowedToMove = true;
 	
 	
 	
+	public boolean isAllowedToMove() {
+		return isAllowedToMove;
+	}
+
+
+	public void setAllowedToMove(boolean isAllowedToMove) {
+		this.isAllowedToMove = isAllowedToMove;
+	}
+
+
 	public Player() {
 		  super(10, "Hero", false, false, true 
 	              , 128f, new Vector2(0, 0), 

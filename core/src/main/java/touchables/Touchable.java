@@ -11,7 +11,7 @@ public class Touchable {
    public int MAX_USAGE;
    public int useages;
    public Rectangle hitBox;
-   public boolean isEntityInside = false;
+   public boolean EntityInside = false;
    
 	public Touchable(Texture texture, int MAX_USAGE, int useages, Rectangle hitBox) {
 	

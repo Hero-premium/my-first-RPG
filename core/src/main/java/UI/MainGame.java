@@ -53,6 +53,7 @@ public class MainGame implements Screen {
 		objects = new ArrayList<Entity>();
 		objects.add(player);
 		objects.add(gatekeeper);
+		
 		touchables = new ArrayList<Touchable>();
 		touchables.add(wall);
 		touchables.add(stopPlayer);
@@ -87,6 +88,10 @@ public class MainGame implements Screen {
         for (Touchable object : touchables) {
 			object.update(player);
 		}
+        
+        if (stopPlayer.isEntityInside(player)) {
+        	player.setAllowedToMove(false);
+        }
         
         touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
         

@@ -17,6 +17,7 @@ public abstract class Entity {
 	public Rectangle hitBox;
 	public float speed;
     public Texture texture;
+    
 	protected Entity(int gold, String name , boolean facingLeft, boolean onGround, boolean isAlive, float speed, 
 	                 Vector2 velocity, Rectangle hitBox, Texture texture) {  
 
