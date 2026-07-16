@@ -31,6 +31,6 @@ public class CombatLogic {
 			target.poisonDuration--;
 		}
 		damage *= 10;
-		target.modifyHp(damage);
+		target.modifyHp(-damage);
 	}
 }
