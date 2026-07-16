@@ -25,7 +25,7 @@ public class GateKeeper extends CombatEntity {
 				250, 0, false, false, false, getDialog(), Textures.player);
 	}
 
-	int damage = 0;
+	private int damage = 0;
 
 	void focus() {
 		System.out.println(name + " used focus");
@@ -57,7 +57,7 @@ public class GateKeeper extends CombatEntity {
 		case 1 -> fireWand(Player, rand);
 		case 2 -> sheild(Player, rand);
 		}
-
+        damage = 0;
 	}
 
 }
