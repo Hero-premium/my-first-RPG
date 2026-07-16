@@ -57,7 +57,6 @@ public class MainGame implements Screen {
 		touchables.add(wall);
 		touchables.add(stopPlayer);
 
-		player.setHp(-1);
 	}
 
 	@Override
@@ -97,7 +96,6 @@ public class MainGame implements Screen {
          WorldUtil.startDialog(gatekeeper, player);
 		}
 
-		// TODO make this the way to trigger the gatekeeper dialog after adding it TvT
 
 		camera.position.set(player.hitBox.x + 350, 300, 0);
 		camera.update();

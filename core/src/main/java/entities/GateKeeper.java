@@ -17,7 +17,7 @@ public class GateKeeper extends CombatEntity {
 				/* 3 */ "gatekeeper: but , that is such a dangerous mission, how are you planning on doing it?",
 				/* 4 */ "gatekeeper: and what are they...?",
 				/* 5 */ "gatekeeper: oh you shouldn't have told me that, as I'll be your first foe, I'll defend my lord with my life!" };
-	
+
 	}
 
 	public GateKeeper() {
@@ -25,37 +25,39 @@ public class GateKeeper extends CombatEntity {
 				250, 0, false, false, false, getDialog(), Textures.player);
 	}
 
-	// TODO refactor the moves into methods
-	// TODO replace the switches from : to ->
-	// Priority: low
+	int damage = 0;
+
+	void focus() {
+		System.out.println(name + " used focus");
+		isfocused = true;
+		System.out.println(name + " is focusing on his attack... you may atack.");
+	}
+
+	void fireWand(CombatEntity player, Random rand) {
+		System.out.println(name + " used fireWand");
+		damage += 2;
+		CombatLogic.applyDamage(player, this, damage, rand);
+		player.setPoisonDur(3);
+	}
+
+	void defende(CombatEntity player, Random rand) {
+		System.out.println(name + " used Sheild");
+		damage += 2;
+		CombatLogic.applyDamage(player, this, damage, rand);
+		isDefending = true;
+	}
 
 	@Override
 	public void taketurn(CombatEntity Player, Random rand) {
 
 		int choice = !isfocused ? rand.nextInt(3) : rand.nextInt(2) + 1;
-		int damage = 0;
 
 		switch (choice) {
-		case 0:
-			System.out.println(name + " used focus");
-			isfocused = true;
-			System.out.println(name + " is focusing on his attack... you may atack.");
-			break;
+		case 0 -> focus();
 
-		case 1:
-			System.out.println(name + " used fireWand");
-			damage += 2;
-			CombatLogic.applyDamage(Player, this, damage, rand);
-			Player.setPoisonDur(3);
+		case 1 -> fireWand(Player, rand);
 
-			break;
-
-		case 2:
-			System.out.println(name + " used Sheild");
-			damage += 2;
-			CombatLogic.applyDamage(Player, this, damage, rand);
-			isDefending = true;
-			break;
+		case 2 -> defende(Player, rand);
 
 		}
 
