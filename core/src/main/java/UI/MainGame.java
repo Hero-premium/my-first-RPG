@@ -93,9 +93,8 @@ public class MainGame implements Screen {
 		touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
 
 		if (stopPlayer.isEntityInside(player)) {
-         WorldUtil.startDialog(gatekeeper, player);
+			WorldUtil.startDialog(gatekeeper, player);
 		}
-
 
 		camera.position.set(player.hitBox.x + 350, 300, 0);
 		camera.update();

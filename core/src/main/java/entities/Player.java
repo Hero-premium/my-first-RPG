@@ -64,7 +64,6 @@ public class Player extends CombatEntity {
 		CombatLogic.applyDamage(enemy, this, damage, rand);
 	}
 
-
 	public void move(float deltaTime) {
 		if (isAllowedToMove) {
 			if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {

@@ -40,7 +40,7 @@ public class GateKeeper extends CombatEntity {
 		player.setPoisonDur(3);
 	}
 
-	void defende(CombatEntity player, Random rand) {
+	void sheild(CombatEntity player, Random rand) {
 		System.out.println(name + " used Sheild");
 		damage += 2;
 		CombatLogic.applyDamage(player, this, damage, rand);
@@ -54,11 +54,8 @@ public class GateKeeper extends CombatEntity {
 
 		switch (choice) {
 		case 0 -> focus();
-
 		case 1 -> fireWand(Player, rand);
-
-		case 2 -> defende(Player, rand);
-
+		case 2 -> sheild(Player, rand);
 		}
 
 	}
