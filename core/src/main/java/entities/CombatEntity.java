@@ -47,7 +47,6 @@ public class CombatEntity extends Entity {
 	 * 
 	 * @param hp the new hp
 	 * @throws IllegalArgumentException on negative input
-	 *
 	 */
 	public void setHp(int hp) {
 		if (hp < 0) {
