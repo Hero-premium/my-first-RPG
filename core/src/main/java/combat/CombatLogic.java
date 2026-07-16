@@ -5,10 +5,6 @@ import java.util.Random;
 import entities.CombatEntity;
 
 public class CombatLogic {
-	static void HpCap(CombatEntity being) {
-		being.hp = Math.max(being.hp, 0);
-		System.out.println(being.name + " now has " + being.hp + "hp");
-	}
 
 	public static void applyDamage(CombatEntity target, CombatEntity user, int damage, Random rand) {
 
@@ -35,7 +31,6 @@ public class CombatLogic {
 			target.poisonDuration--;
 		}
 		damage *= 10;
-		target.hp -= damage;
-		HpCap(target);
+		target.modifyHp(damage);
 	}
 }

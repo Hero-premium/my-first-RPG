@@ -9,11 +9,11 @@ public class BattleLauncher {
 	@SuppressWarnings("unused")
 	public static void launchBattle(Random rand, CombatEntity player, CombatEntity enemy) {
 		System.out.println("_______ battle starts! _______");
-		System.out.println(player.name + " has " + player.hp + " hit points");
-		System.out.println(enemy.name + " has " + enemy.hp + " hit points");
+		System.out.println(player.name + " has " + player.getHp() + " hit points");
+		System.out.println(enemy.name + " has " + enemy.getHp() + " hit points");
 		battleloop: while (true) {
 
-			if (enemy.hp <= 0) {
+			if (enemy.getHp() <= 0) {
 				player.gold += enemy.gold;
 				System.out.println("You won!");
 				System.out.println("you gained " + enemy.gold + " gold");
@@ -22,7 +22,7 @@ public class BattleLauncher {
 				break;
 			}
 
-			if (player.hp <= 0) {
+			if (player.getHp() <= 0) {
 				System.out.println("you lost!");
 				System.out.println("to retry press 1 to quit press 2");
 
@@ -42,7 +42,7 @@ public class BattleLauncher {
 					case 1:
 						player.isDodging = false;
 						player.resetHp();
-						enemy.hp = enemy.maxhp;
+						enemy.resetHp();
 						enemy.isfocused = false;
 						enemy.isDefending = false;
 						break choiceloop;

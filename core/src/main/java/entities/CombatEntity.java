@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class CombatEntity extends Entity {
 
-	public int hp;
+	private int hp;
 	public int maxhp;
 	public int poisonDuration;
 	public boolean isDodging;
@@ -31,8 +31,38 @@ public class CombatEntity extends Entity {
 		this.dialog = dialog;
 	}
 
+	/**
+	 * resets hp to its max
+	 */
 	public void resetHp() {
 		this.hp = this.maxhp;
+	}
+
+	public int getHp() {
+		return hp;
+	}
+
+	/**
+	 * sets hp to given amount
+	 * 
+	 * @param hp the new hp
+	 */
+	public void setHp(int hp) {
+		if (hp < 0) {
+			throw new IllegalArgumentException("you can't set hp to negative");
+		}
+		this.hp = hp;
+		this.hp = Math.clamp(this.hp, 0, maxhp);
+	}
+
+	/**
+	 * adds the given amount of hp to the existing amount of hp
+	 * 
+	 * @param hp how much you want to add
+	 */
+	public void modifyHp(int hp) {
+		this.hp += hp;
+		this.hp = Math.clamp(this.hp, 0, maxhp);
 	}
 
 	public void setPoisonDur(int duration) {

@@ -57,6 +57,7 @@ public class MainGame implements Screen {
 		touchables.add(wall);
 		touchables.add(stopPlayer);
 
+		player.setHp(-1);
 	}
 
 	@Override
