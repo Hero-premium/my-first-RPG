@@ -14,12 +14,10 @@ public class CombatEntity extends Entity {
 	public boolean isDodging;
 	public boolean isDefending;
 	public boolean isfocused;
-	// TODO throw this somewhere else since it's unrelated
-	public String[] dialog;
 
 	public CombatEntity(int gold, String name, boolean facingLeft, boolean onGround, boolean isAlive, float speed,
 			Vector2 velocity, Rectangle hitbox, int hp, int maxhp, int poisonDuration, boolean isDodging,
-			boolean isDefending, boolean isfocused, String[] dialog, Texture texture) {
+			boolean isDefending, boolean isfocused, Texture texture) {
 		super(gold, name, facingLeft, onGround, isAlive, speed, velocity, hitbox, texture);
 
 		this.hp = hp;
@@ -28,7 +26,6 @@ public class CombatEntity extends Entity {
 		this.isDodging = isDodging;
 		this.isDefending = isDefending;
 		this.isfocused = isfocused;
-		this.dialog = dialog;
 	}
 
 	/**

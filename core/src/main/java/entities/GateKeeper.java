@@ -10,19 +10,10 @@ import combat.CombatLogic;
 
 public class GateKeeper extends CombatEntity {
 
-	public static String[] getDialog() {
-		return new String[] {
-				/* 1 */ "gatekeeper: welcome to this dungeon; but coming here was a big mistake! as there's an angry dragon ready to hunt whoever enters.",
-				/* 2 */ "gatekeeper: what do I call you, hunter?",
-				/* 3 */ "gatekeeper: but , that is such a dangerous mission, how are you planning on doing it?",
-				/* 4 */ "gatekeeper: and what are they...?",
-				/* 5 */ "gatekeeper: oh you shouldn't have told me that, as I'll be your first foe, I'll defend my lord with my life!" };
-
-	}
 
 	public GateKeeper() {
 		super(20, "GateKeeper", false, false, true, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
-				250, 0, false, false, false, getDialog(), Textures.player);
+				250, 0, false, false, false, Textures.player);
 	}
 
 	private int damage = 0;
@@ -46,7 +37,7 @@ public class GateKeeper extends CombatEntity {
 		CombatLogic.applyDamage(player, this, damage, rand);
 		isDefending = true;
 	}
-
+    // TODO add a smarter AI -# psttttt make it self aware
 	@Override
 	public void taketurn(CombatEntity Player, Random rand) {
 

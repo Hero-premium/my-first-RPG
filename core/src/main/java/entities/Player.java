@@ -12,13 +12,6 @@ import combat.CombatLogic;
 
 public class Player extends CombatEntity {
 
-	public static String[] getDialog() {
-		return new String[] { "player: yes! I know, but I want the gold the dragon is hiding beneath his throne.",
-				"player: of course I didn't come unprepared, I do have some moves that will help me defeat this evil monster.",
-				"player: dash! An awesome ability that would help me dodge the dragon's attacks. Sometimes I don't move fast enough though.",
-				"player: swordSlash: I'm not very good at using my sword, but it helps me attack vital organs. Most of the time I can't.",
-				"player: kick: One of my best moves that I mastered. It's still based on my human abilities, but it's very consistent." };
-	}
 
 	private boolean isAllowedToMove = true;
 
@@ -32,7 +25,7 @@ public class Player extends CombatEntity {
 
 	public Player() {
 		super(10, "Hero", false, false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, 200, 0,
-				false, false, false, getDialog(), Textures.player); // combat stats
+				false, false, false, Textures.player); // combat stats
 	}
 	// gold,name, texture position at start speed velocity hitbox
 

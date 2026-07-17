@@ -19,7 +19,7 @@ import entities.GateKeeper;
 import entities.Player;
 import touchables.Touchable;
 import touchables.Wall;
-import util.WorldUtil;
+import util.Dialogs;
 import world.Physics;
 
 public class MainGame implements Screen {
@@ -36,13 +36,14 @@ public class MainGame implements Screen {
 	Touchable stopPlayer;
 	List<Entity> objects;
 	List<Touchable> touchables;
-
+    Dialogs story;
 	public MainGame() {
 		player = new Player();
 		wall = new Wall();
 		stopPlayer = new Touchable(Textures.PlaceHolder, 1, 0, (new Rectangle(100, 100, 200, 700)));
 		gatekeeper = new GateKeeper();
-
+        story = new Dialogs();
+        
 		debug = new Debug();
 		physics = new Physics();
 		batch = new SpriteBatch();
@@ -56,7 +57,7 @@ public class MainGame implements Screen {
 		touchables = new ArrayList<Touchable>();
 		touchables.add(wall);
 		touchables.add(stopPlayer);
-
+        wall.texture = null;
 	}
 
 	@Override
@@ -88,13 +89,11 @@ public class MainGame implements Screen {
 
 		if (stopPlayer.isEntityInside(player)) {
 			player.setAllowedToMove(false);
+			story.lunchStory(player);
 		}
 
 		touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
 
-		if (stopPlayer.isEntityInside(player)) {
-			WorldUtil.startDialog(gatekeeper, player);
-		}
 
 		camera.position.set(player.hitBox.x + 350, 300, 0);
 		camera.update();
@@ -104,19 +103,20 @@ public class MainGame implements Screen {
 		batch.begin();
 
 		batch.draw(Textures.backGround, player.hitBox.x - 50, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-		batch.draw(player.texture, // 1. The texture
-				player.hitBox.x, // 2. Target X on screen
-				player.hitBox.y, // 3. Target Y on screen
-				64f, // 4. Width to draw on screen (adjust as needed)
-				64f, // 5. Height to draw on screen (adjust as needed)
-				0, // 6. Source X start (left side of texture)
-				0, // 7. Source Y start (top side of texture)
-				player.texture.getWidth(), // 8. Source Width (use full texture width)
-				player.texture.getHeight(), // 9. Source Height (use full texture height)
-				!player.facingLeft, // 10. Flip horizontally? (True if NOT facing right)
-				false // 11. Flip vertically? (False, keep right-side up)
+		batch.draw(player.texture, 
+				player.hitBox.x,
+				player.hitBox.y, 
+				64f, 
+				64f, 
+				0, 
+				0, 
+				player.texture.getWidth(), 
+				player.texture.getHeight(), 
+				!player.facingLeft, 
+				false
 		);
 		for (Touchable object : touchables) {
+			if (object.texture != null) 
 			batch.draw(object.texture, object.hitBox.x, object.hitBox.y, object.hitBox.width, object.hitBox.height);
 		}
 
