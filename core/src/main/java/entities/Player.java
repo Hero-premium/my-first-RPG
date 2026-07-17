@@ -12,19 +12,8 @@ import combat.CombatLogic;
 
 public class Player extends CombatEntity {
 
-
-	private boolean isAllowedToMove = true;
-
-	public boolean getIsAllowedToMove() {
-		return isAllowedToMove;
-	}
-
-	public void setAllowedToMove(boolean isAllowedToMove) {
-		this.isAllowedToMove = isAllowedToMove;
-	}
-
 	public Player() {
-		super(10, "Hero", false, false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f),
+		super(10, "Hero", false, false, true, false, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f),
 				200, 200, 0, false, false, false, Textures.player);
 	}
 
@@ -57,7 +46,7 @@ public class Player extends CombatEntity {
 	}
 
 	public void move(float deltaTime) {
-		if (isAllowedToMove) {
+		if (!getMovmentLocked()) {
 			if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 				facingLeft = true;
 				hitBox.x -= speed * deltaTime;

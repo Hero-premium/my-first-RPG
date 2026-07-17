@@ -15,10 +15,10 @@ public class CombatEntity extends Entity {
 	public boolean isDefending;
 	public boolean isfocused;
 
-	public CombatEntity(int gold, String name, boolean facingLeft, boolean onGround, boolean isAlive, float speed,
+	public CombatEntity(int gold, String name, boolean facingLeft, boolean onGround, boolean isAlive, boolean movmentLocked, float speed,
 			Vector2 velocity, Rectangle hitbox, int hp, int maxhp, int poisonDuration, boolean isDodging,
 			boolean isDefending, boolean isfocused, Texture texture) {
-		super(gold, name, facingLeft, onGround, isAlive, speed, velocity, hitbox, texture);
+		super(gold, name, facingLeft, onGround, isAlive, movmentLocked, speed, velocity, hitbox, texture);
 
 		this.hp = hp;
 		this.maxhp = maxhp;

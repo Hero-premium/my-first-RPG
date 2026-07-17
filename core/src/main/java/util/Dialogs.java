@@ -2,6 +2,7 @@ package util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import entities.Entity;
 
@@ -29,14 +30,16 @@ public class Dialogs {
 			return false;
 	}
 
-	static void display(String text) {
-		System.out.println(text);
+	static void display(String text, Label dialogLabel) {
+		dialogLabel.setText(text);
+		if (text.equals("gatekeeper: what do I call you, hunter?")) {
+			
+		}
 	}
 
-	public void lunchStory(Entity pl) {
+	public void lunchStory(Entity pl, Label dialogLabel) {
 		if (proceed(pl)) {
-			display(getStory(pl)[index]);
-			System.out.println(index);
+			display(getStory(pl)[index], dialogLabel);
 			index++;
 		}
 

@@ -11,12 +11,13 @@ public abstract class Entity {
 	public boolean facingLeft;
 	public boolean onGround;
 	public boolean isAlive;
+    private boolean movmentLocked;
 	public Vector2 velocity;
 	public Rectangle hitBox;
 	public float speed;
 	public Texture texture;
 
-	protected Entity(int gold, String name, boolean facingLeft, boolean onGround, boolean isAlive, float speed,
+	protected Entity(int gold, String name, boolean facingLeft, boolean onGround, boolean isAlive, boolean movmentLocked, float speed,
 			Vector2 velocity, Rectangle hitBox, Texture texture) {
 
 		this.gold = gold;
@@ -24,6 +25,7 @@ public abstract class Entity {
 		this.facingLeft = facingLeft;
 		this.onGround = onGround;
 		this.isAlive = isAlive;
+		this.movmentLocked = movmentLocked;
 		this.velocity = velocity;
 		this.speed = speed;
 		this.hitBox = hitBox;
@@ -40,6 +42,14 @@ public abstract class Entity {
 
 	// to be overridden by other classes
 	public void passiveAbility() {
+	}
+	
+	public boolean getMovmentLocked() {
+		return movmentLocked;
+	}
+
+	public void setMovmentLocked(boolean movmentLocked) {
+		this.movmentLocked = movmentLocked;
 	}
 
 }
