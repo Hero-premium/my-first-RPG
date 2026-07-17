@@ -37,13 +37,14 @@ public class MainGame implements Screen {
 	List<Entity> objects;
 	List<Touchable> touchables;
     Dialogs story;
+
 	public MainGame() {
 		player = new Player();
 		wall = new Wall();
 		stopPlayer = new Touchable(Textures.PlaceHolder, 1, 0, (new Rectangle(100, 100, 200, 700)));
 		gatekeeper = new GateKeeper();
         story = new Dialogs();
-        
+
 		debug = new Debug();
 		physics = new Physics();
 		batch = new SpriteBatch();
@@ -103,16 +104,16 @@ public class MainGame implements Screen {
 		batch.begin();
 
 		batch.draw(Textures.backGround, player.hitBox.x - 50, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-		batch.draw(player.texture, 
+		batch.draw(player.texture,
 				player.hitBox.x,
-				player.hitBox.y, 
-				64f, 
-				64f, 
-				0, 
-				0, 
-				player.texture.getWidth(), 
-				player.texture.getHeight(), 
-				!player.facingLeft, 
+				player.hitBox.y,
+				64f,
+				64f,
+				0,
+				0,
+				player.texture.getWidth(),
+				player.texture.getHeight(),
+				!player.facingLeft,
 				false
 		);
 		for (Touchable object : touchables) {
@@ -137,20 +138,12 @@ public class MainGame implements Screen {
 	}
 
 	@Override
-	public void pause() {
-
-	}
-
+	public void pause() {}
 	@Override
-	public void resume() {
-
-	}
-
+	public void resume() {}
 	@Override
-	public void hide() {
-
-	}
-
+	public void hide() {}
+	
 	@Override
 	public void dispose() {
 		batch.dispose();

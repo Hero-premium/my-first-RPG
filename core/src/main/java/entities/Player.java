@@ -15,7 +15,7 @@ public class Player extends CombatEntity {
 
 	private boolean isAllowedToMove = true;
 
-	public boolean isAllowedToMove() {
+	public boolean getIsAllowedToMove() {
 		return isAllowedToMove;
 	}
 
@@ -24,10 +24,9 @@ public class Player extends CombatEntity {
 	}
 
 	public Player() {
-		super(10, "Hero", false, false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, 200, 0,
-				false, false, false, Textures.player); // combat stats
+		super(10, "Hero", false, false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f),
+				200, 200, 0, false, false, false, Textures.player);
 	}
-	// gold,name, texture position at start speed velocity hitbox
 
 	public void kick(Random rand, CombatEntity enemy) {
 		System.out.println(name + " used kick");
