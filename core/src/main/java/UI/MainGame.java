@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Textures;
@@ -44,6 +45,7 @@ public class MainGame implements Screen {
     Stage stage;
     Skin skin;
     Label dialogLabel;
+    TextField takeInput;
 
 	public MainGame() {
 		player = new Player();
@@ -76,16 +78,23 @@ public class MainGame implements Screen {
 		
 		skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
 		stage = new Stage(viewport);
+		Gdx.input.setInputProcessor(stage);
 
 		dialogLabel = new Label("", skin);
 		dialogLabel.setVisible(true);
 		dialogLabel.setWrap(true);
 		
-		Table table = new Table();
-		table.setFillParent(true); // table fills the whole stage/screen
-		table.bottom(); 
-		table.add(dialogLabel).width(700).pad(10);
-		stage.addActor(table);
+		takeInput = new TextField("",skin);
+		takeInput.setVisible(false);
+		takeInput.setPosition(250, 100, 10);		
+		Table dialog = new Table();
+		
+		dialog.setFillParent(true); // table fills the whole stage/screen
+		dialog.bottom(); 
+		dialog.add(dialogLabel).width(700).pad(10);
+		
+		stage.addActor(dialog);
+		stage.addActor(takeInput);
 	}
 
 	@Override
@@ -110,8 +119,9 @@ public class MainGame implements Screen {
 		}
 
 		if (stopPlayer.isEntityInside(player)) {
+			stopPlayer.useages = stopPlayer.MAX_USAGE;
 			player.setMovmentLocked(true);
-			story.lunchStory(player, dialogLabel);
+			story.lunchStory(player, dialogLabel,takeInput);
 		}
 
 		touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
@@ -145,7 +155,6 @@ public class MainGame implements Screen {
 		}
 
 		batch.end();
-		
 		stage.act(delta);
 		stage.draw();
 
