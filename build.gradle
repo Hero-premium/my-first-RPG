@@ -8,7 +8,6 @@ buildscript {
   }
   dependencies {
 
-
   }
 }
 
@@ -27,7 +26,13 @@ allprojects {
 
 configure(subprojects) {
   apply plugin: 'java-library'
-  java.sourceCompatibility = 26
+  
+  // Configures the Java 26 toolchain for all subprojects
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(26)
+    }
+  }
 
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
   // The article can be helpful when using assets.txt in your project.
