@@ -1,12 +1,11 @@
 package combat;
 
-import java.util.Random;
-
 import entities.CombatEntity;
+import util.Util;
 
 public class CombatLogic {
 
-	public static void applyDamage(CombatEntity target, CombatEntity user, int damage, Random rand) {
+	public static void applyDamage(CombatEntity target, CombatEntity user, int damage) {
 
 		if (target.isDodging) {
 			System.out.println(target.name + " has dodged the " + user.name + " attack!");
@@ -26,7 +25,7 @@ public class CombatLogic {
 			user.isfocused = false;
 		}
 		if (target.poisonDuration > 0) {
-			damage += rand.nextInt(2) + 1;
+			damage += Util.rand.nextInt(2) + 1;
 			System.out.println(target.name + " took extra damage because of being on fire!");
 			target.poisonDuration--;
 		}

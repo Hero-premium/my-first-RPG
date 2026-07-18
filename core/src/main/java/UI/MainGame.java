@@ -45,6 +45,7 @@ public class MainGame implements Screen {
 	Skin skin;
 	Label dialogLabel;
 	TextField takeInput;
+	
 
 	public MainGame() {
 		player = new Player();

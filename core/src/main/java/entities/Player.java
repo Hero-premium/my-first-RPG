@@ -1,7 +1,5 @@
 package entities;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Assets;
 
 import combat.CombatLogic;
+import util.Util;
 
 public class Player extends CombatEntity {
 
@@ -17,32 +16,32 @@ public class Player extends CombatEntity {
 				200, 200, 0, false, false, false, Assets.player);
 	}
 
-	public void kick(Random rand, CombatEntity enemy) {
+	public void kick(CombatEntity enemy) {
 		System.out.println(name + " used kick");
-		int damage = rand.nextInt(2) + 3;
-		CombatLogic.applyDamage(enemy, this, damage, rand);
+		int damage = Util.rand.nextInt(2) + 3;
+		CombatLogic.applyDamage(enemy, this, damage);
 	}
 
-	public void swordSlash(Random rand, CombatEntity enemy) {
+	public void swordSlash(CombatEntity enemy) {
 		System.out.println(name + " used swordSlash");
 		int damage = 0;
-		if (75 <= rand.nextInt(100)) {
+		if (75 <= Util.rand.nextInt(100)) {
 			damage = 8;
 			System.out.println("critical hit!");
-			CombatLogic.applyDamage(enemy, this, damage, rand);
+			CombatLogic.applyDamage(enemy, this, damage);
 
 		} else {
-			damage += rand.nextInt(2) + 3;
-			CombatLogic.applyDamage(enemy, this, damage, rand);
+			damage += Util.rand.nextInt(2) + 3;
+			CombatLogic.applyDamage(enemy, this, damage);
 		}
 
 	}
 
-	public void dodge(Random rand, CombatEntity enemy) {
+	public void dodge( CombatEntity enemy) {
 		System.out.println(name + " used dodge");
-		isDodging = rand.nextBoolean();
+		isDodging = Util.rand.nextBoolean();
 		int damage = 1;
-		CombatLogic.applyDamage(enemy, this, damage, rand);
+		CombatLogic.applyDamage(enemy, this, damage);
 	}
 
 	public void move(float deltaTime) {

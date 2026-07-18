@@ -1,7 +1,5 @@
 package entities;
 
-import java.util.Random;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -67,6 +65,6 @@ public class CombatEntity extends Entity {
 		poisonDuration = duration;
 	}
 
-	public void taketurn(CombatEntity player, Random rand) {
+	public void taketurn(CombatEntity player) {
 	}
 }

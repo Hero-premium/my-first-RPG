@@ -55,6 +55,7 @@ public class StartupHelper {
 	 * @return whether NVIDIA drivers are present on Linux.
 	 */
 	public static boolean isLinuxNvidia() {
+		@SuppressWarnings("unused")
 		String[] drivers = new File("/proc/driver").list(
 			(dir, path) -> path.toUpperCase(Locale.ROOT).contains("NVIDIA")
 		);

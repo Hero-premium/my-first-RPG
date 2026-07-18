@@ -1,13 +1,11 @@
 package combat;
 
-import java.util.Random;
-
 import entities.CombatEntity;
-
+// FIXME make it compatible this GUI or delete it entirely
 public class BattleLauncher {
 
 	@SuppressWarnings("unused")
-	public static void launchBattle(Random rand, CombatEntity player, CombatEntity enemy) {
+	public static void launchBattle(CombatEntity player, CombatEntity enemy) {
 		System.out.println("_______ battle starts! _______");
 		System.out.println(player.name + " has " + player.getHp() + " hit points");
 		System.out.println(enemy.name + " has " + enemy.getHp() + " hit points");
