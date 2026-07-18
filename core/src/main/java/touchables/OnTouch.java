@@ -1,4 +1,4 @@
-package world;
+package touchables;
 
 import entities.Entity;
 
