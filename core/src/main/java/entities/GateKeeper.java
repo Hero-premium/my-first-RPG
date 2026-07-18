@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.Textures;
+import com.mygdx.game.Assets;
 
 import combat.CombatLogic;
 
@@ -13,7 +13,7 @@ public class GateKeeper extends CombatEntity {
 
 	public GateKeeper() {
 		super(20, "GateKeeper", false, false, true, false, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
-				250, 0, false, false, false, Textures.player);
+				250, 0, false, false, false, Assets.player);
 	}
 
 	private int damage = 0;

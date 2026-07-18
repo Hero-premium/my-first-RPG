@@ -1,14 +1,14 @@
 package touchables;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.Textures;
+import com.mygdx.game.Assets;
 
 import entities.Entity;
 
 public class Wall extends Touchable {
 
 	public Wall() {
-		super(Textures.PlaceHolder, Integer.MAX_VALUE, 0, (new Rectangle(0, 0, 50, 50)));
+		super(Assets.PlaceHolder, Integer.MAX_VALUE, 0, (new Rectangle(0, 0, 50, 50)));
 	}
 
 	public void wall(Entity entity) {

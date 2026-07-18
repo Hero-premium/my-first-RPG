@@ -14,8 +14,7 @@ public class Dialogs {
 		return new String[] {
 				"gatekeeper: welcome to this dungeon; but coming here was a big mistake! as there's an angry dragon ready to hunt whoever enters.",
 				"player: yes! I know, but I want the gold the dragon is hiding beneath his thrown.",
-				"gatekeeper: what do I call you, hunter?",
-				"gatekeeper: what do I call you, hunter? ",
+				"gatekeeper: what do I call you, hunter?", "gatekeeper: what do I call you, hunter? ",
 				"gatekeeper: but " + pl.name + ", that is such a dangerous mission, how are you planning on doing it?",
 				pl.name + ": of course I didn't come unprepared, I do have some moves that will help me defeat this evil monster",
 				"gatekeeper: and what are they...?",
@@ -34,22 +33,33 @@ public class Dialogs {
 
 	static void display(String text, Label dialogLabel, TextField takeInput) {
 		dialogLabel.setText(text);
-		
+
 		if (text.equals("gatekeeper: what do I call you, hunter?")) {
 			takeInput.setVisible(true);
 		}
 	}
 
+	// FIXME im fucked up (too many bugs)
 	public void lunchStory(Entity pl, Label dialogLabel, TextField takeInput) {
 		if (proceed(pl)) {
+			if (pl.name.equals("Hero")) {
+				display("please enter a name", dialogLabel, takeInput);
+				takeInput.setVisible(true);
+				return;
+			}
+			if (takeInput.isVisible()) {
+				
+				String name = takeInput.getText();
+				
+				if (!name.equals("")) {
+				pl.name = name;
+				takeInput.clear();
+				takeInput.setVisible(false);
+				}
+			}
 			display(getStory(pl)[index], dialogLabel, takeInput);
 			index++;
-			pl.name = takeInput.getText();
-			getStory(pl);
-			if (pl.name.equals("")) return;
-			takeInput.clear();
-			takeInput.setVisible(false);
-			
+
 		}
 
 	}

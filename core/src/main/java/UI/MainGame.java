@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.game.Textures;
+import com.mygdx.game.Assets;
 
 import debug.Debug;
 import entities.Entity;
@@ -41,24 +40,25 @@ public class MainGame implements Screen {
 	Touchable stopPlayer;
 	List<Entity> objects;
 	List<Touchable> touchables;
-    Dialogs story;
-    Stage stage;
-    Skin skin;
-    Label dialogLabel;
-    TextField takeInput;
+	Dialogs story;
+	Stage stage;
+	Skin skin;
+	Label dialogLabel;
+	TextField takeInput;
 
 	public MainGame() {
 		player = new Player();
 		wall = new Wall();
 		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 700)));
 		gatekeeper = new GateKeeper();
-        story = new Dialogs();
+		story = new Dialogs();
 
 		debug = new Debug();
 		physics = new Physics();
 		batch = new SpriteBatch();
 		stopPlayer.hitBox.setSize(200, 700);
 		wall.hitBox.set(-350, 50, 200, 700);
+		wall.texture = null;
 
 		objects = new ArrayList<Entity>();
 		objects.add(player);
@@ -67,34 +67,38 @@ public class MainGame implements Screen {
 		touchables = new ArrayList<Touchable>();
 		touchables.add(wall);
 		touchables.add(stopPlayer);
-        wall.texture = null;
-      
+		
+
 	}
 
 	@Override
 	public void show() {
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(800, 600, camera);
-		
-		skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+
+		skin = new Skin(Gdx.files.internal("textures/uiskin/uiskin.json"));
 		stage = new Stage(viewport);
 		Gdx.input.setInputProcessor(stage);
 
 		dialogLabel = new Label("", skin);
 		dialogLabel.setVisible(true);
 		dialogLabel.setWrap(true);
-		
-		takeInput = new TextField("",skin);
+
+		takeInput = new TextField("", skin);
 		takeInput.setVisible(false);
-		takeInput.setPosition(250, 100, 10);		
+		takeInput.setPosition(250, 100, 10);
 		Table dialog = new Table();
-		
+
 		dialog.setFillParent(true); // table fills the whole stage/screen
-		dialog.bottom(); 
+		dialog.bottom();
 		dialog.add(dialogLabel).width(700).pad(10);
-		
+
 		stage.addActor(dialog);
 		stage.addActor(takeInput);
+		
+		Assets.mainMenu.setLooping(true);
+		Assets.mainMenu.setVolume(0.7f);
+		Assets.mainMenu.play();
 	}
 
 	@Override
@@ -121,11 +125,11 @@ public class MainGame implements Screen {
 		if (stopPlayer.isEntityInside(player)) {
 			stopPlayer.useages = stopPlayer.MAX_USAGE;
 			player.setMovmentLocked(true);
-			story.lunchStory(player, dialogLabel,takeInput);
+			story.lunchStory(player, dialogLabel, takeInput);
+			gatekeeper.facingLeft = true;
 		}
 
 		touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
-
 
 		camera.position.set(player.hitBox.x + 350, 300, 0);
 		camera.update();
@@ -134,34 +138,24 @@ public class MainGame implements Screen {
 
 		batch.begin();
 
-		batch.draw(Textures.backGround, player.hitBox.x - 50, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-		for (Entity object : objects)
-		batch.draw(
-				object.texture,
-				object.hitBox.x,
-				object.hitBox.y,
-				64f,
-				64f,
-				0,
-				0,
-				object.texture.getWidth(),
-				object.texture.getHeight(),
-				!object.facingLeft,
-				false
-		);
+		batch.draw(Assets.backGround, player.hitBox.x - 50, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+		
+		for (Entity object : objects) {
+			if (object.texture != null) object.render(batch);
+		}
+			
+		
 		for (Touchable object : touchables) {
-			if (object.texture != null) 
-			batch.draw(object.texture, object.hitBox.x, object.hitBox.y, object.hitBox.width, object.hitBox.height);
+			if (object.texture != null)
+				batch.draw(object.texture, object.hitBox.x, object.hitBox.y, object.hitBox.width, object.hitBox.height);
 		}
 
 		batch.end();
+		
 		stage.act(delta);
 		stage.draw();
 
 		// TEMP for me to debug remove when you send to someone
-		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-			debug.isdebug = !debug.isdebug;
-		}
 		debug.showDebug(batch, player, viewport, objects, touchables, camera);
 
 	}
@@ -170,19 +164,25 @@ public class MainGame implements Screen {
 	public void resize(int width, int height) {
 		viewport.update(width, height, true);
 	}
+
 	@Override
-	public void pause() {}
+	public void pause() {
+	}
+
 	@Override
-	public void resume() {}
+	public void resume() {
+	}
+
 	@Override
-	public void hide() {}
-	
+	public void hide() {
+	}
+
 	@Override
 	public void dispose() {
 		skin.dispose();
 		stage.dispose();
 		batch.dispose();
 		debug.dispose();
-		Textures.dispose();
+		Assets.dispose();
 	}
 }

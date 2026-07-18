@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.Textures;
+import com.mygdx.game.Assets;
 
 import combat.CombatLogic;
 
@@ -14,7 +14,7 @@ public class Player extends CombatEntity {
 
 	public Player() {
 		super(10, "Hero", false, false, true, false, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f),
-				200, 200, 0, false, false, false, Textures.player);
+				200, 200, 0, false, false, false, Assets.player);
 	}
 
 	public void kick(Random rand, CombatEntity enemy) {

@@ -3,6 +3,7 @@ package debug;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -29,6 +30,9 @@ public class Debug {
 
 	public void showDebug(SpriteBatch batch, Entity player, FitViewport viewport, List<Entity> objects,
 			List<Touchable> touchables, OrthographicCamera camera) {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+			isdebug = !isdebug;
+		}
 		textPos = getCamera(camera, viewport, 0);
 		if (isdebug) {
 			batch.begin();
