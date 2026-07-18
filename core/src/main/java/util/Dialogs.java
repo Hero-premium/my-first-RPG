@@ -9,12 +9,13 @@ import entities.Entity;
 
 public class Dialogs {
 	int index = 0;
+	boolean here = false;
 
 	static String[] getStory(Entity pl) {
 		return new String[] {
 				"gatekeeper: welcome to this dungeon; but coming here was a big mistake! as there's an angry dragon ready to hunt whoever enters.",
 				"player: yes! I know, but I want the gold the dragon is hiding beneath his thrown.",
-				"gatekeeper: what do I call you, hunter?", "gatekeeper: what do I call you, hunter? ",
+				"gatekeeper: what do I call you, hunter?",
 				"gatekeeper: but " + pl.name + ", that is such a dangerous mission, how are you planning on doing it?",
 				pl.name + ": of course I didn't come unprepared, I do have some moves that will help me defeat this evil monster",
 				"gatekeeper: and what are they...?",
@@ -31,35 +32,30 @@ public class Dialogs {
 			return false;
 	}
 
-	static void display(String text, Label dialogLabel, TextField takeInput) {
+	void display(String text, Label dialogLabel, TextField takeInput) {
 		dialogLabel.setText(text);
 
 		if (text.equals("gatekeeper: what do I call you, hunter?")) {
+			here = true;
 			takeInput.setVisible(true);
 		}
 	}
 
-	// FIXME im fucked up (too many bugs)
 	public void lunchStory(Entity pl, Label dialogLabel, TextField takeInput) {
+
 		if (proceed(pl)) {
-			if (pl.name.equals("Hero")) {
-				display("please enter a name", dialogLabel, takeInput);
+			if (!takeInput.getText().equals("")) {
+				pl.name = takeInput.getText();
+				takeInput.setVisible(false);
+			}
+			if (pl.name.equals("") && here) {
+				dialogLabel.setText("please enter a name");
 				takeInput.setVisible(true);
 				return;
 			}
-			if (takeInput.isVisible()) {
-				
-				String name = takeInput.getText();
-				
-				if (!name.equals("")) {
-				pl.name = name;
-				takeInput.clear();
-				takeInput.setVisible(false);
-				}
-			}
+
 			display(getStory(pl)[index], dialogLabel, takeInput);
 			index++;
-
 		}
 
 	}

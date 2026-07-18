@@ -13,7 +13,7 @@ import combat.CombatLogic;
 public class Player extends CombatEntity {
 
 	public Player() {
-		super(10, "Hero", false, false, true, false, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f),
+		super(10, "", false, false, true, false, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f),
 				200, 200, 0, false, false, false, Assets.player);
 	}
 
