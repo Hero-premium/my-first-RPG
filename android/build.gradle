@@ -10,7 +10,7 @@ apply plugin: 'com.android.application'
 
 android {
   namespace = "io.github.some_example_name"
-  compileSdk = 35
+  compileSdk = 36
   sourceSets {
     main {
       manifest.srcFile 'AndroidManifest.xml'
@@ -38,8 +38,8 @@ android {
     versionName "1.0"
   }
   compileOptions {
-    sourceCompatibility "26"
-    targetCompatibility "26"
+    sourceCompatibility "24"
+    targetCompatibility "24"
     coreLibraryDesugaringEnabled = true
   }
   buildTypes {
