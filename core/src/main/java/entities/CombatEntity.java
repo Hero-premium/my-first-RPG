@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 public class CombatEntity extends Entity {
 
 	private int hp;
-	public int maxhp;
+	public int maxHp;
 	public int poisonDuration = 0;
 	public boolean isDodging = false;
 	public boolean isDefending = false;
@@ -19,14 +19,14 @@ public class CombatEntity extends Entity {
 		super(gold, name, onGround, isAlive, speed, velocity, hitbox, texture);
 
 		this.hp = hp;
-		this.maxhp = maxhp;
+		this.maxHp = maxhp;
 	}
 
 	/**
 	 * resets hp to its max
 	 */
 	public void resetHp() {
-		this.hp = this.maxhp;
+		this.hp = this.maxHp;
 	}
 
 	public int getHp() {
@@ -35,7 +35,7 @@ public class CombatEntity extends Entity {
 
 	/**
 	 * sets hp to given amount
-	 * 
+	 * also clamps hp between 0 and maxHp
 	 * @param hp the new hp
 	 * @throws IllegalArgumentException on negative input
 	 */
@@ -44,23 +44,24 @@ public class CombatEntity extends Entity {
 			throw new IllegalArgumentException("you can't set hp to negative");
 		}
 		this.hp = hp;
-		this.hp = Math.clamp(this.hp, 0, maxhp);
+		this.hp = Math.clamp(this.hp, 0, maxHp);
 	}
 
 	/**
 	 * adds the given amount of hp to the existing amount of hp
+	 * also clamps hp between 0 and maxHp
 	 * 
 	 * @param hp how much you want to add
 	 */
 	public void modifyHp(int hp) {
 		this.hp += hp;
-		this.hp = Math.clamp(this.hp, 0, maxhp);
+		this.hp = Math.clamp(this.hp, 0, maxHp);
 	}
 
 	public void setPoisonDur(int duration) {
 		poisonDuration = duration;
 	}
 
-	public void taketurn(CombatEntity player) {
+	public void taketurn(CombatEntity entity) {
 	}
 }
