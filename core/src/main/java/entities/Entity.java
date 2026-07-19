@@ -9,24 +9,22 @@ public abstract class Entity {
 
 	public int gold;
 	public String name;
-	public boolean facingLeft;
+	public boolean facingLeft = false;
 	public boolean onGround;
 	public boolean isAlive;
-	private boolean movmentLocked;
+	private boolean movmentLocked = false;
 	public Vector2 velocity;
 	public Rectangle hitBox;
 	public float speed;
 	public Texture texture;
 
-	protected Entity(int gold, String name, boolean facingLeft, boolean onGround, boolean isAlive,
-			boolean movmentLocked, float speed, Vector2 velocity, Rectangle hitBox, Texture texture) {
+	protected Entity(int gold, String name, boolean onGround, boolean isAlive, float speed, Vector2 velocity,
+			Rectangle hitBox, Texture texture) {
 
 		this.gold = gold;
 		this.name = name;
-		this.facingLeft = facingLeft;
 		this.onGround = onGround;
 		this.isAlive = isAlive;
-		this.movmentLocked = movmentLocked;
 		this.velocity = velocity;
 		this.speed = speed;
 		this.hitBox = hitBox;

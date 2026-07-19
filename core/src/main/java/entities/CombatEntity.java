@@ -8,22 +8,18 @@ public class CombatEntity extends Entity {
 
 	private int hp;
 	public int maxhp;
-	public int poisonDuration;
-	public boolean isDodging;
-	public boolean isDefending;
-	public boolean isfocused;
+	public int poisonDuration = 0;
+	public boolean isDodging = false;
+	public boolean isDefending = false;
+	public boolean isfocused = false;
 
-	public CombatEntity(int gold, String name, boolean facingLeft, boolean onGround, boolean isAlive, boolean movmentLocked, float speed,
-			Vector2 velocity, Rectangle hitbox, int hp, int maxhp, int poisonDuration, boolean isDodging,
-			boolean isDefending, boolean isfocused, Texture texture) {
-		super(gold, name, facingLeft, onGround, isAlive, movmentLocked, speed, velocity, hitbox, texture);
+	public CombatEntity(int gold, String name, boolean onGround, boolean isAlive,
+			 float speed, Vector2 velocity, Rectangle hitbox, int hp, int maxhp,
+			Texture texture) {
+		super(gold, name, onGround, isAlive, speed, velocity, hitbox, texture);
 
 		this.hp = hp;
 		this.maxhp = maxhp;
-		this.poisonDuration = poisonDuration;
-		this.isDodging = isDodging;
-		this.isDefending = isDefending;
-		this.isfocused = isfocused;
 	}
 
 	/**

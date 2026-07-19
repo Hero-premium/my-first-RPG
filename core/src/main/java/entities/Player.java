@@ -12,8 +12,7 @@ import util.Util;
 public class Player extends CombatEntity {
 
 	public Player() {
-		super(10, "", false, false, true, false, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f),
-				200, 200, 0, false, false, false, Assets.player);
+		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, 200, Assets.player);
 	}
 
 	public void kick(CombatEntity enemy) {
@@ -37,7 +36,7 @@ public class Player extends CombatEntity {
 
 	}
 
-	public void dodge( CombatEntity enemy) {
+	public void dodge(CombatEntity enemy) {
 		System.out.println(name + " used dodge");
 		isDodging = Util.rand.nextBoolean();
 		int damage = 1;

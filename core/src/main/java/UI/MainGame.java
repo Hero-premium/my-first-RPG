@@ -98,7 +98,7 @@ public class MainGame implements Screen {
 		stage.addActor(takeInput);
 		
 		Assets.mainMenu.setLooping(true);
-		Assets.mainMenu.setVolume(0.7f);
+		Assets.mainMenu.setVolume(0.1f);
 		Assets.mainMenu.play();
 	}
 

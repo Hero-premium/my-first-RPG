@@ -11,8 +11,8 @@ public class GateKeeper extends CombatEntity {
 
 
 	public GateKeeper() {
-		super(20, "GateKeeper", false, false, true, false, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
-				250, 0, false, false, false, Assets.PlaceHolder);
+		super(20, "GateKeeper", false, true, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
+				250, Assets.PlaceHolder);
 	}
 
 	private int damage = 0;
