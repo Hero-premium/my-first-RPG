@@ -1,12 +1,17 @@
 package combat;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
 import entities.CombatEntity;
-// FIXME make it compatible this GUI or delete it entirely
+
+// FIXME make it compatible to GUI or delete it entirely
+// the old class is kept for reference I'll delete when i feel like it
 public class BattleLauncher {
 
-	@SuppressWarnings("unused")
-	public static void launchBattle(CombatEntity player, CombatEntity enemy) {
-		System.out.println("_______ battle starts! _______");
+
+	public static void launchBattle(CombatEntity player, CombatEntity enemy, Label dialogLabel, Stage stage) {
+		/*	System.out.println("_______ battle starts! _______");
 		System.out.println(player.name + " has " + player.getHp() + " hit points");
 		System.out.println(enemy.name + " has " + enemy.getHp() + " hit points");
 		battleloop: while (true) {
@@ -52,7 +57,8 @@ public class BattleLauncher {
 					}
 				}
 			}
-		}
+		}*/
 
+		System.out.println("you're a cool guy");
 	}
 }

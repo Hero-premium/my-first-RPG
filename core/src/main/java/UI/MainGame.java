@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -42,7 +41,6 @@ public class MainGame implements Screen {
 	List<Touchable> touchables;
 	Dialogs story;
 	Stage stage;
-	Skin skin;
 	Label dialogLabel;
 	TextField takeInput;
 	
@@ -52,7 +50,7 @@ public class MainGame implements Screen {
 		wall = new Wall();
 		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 700)));
 		gatekeeper = new GateKeeper();
-		story = new Dialogs();
+		story = new Dialogs(player);
 
 		debug = new Debug();
 		physics = new Physics();
@@ -77,15 +75,15 @@ public class MainGame implements Screen {
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(800, 600, camera);
 
-		skin = new Skin(Gdx.files.internal("textures/uiskin/uiskin.json"));
+		
 		stage = new Stage(viewport);
 		Gdx.input.setInputProcessor(stage);
 
-		dialogLabel = new Label("", skin);
+		dialogLabel = new Label("", Assets.skin);
 		dialogLabel.setVisible(true);
 		dialogLabel.setWrap(true);
 
-		takeInput = new TextField("", skin);
+		takeInput = new TextField("", Assets.skin);
 		takeInput.setVisible(false);
 		takeInput.setPosition(250, 100, 10);
 		Table dialog = new Table();
@@ -126,7 +124,7 @@ public class MainGame implements Screen {
 		if (stopPlayer.isEntityInside(player)) {
 			stopPlayer.useages = stopPlayer.MAX_USAGE;
 			player.setMovmentLocked(true);
-			story.lunchStory(player, dialogLabel, takeInput);
+			story.lunchStory(player, dialogLabel, takeInput, stage);
 			gatekeeper.facingLeft = true;
 		}
 
@@ -180,7 +178,6 @@ public class MainGame implements Screen {
 
 	@Override
 	public void dispose() {
-		skin.dispose();
 		stage.dispose();
 		batch.dispose();
 		debug.dispose();
