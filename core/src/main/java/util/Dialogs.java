@@ -55,9 +55,6 @@ public class Dialogs {
 		}
 	}
 
-	void display(Label dialogLabel) {
-		dialogLabel.setText(story[index]);		
-	}
 
 	public void lunchStory(Player player, CombatEntity enemy, Label dialogLabel, TextField takeInput, Stage stage) {
 
@@ -73,7 +70,7 @@ public class Dialogs {
 				takeInput.setVisible(true);
 				return;
 			}
-			display(dialogLabel);
+			dialogLabel.setText(story[index]);
 			checkInput(dialogLabel, takeInput, player, enemy, stage);
 			index++;
 		}
