@@ -58,10 +58,6 @@ public class CombatEntity extends Entity {
 		this.hp = Math.clamp(this.hp, 0, maxHp);
 	}
 
-	public void setPoisonDur(int duration) {
-		poisonDuration = duration;
-	}
-
-	public void taketurn(CombatEntity entity) {
+	public void takeTurn(CombatEntity entity) {
 	}
 }

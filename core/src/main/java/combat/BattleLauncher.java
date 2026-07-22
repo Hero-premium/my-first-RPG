@@ -1,16 +1,26 @@
 package combat;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.Assets;
 
 import entities.CombatEntity;
+import entities.Player;
 
 // FIXME make it compatible to GUI or delete it entirely
+// TODO add slight delay between each move
 // the old class is kept for reference I'll delete when i feel like it
 public class BattleLauncher {
+	
+	private static void battleValidate() {
+		
+	}
 
 
-	public static void launchBattle(CombatEntity player, CombatEntity enemy, Label dialogLabel, Stage stage) {
+	public static void launchBattle(Player player, CombatEntity enemy, Label dialogLabel, Stage stage) {
 		/*	System.out.println("_______ battle starts! _______");
 		System.out.println(player.name + " has " + player.getHp() + " hit points");
 		System.out.println(enemy.name + " has " + enemy.getHp() + " hit points");
@@ -59,6 +69,15 @@ public class BattleLauncher {
 			}
 		}*/
 
-		System.out.println("you're a cool guy");
+		TextButton kick = new TextButton("Kick", Assets.skin);
+		kick.addListener(new ClickListener() {
+		    @Override
+		    public void clicked(InputEvent event, float x, float y) {
+		        player.kick(enemy);
+		        enemy.takeTurn(player);
+		    }
+		});
+		kick.setVisible(true);
+		stage.addActor(kick);
 	}
 }

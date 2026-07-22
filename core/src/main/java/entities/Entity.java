@@ -12,7 +12,7 @@ public abstract class Entity {
 	public boolean facingLeft = false;
 	public boolean onGround;
 	public boolean isAlive;
-	private boolean movmentLocked = false;
+	private boolean movementLocked = false;
 	public Vector2 velocity;
 	public Rectangle hitBox;
 	public float speed;
@@ -32,7 +32,7 @@ public abstract class Entity {
 	}
 
 	/**
-	 * clapms all entities velocity to 5000
+	 * clapms all entities velocity to 2000
 	 */
 	public void velocityClamp() {
 		velocity.x = Math.clamp(velocity.x, -2000, 2000);
@@ -43,12 +43,12 @@ public abstract class Entity {
 	public void passiveAbility() {
 	}
 
-	public boolean getMovmentLocked() {
-		return movmentLocked;
+	public boolean getMovementLocked() {
+		return movementLocked;
 	}
 
-	public void setMovmentLocked(boolean movmentLocked) {
-		this.movmentLocked = movmentLocked;
+	public void setMovementLocked(boolean movmentLocked) {
+		this.movementLocked = movmentLocked;
 	}
 
 	public void render(SpriteBatch batch) {

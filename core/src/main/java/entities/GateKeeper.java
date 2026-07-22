@@ -17,20 +17,20 @@ public class GateKeeper extends CombatEntity {
 
 	private int damage = 0;
 
-	void focus() {
+	private void focus() {
 		System.out.println(name + " used focus");
 		isfocused = true;
 		System.out.println(name + " is focusing on his attack... you may atack.");
 	}
 
-	void fireWand(CombatEntity player) {
+	private void fireWand(CombatEntity player) {
 		System.out.println(name + " used fireWand");
 		damage += 2;
 		CombatLogic.applyDamage(player, this, damage);
-		player.setPoisonDur(3);
+		player.poisonDuration = 3;
 	}
 
-	void shield(CombatEntity player) {
+	private void shield(CombatEntity player) {
 		System.out.println(name + " used Shield");
 		damage += 2;
 		CombatLogic.applyDamage(player, this, damage);
@@ -38,7 +38,7 @@ public class GateKeeper extends CombatEntity {
 	}
     // TODO add a smarter AI -# psttttt make it self aware
 	@Override
-	public void taketurn(CombatEntity player) {
+	public void takeTurn(CombatEntity player) {
 
 		int choice = !isfocused ? Util.rand.nextInt(3) : Util.rand.nextInt(2) + 1;
 

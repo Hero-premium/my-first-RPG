@@ -123,8 +123,8 @@ public class MainGame implements Screen {
 
 		if (stopPlayer.isEntityInside(player)) {
 			stopPlayer.useages = stopPlayer.MAX_USAGE;
-			player.setMovmentLocked(true);
-			story.lunchStory(player, dialogLabel, takeInput, stage);
+			player.setMovementLocked(true);
+			story.lunchStory(player, gatekeeper, dialogLabel, takeInput, stage);
 			gatekeeper.facingLeft = true;
 		}
 

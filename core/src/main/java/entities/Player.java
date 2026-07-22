@@ -44,7 +44,7 @@ public class Player extends CombatEntity {
 	}
 
 	public void move(float deltaTime) {
-		if (!getMovmentLocked()) {
+		if (!getMovementLocked()) {
 			if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 				facingLeft = true;
 				hitBox.x -= speed * deltaTime;

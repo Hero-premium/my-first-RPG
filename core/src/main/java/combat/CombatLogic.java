@@ -31,5 +31,6 @@ public class CombatLogic {
 		}
 		damage *= 10;
 		target.modifyHp(-damage);
+		System.out.println(target.name + " now has " + target.getHp());
 	}
 }
