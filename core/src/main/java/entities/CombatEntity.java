@@ -45,6 +45,9 @@ public class CombatEntity extends Entity {
 		}
 		this.hp = hp;
 		this.hp = Math.clamp(this.hp, 0, maxHp);
+		if (hp <= 0) {
+			isAlive = false;
+		}
 	}
 
 	/**
@@ -56,6 +59,9 @@ public class CombatEntity extends Entity {
 	public void modifyHp(int hp) {
 		this.hp += hp;
 		this.hp = Math.clamp(this.hp, 0, maxHp);
+		if (hp <= 0) {
+			isAlive = false;
+		}
 	}
 
 	public void takeTurn(CombatEntity entity) {
