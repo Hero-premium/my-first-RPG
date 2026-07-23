@@ -43,7 +43,6 @@ public class MainGame implements Screen {
 	Stage stage;
 	Label dialogLabel;
 	TextField takeInput;
-	
 
 	public MainGame() {
 		player = new Player();
@@ -66,7 +65,6 @@ public class MainGame implements Screen {
 		touchables = new ArrayList<Touchable>();
 		touchables.add(wall);
 		touchables.add(stopPlayer);
-		
 
 	}
 
@@ -75,7 +73,6 @@ public class MainGame implements Screen {
 		camera = new OrthographicCamera();
 		viewport = new FitViewport(800, 600, camera);
 
-		
 		stage = new Stage(viewport);
 		Gdx.input.setInputProcessor(stage);
 
@@ -94,7 +91,7 @@ public class MainGame implements Screen {
 
 		stage.addActor(dialog);
 		stage.addActor(takeInput);
-		
+
 		Assets.mainMenu.setLooping(true);
 		Assets.mainMenu.setVolume(0.1f);
 		Assets.mainMenu.play();
@@ -115,10 +112,11 @@ public class MainGame implements Screen {
 		}
 
 		objects.removeIf(object -> !object.isAlive);
-
-		// FIXME add a way to loop through all entities
-		for (Touchable object : touchables) {
-			object.update(player);
+		
+		
+		for (Touchable touchable : touchables) {
+			for (Entity entity : objects)
+				touchable.update(entity);
 		}
 
 		if (stopPlayer.isEntityInside(player)) {
@@ -138,19 +136,19 @@ public class MainGame implements Screen {
 		batch.begin();
 
 		batch.draw(Assets.backGround, player.hitBox.x - 50, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-		
+
 		for (Entity object : objects) {
-			if (object.texture != null) object.render(batch);
+			if (object.texture != null)
+				object.render(batch);
 		}
-			
-		
+
 		for (Touchable object : touchables) {
 			if (object.texture != null)
 				batch.draw(object.texture, object.hitBox.x, object.hitBox.y, object.hitBox.width, object.hitBox.height);
 		}
 
 		batch.end();
-		
+
 		stage.act(delta);
 		stage.draw();
 
