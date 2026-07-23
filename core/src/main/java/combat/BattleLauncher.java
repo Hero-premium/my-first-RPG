@@ -16,14 +16,20 @@ import entities.Player;
 // the old class is kept for reference I'll delete when i feel like it
 public class BattleLauncher {
 
-	private static void validateBattle(Player player, CombatEntity enemy) {
+	enum BattleState {
+		hi, hxi
+	};
+
+	private static BattleState validateBattle(Player player, CombatEntity enemy) {
 		if (enemy.getHp() <= 0) {
-			player.gold += enemy.gold;
+			enemy.moveGold(enemy.gold, player);
 			System.out.println("You won!");
 			System.out.println("you gained " + enemy.gold + " gold");
 			System.out.println("to keep going press any button");
-			
-		} else if (player.getHp() <= 0) {
+			return BattleState.hi;
+
+		}
+		if (player.getHp() <= 0) {
 			System.out.println("you lost!");
 			System.out.println("to retry press 1 to quit press 2");
 
@@ -46,18 +52,17 @@ public class BattleLauncher {
 				}
 
 			});
-		} else {
-			enemy.takeTurn(player);
+			return BattleState.hi;
 		}
+		enemy.takeTurn(player);
+		return BattleState.hxi;
 	}
 
 	public static void launchBattle(Player player, CombatEntity enemy, Label dialogLabel, Stage stage) {
-		/*
-		 * System.out.println("_______ battle starts! _______");
-		 * System.out.println(player.name + " has " + player.getHp() + " hit points");
-		 * System.out.println(enemy.name + " has " + enemy.getHp() + " hit points");
-		 * 
-		 */
+
+		System.out.println("_______ battle starts! _______");
+		System.out.println(player.name + " has " + player.getHp() + " hit points");
+		System.out.println(enemy.name + " has " + enemy.getHp() + " hit points");
 
 		TextButton kick = new TextButton("Kick", Assets.skin);
 		kick.addListener(new ClickListener() {
@@ -67,7 +72,23 @@ public class BattleLauncher {
 				validateBattle(player, enemy);
 			}
 		});
+
+		TextButton swordSlash = new TextButton("Sword slash", Assets.skin);
+		swordSlash.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				player.swordSlash(enemy);
+				BattleState hi = validateBattle(player, enemy);
+				
+				if (hi == BattleState.hi) {
+					swordSlash.setDisabled(true);
+				}
+			}
+		});
+
 		kick.setVisible(true);
+		swordSlash.setVisible(true);
 		stage.addActor(kick);
+		stage.addActor(swordSlash);
 	}
 }

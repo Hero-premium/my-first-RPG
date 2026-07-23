@@ -56,4 +56,25 @@ public abstract class Entity {
 				false);
 	}
 
+	/**
+	 * moves an amount of gold from an entity to another entity
+	 * 
+	 * @param amount the amount of gold moved
+	 * @param receiver the entity receiving the gold
+	 * @throws IllegalArgumentException on negative input	 
+	 * 
+	 */
+	public void moveGold(int amount, Entity receiver) {
+		if (amount < 0) {
+			throw new IllegalArgumentException("this number can't be negative - you set the gk gold to negative");
+		}
+		if (gold < amount) {
+			System.out.println("this entity doesn't have enough gold for this transaction");
+			return;
+		}
+
+		gold -= amount;
+		receiver.gold += amount;
+	}
+
 }
