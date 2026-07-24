@@ -44,7 +44,7 @@ public class Dialogs {
 			stage.setKeyboardFocus(takeInput);
 		}
 		if (story[index].equals("gatekeeper: oh you shouldn't have told me that, as I'll be your first foe, I'll defend my lord with my life!")) {
-			BattleLauncher.launchBattle(player, enemy, dialogLabel, table);
+			BattleLauncher.launchBattle(player, enemy, table);
 		
 	}
 	}

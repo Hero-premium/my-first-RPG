@@ -2,7 +2,6 @@ package combat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -24,6 +23,7 @@ public class BattleLauncher {
 	
 	private static Player player;
 	private static CombatEntity enemy;
+	private static Table combat;
 	
 	private static void retry() {
 		player.isDodging = false;
@@ -31,6 +31,24 @@ public class BattleLauncher {
 		enemy.resetHp();
 		enemy.isfocused = false;
 		enemy.isDefending = false;
+		
+		kick.setDisabled(false);
+		kick.setVisible(true);
+		
+		swordSlash.setDisabled(false);
+		swordSlash.setVisible(true);
+		
+		dodge.setDisabled(false);
+		dodge.setVisible(true);
+		
+		retry.setVisible(false);
+		quit.setVisible(false);
+		retry.setDisabled(true);
+		quit.setDisabled(true);
+		
+		launchBattle(player, enemy, combat);
+		
+		
 		
 		// TODO complete this method
 	}
@@ -82,18 +100,25 @@ public class BattleLauncher {
 		quit.setVisible(false);
 		retry.setDisabled(true);
 		quit.setDisabled(true);
+		
+		if (combat.getChildren().isEmpty()) {
 		combat.add(kick).pad(30);
 		combat.add(swordSlash).pad(30);
 		combat.add(dodge).pad(30);
 		combat.add(retry).pad(30);
 		combat.add(quit).pad(30);
+		}
 	}
 	
-	public static void launchBattle(Player p, CombatEntity e, Label dialogLabel, Table combat) {
+	public static void launchBattle(Player p, CombatEntity e, Table combatTable) {
 		player = p;
 		enemy = e;
+		combat = combatTable;
+		
+		if (dodge == null) {
 		generateButtons(combat);
-
+		}
+		
 		Util.log("_______ battle starts! _______");
 		Util.log(player.name + " has " + player.getHp() + " hit points");
 		Util.log(enemy.name + " has " + enemy.getHp() + " hit points");
@@ -123,13 +148,15 @@ public class BattleLauncher {
 	private static void endBattle() {
 		kick.setDisabled(true);
 		kick.setVisible(false);
-		
+
 		swordSlash.setDisabled(true);
 		swordSlash.setVisible(false);
 		
 		dodge.setDisabled(true);
 		dodge.setVisible(false);
 		
+		enemy = null;
+
 		// TODO complete this method
 	}
 

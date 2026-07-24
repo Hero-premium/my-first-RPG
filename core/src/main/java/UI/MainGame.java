@@ -67,7 +67,6 @@ public class MainGame implements Screen {
 		touchables = new ArrayList<Touchable>();
 		touchables.add(wall);
 		touchables.add(stopPlayer);
-
 	}
 
 	@Override
