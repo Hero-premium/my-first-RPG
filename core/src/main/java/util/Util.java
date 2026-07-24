@@ -11,7 +11,7 @@ public class Util {
 	private static final DateTimeFormatter FORMAT =
             DateTimeFormatter.ofPattern("HH:mm:ss");
 
-    public static void log(String message) {
+    public final static void log(String message) {
         String time = LocalDateTime.now().format(FORMAT);
         System.out.println("[" + time + "] " + message);
     }
