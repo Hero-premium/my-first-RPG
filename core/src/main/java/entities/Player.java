@@ -9,7 +9,7 @@ import com.mygdx.game.Assets;
 import combat.CombatLogic;
 import util.Util;
 
-public class Player extends CombatEntity {
+public class Player extends CombatEntity  {
 
 	public Player() {
 		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, 200, Assets.player);
@@ -45,6 +45,12 @@ public class Player extends CombatEntity {
 
 	public void move(float deltaTime) {
 		if (!movementLocked()) {
+			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+				speed *= 1.5;
+			}
+			if (Util.isKeyJustReleased(Input.Keys.W)) {
+				speed /= 1.5;
+			}
 			if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 				facingLeft = true;
 				hitBox.x -= speed * deltaTime;
