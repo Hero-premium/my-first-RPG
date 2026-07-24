@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Assets;
 
 import entities.Entity;
-
+// FIXME going through walls bug
 public class Wall extends Touchable {
 
 	public Wall() {

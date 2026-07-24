@@ -18,20 +18,20 @@ public class GateKeeper extends CombatEntity {
 	private int damage = 0;
 
 	private void focus() {
-		System.out.println(name + " used focus");
+		Util.log(name + " used focus");
 		isfocused = true;
-		System.out.println(name + " is focusing on his attack... you may atack.");
+		Util.log(name + " is focusing on his attack... you may atack.");
 	}
 
 	private void fireWand(CombatEntity player) {
-		System.out.println(name + " used fireWand");
+		Util.log(name + " used fireWand");
 		damage += 2;
 		CombatLogic.applyDamage(player, this, damage);
 		player.poisonDuration = 3;
 	}
 
 	private void shield(CombatEntity player) {
-		System.out.println(name + " used Shield");
+		Util.log(name + " used Shield");
 		damage += 2;
 		CombatLogic.applyDamage(player, this, damage);
 		isDefending = true;

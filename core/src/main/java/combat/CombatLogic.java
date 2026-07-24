@@ -8,7 +8,7 @@ public class CombatLogic {
 	public static void applyDamage(CombatEntity target, CombatEntity user, int damage) {
 
 		if (target.isDodging) {
-			System.out.println(target.name + " has dodged the " + user.name + " attack!");
+			Util.log(target.name + " has dodged the " + user.name + " attack!");
 			target.isDodging = false;
 			target.isfocused = false;
 			target.poisonDuration--;
@@ -16,21 +16,21 @@ public class CombatLogic {
 		}
 		if (target.isDefending) {
 			damage /= 2;
-			System.out.println("your damage was reduced by 50% because of " + target.name + " using a sheild!");
+			Util.log("your damage was reduced by 50% because of " + target.name + " using a sheild!");
 			target.isDefending = false;
 		}
 		if (user.isfocused) {
 			damage *= 2;
-			System.out.println(user.name + " focuses hard to deal 100% more damage!");
+			Util.log(user.name + " focuses hard to deal 100% more damage!");
 			user.isfocused = false;
 		}
 		if (target.poisonDuration > 0) {
 			damage += Util.rand.nextInt(2) + 1;
-			System.out.println(target.name + " took extra damage because of being on fire!");
+			Util.log(target.name + " took extra damage because of being on fire!");
 			target.poisonDuration--;
 		}
 		damage *= 10;
 		target.modifyHp(-damage);
-		System.out.println(target.name + " now has " + target.getHp());
+		Util.log(target.name + " now has " + target.getHp());
 	}
 }

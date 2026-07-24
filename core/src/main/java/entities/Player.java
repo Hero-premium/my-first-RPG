@@ -16,17 +16,17 @@ public class Player extends CombatEntity {
 	}
 
 	public void kick(CombatEntity enemy) {
-		System.out.println(name + " used kick");
+		Util.log(name + " used kick");
 		int damage = Util.rand.nextInt(2) + 3;
 		CombatLogic.applyDamage(enemy, this, damage);
 	}
 
 	public void swordSlash(CombatEntity enemy) {
-		System.out.println(name + " used swordSlash");
+		Util.log(name + " used swordSlash");
 		int damage = 0;
 		if (75 <= Util.rand.nextInt(100)) {
 			damage = 8;
-			System.out.println("critical hit!");
+			Util.log("critical hit!");
 			CombatLogic.applyDamage(enemy, this, damage);
 
 		} else {
@@ -37,14 +37,14 @@ public class Player extends CombatEntity {
 	}
 
 	public void dodge(CombatEntity enemy) {
-		System.out.println(name + " used dodge");
+		Util.log(name + " used dodge");
 		isDodging = Util.rand.nextBoolean();
 		int damage = 1;
 		CombatLogic.applyDamage(enemy, this, damage);
 	}
 
 	public void move(float deltaTime) {
-		if (!getMovementLocked()) {
+		if (!movementLocked()) {
 			if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 				facingLeft = true;
 				hitBox.x -= speed * deltaTime;

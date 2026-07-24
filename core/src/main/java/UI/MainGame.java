@@ -43,6 +43,8 @@ public class MainGame implements Screen {
 	Stage stage;
 	Label dialogLabel;
 	TextField takeInput;
+	Table combat;
+	boolean storyOn = false;
 
 	public MainGame() {
 		player = new Player();
@@ -89,7 +91,12 @@ public class MainGame implements Screen {
 		dialog.bottom();
 		dialog.add(dialogLabel).width(700).pad(10);
 
+	    combat = new Table();
+		combat.setFillParent(true); // table fills the whole stage/screen
+		combat.bottom();
+		
 		stage.addActor(dialog);
+		stage.addActor(combat);
 		stage.addActor(takeInput);
 
 		Assets.mainMenu.setLooping(true);
@@ -115,15 +122,20 @@ public class MainGame implements Screen {
 		
 		
 		for (Touchable touchable : touchables) {
-			for (Entity entity : objects)
+			for (Entity entity : objects) {
 				touchable.update(entity);
+			}
+			if (touchable == stopPlayer)
+			if (touchable.isEntityInside(player)) {
+				stopPlayer.useages = stopPlayer.MAX_USAGE;
+				player.setMovementLocked(true);
+				storyOn = true;
+				gatekeeper.facingLeft = true;
+			}
 		}
 
-		if (stopPlayer.isEntityInside(player)) {
-			stopPlayer.useages = stopPlayer.MAX_USAGE;
-			player.setMovementLocked(true);
-			story.lunchStory(player, gatekeeper, dialogLabel, takeInput, stage);
-			gatekeeper.facingLeft = true;
+		if (storyOn) {
+			story.lunchStory(player, gatekeeper, dialogLabel, takeInput, stage, combat);
 		}
 
 		touchables.removeIf(object -> object.useages >= object.MAX_USAGE);

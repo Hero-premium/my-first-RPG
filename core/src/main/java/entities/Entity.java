@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import util.Util;
+
 public abstract class Entity {
 
 	public int gold;
@@ -43,7 +45,7 @@ public abstract class Entity {
 	public void passiveAbility() {
 	}
 
-	public boolean getMovementLocked() {
+	public boolean movementLocked() {
 		return movementLocked;
 	}
 
@@ -66,10 +68,10 @@ public abstract class Entity {
 	 */
 	public void moveGold(int amount, Entity receiver) {
 		if (amount < 0) {
-			throw new IllegalArgumentException("this number can't be negative - you set the gk gold to negative");
+			throw new IllegalArgumentException("this number can't be negative");
 		}
 		if (gold < amount) {
-			System.out.println("this entity doesn't have enough gold for this transaction");
+			Util.log("this entity doesn't have enough gold for this transaction");
 			return;
 		}
 
