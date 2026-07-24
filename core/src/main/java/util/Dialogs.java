@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import combat.BattleLauncher;
@@ -36,13 +37,14 @@ public class Dialogs {
 
 	
 	
-	void checkInput(Label dialogLabel, TextField takeInput, Player player, CombatEntity enemy, Stage stage) {
+	void checkInput(Label dialogLabel, TextField takeInput, Player player, CombatEntity enemy, Stage stage ,Table table) {
 		if (story[index].equals("gatekeeper: what do I call you, hunter?")) {
 			here = true;
 			takeInput.setVisible(true);
+			stage.setKeyboardFocus(takeInput);
 		}
 		if (story[index].equals("gatekeeper: oh you shouldn't have told me that, as I'll be your first foe, I'll defend my lord with my life!")) {
-			BattleLauncher.launchBattle(player, enemy, dialogLabel, stage);
+			BattleLauncher.launchBattle(player, enemy, dialogLabel, table);
 		
 	}
 	}
@@ -56,13 +58,14 @@ public class Dialogs {
 	}
 
 
-	public void lunchStory(Player player, CombatEntity enemy, Label dialogLabel, TextField takeInput, Stage stage) {
+	public void lunchStory(Player player, CombatEntity enemy, Label dialogLabel, TextField takeInput, Stage stage, Table table) {
 
 		if (proceed()) {
 			if (!takeInput.getText().equals("")) {
 				
 				player.name = takeInput.getText();
 				takeInput.setVisible(false);
+				stage.setKeyboardFocus(null);
 				story = updateStory(player);
 			}
 			if (player.name.equals("") && here) {
@@ -71,7 +74,7 @@ public class Dialogs {
 				return;
 			}
 			dialogLabel.setText(story[index]);
-			checkInput(dialogLabel, takeInput, player, enemy, stage);
+			checkInput(dialogLabel, takeInput, player, enemy, stage,table);
 			index++;
 		}
 
