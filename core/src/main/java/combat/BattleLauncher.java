@@ -47,11 +47,8 @@ public class BattleLauncher {
 		quit.setDisabled(true);
 		
 		launchBattle(player, enemy, combat);
-		
-		
-		
-		// TODO complete this method
 	}
+	
 	private static void generateButtons(Table combat) {
 		kick = new TextButton("Kick", Assets.skin);
 		kick.addListener(new ClickListener() {
@@ -155,9 +152,6 @@ public class BattleLauncher {
 		dodge.setDisabled(true);
 		dodge.setVisible(false);
 		
-		enemy = null;
-
-		// TODO complete this method
 	}
 
 	private static void handleBattleState(BattleState state) {
