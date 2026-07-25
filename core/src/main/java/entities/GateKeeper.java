@@ -9,10 +9,9 @@ import util.Util;
 
 public class GateKeeper extends CombatEntity {
 
-
 	public GateKeeper() {
-		super(20, "GateKeeper", false, true, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
-				250, Assets.PlaceHolder);
+		super(20, "GateKeeper", false, true, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250, 250,
+				Assets.PlaceHolder);
 	}
 
 	private int damage = 0;
@@ -36,7 +35,8 @@ public class GateKeeper extends CombatEntity {
 		CombatLogic.applyDamage(player, this, damage);
 		isDefending = true;
 	}
-    // TODO add a smarter AI -# psttttt make it self aware
+
+	// TODO add a smarter AI -# psttttt make it self aware
 	@Override
 	public void takeTurn(CombatEntity player) {
 
@@ -47,7 +47,7 @@ public class GateKeeper extends CombatEntity {
 		case 1 -> fireWand(player);
 		case 2 -> shield(player);
 		}
-        damage = 0;
+		damage = 0;
 	}
 
 }

@@ -13,9 +13,8 @@ public class CombatEntity extends Entity {
 	public boolean isDefending = false;
 	public boolean isfocused = false;
 
-	public CombatEntity(int gold, String name, boolean onGround, boolean isAlive,
-			 float speed, Vector2 velocity, Rectangle hitbox, int hp, int maxhp,
-			Texture texture) {
+	public CombatEntity(int gold, String name, boolean onGround, boolean isAlive, float speed, Vector2 velocity,
+			Rectangle hitbox, int hp, int maxhp, Texture texture) {
 		super(gold, name, onGround, isAlive, speed, velocity, hitbox, texture);
 
 		this.hp = hp;
@@ -34,8 +33,8 @@ public class CombatEntity extends Entity {
 	}
 
 	/**
-	 * sets hp to given amount
-	 * also clamps hp between 0 and maxHp
+	 * sets hp to given amount also clamps hp between 0 and maxHp
+	 * 
 	 * @param hp the new hp
 	 * @throws IllegalArgumentException on negative input
 	 */
@@ -48,8 +47,8 @@ public class CombatEntity extends Entity {
 	}
 
 	/**
-	 * adds the given amount of hp to the existing amount of hp
-	 * also clamps hp between 0 and maxHp
+	 * adds the given amount of hp to the existing amount of hp also clamps hp
+	 * between 0 and maxHp
 	 * 
 	 * @param hp how much you want to add
 	 */

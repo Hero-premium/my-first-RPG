@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Assets;
 
 import entities.Entity;
+
 // FIXME going through walls bug
 public class Wall extends Touchable {
 
@@ -12,14 +13,15 @@ public class Wall extends Touchable {
 	}
 
 	public void wall(Entity entity) {
-		if (!isEntityInside(entity)) return;
+		if (!isEntityInside(entity))
+			return;
 
 		Rectangle e = entity.hitBox;
 
-		float overlapLeft   = (e.x + e.width) - hitBox.x;
-		float overlapRight  = (hitBox.x + hitBox.width) - e.x;
+		float overlapLeft = (e.x + e.width) - hitBox.x;
+		float overlapRight = (hitBox.x + hitBox.width) - e.x;
 		float overlapBottom = (e.y + e.height) - hitBox.y;
-		float overlapTop    = (hitBox.y + hitBox.height) - e.y;
+		float overlapTop = (hitBox.y + hitBox.height) - e.y;
 
 		float minOverlapX = Math.min(overlapLeft, overlapRight);
 		float minOverlapY = Math.min(overlapBottom, overlapTop);

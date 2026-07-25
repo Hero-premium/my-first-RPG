@@ -9,7 +9,7 @@ import com.mygdx.game.Assets;
 import combat.CombatLogic;
 import util.Util;
 
-public class Player extends CombatEntity  {
+public class Player extends CombatEntity {
 
 	public Player() {
 		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, 200, Assets.player);
@@ -24,7 +24,7 @@ public class Player extends CombatEntity  {
 	public void swordSlash(CombatEntity enemy) {
 		Util.log(name + " used swordSlash");
 		int damage = 0;
-		if (75 <= Util.rand.nextInt(100)) {
+		if (80 <= Util.rand.nextInt(100)) {
 			damage = 8;
 			Util.log("critical hit!");
 			CombatLogic.applyDamage(enemy, this, damage);

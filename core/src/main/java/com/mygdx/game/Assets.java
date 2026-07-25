@@ -12,11 +12,11 @@ public class Assets {
 	public final static Texture openedSpringTrap = new Texture(Gdx.files.internal("textures/spring_trap_opened.png"));
 	public final static Texture closedSpringTrap = new Texture(Gdx.files.internal("textures/spring_trap_closed.png"));
 	public final static Texture PlaceHolder = new Texture(Gdx.files.internal("textures/place_holder.png"));
-	public final static  Skin skin = new Skin(Gdx.files.internal("textures/uiskin/uiskin.json"));
+	public final static Skin skin = new Skin(Gdx.files.internal("textures/uiskin/uiskin.json"));
 
-	public final static Music mainMenu =  Gdx.audio.newMusic(Gdx.files.internal("music/Walen - Conspiracy Detective (freetouse.com).mp3"));
-	
-	
+	public final static Music mainMenu = Gdx.audio
+			.newMusic(Gdx.files.internal("music/Walen - Conspiracy Detective (freetouse.com).mp3"));
+
 	public static void dispose() {
 		player.dispose();
 		backGround.dispose();
