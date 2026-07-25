@@ -2,6 +2,7 @@ package combat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,36 +21,41 @@ public class BattleLauncher {
 	private static TextButton dodge;
 	private static TextButton retry;
 	private static TextButton quit;
-	
+
 	private static Player player;
 	private static CombatEntity enemy;
-	private static Table combat;
-	
+	private static Stage stage;
+
 	private static void retry() {
 		player.isDodging = false;
 		player.resetHp();
 		enemy.resetHp();
 		enemy.isfocused = false;
 		enemy.isDefending = false;
-		
+
 		kick.setDisabled(false);
 		kick.setVisible(true);
-		
+
 		swordSlash.setDisabled(false);
 		swordSlash.setVisible(true);
-		
+
 		dodge.setDisabled(false);
 		dodge.setVisible(true);
-		
+
 		retry.setVisible(false);
 		quit.setVisible(false);
 		retry.setDisabled(true);
 		quit.setDisabled(true);
-		
-		launchBattle(player, enemy, combat);
+
+		launchBattle(player, enemy, stage);
 	}
-	
-	private static void generateButtons(Table combat) {
+
+	private static void generateButtons() {
+		Table combat = new Table();
+		combat.setFillParent(true); // table fills the whole stage/screen
+		combat.bottom();
+		
+		
 		kick = new TextButton("Kick", Assets.skin);
 		kick.addListener(new ClickListener() {
 			@Override
@@ -77,8 +83,8 @@ public class BattleLauncher {
 
 			}
 		});
-		
-	    retry = new TextButton("retry", Assets.skin);
+
+		retry = new TextButton("retry", Assets.skin);
 		retry.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -97,34 +103,34 @@ public class BattleLauncher {
 		quit.setVisible(false);
 		retry.setDisabled(true);
 		quit.setDisabled(true);
-		
+
 		if (combat.getChildren().isEmpty()) {
-		combat.add(kick).pad(30);
-		combat.add(swordSlash).pad(30);
-		combat.add(dodge).pad(30);
-		combat.add(retry).pad(30);
-		combat.add(quit).pad(30);
+			combat.add(kick).pad(30);
+			combat.add(swordSlash).pad(30);
+			combat.add(dodge).pad(30);
+			combat.add(retry).pad(30);
+			combat.add(quit).pad(30);
+			stage.addActor(combat);
 		}
 	}
-	
-	public static void launchBattle(Player p, CombatEntity e, Table combatTable) {
+
+	public static void launchBattle(Player p, CombatEntity e, Stage gameStage) {
 		player = p;
 		enemy = e;
-		combat = combatTable;
-		
+	    stage = gameStage;
+
 		if (dodge == null) {
-		generateButtons(combat);
+			generateButtons();
 		}
-		
+
 		Util.log("_______ battle starts! _______");
 		Util.log(player.name + " has " + player.getHp() + " hit points");
 		Util.log(enemy.name + " has " + enemy.getHp() + " hit points");
 
-		
 	}
 
 	enum BattleState {
-		 GOING, WON, LOST
+		GOING, WON, LOST
 	};
 
 	private static BattleState validateBattle() {
@@ -142,16 +148,17 @@ public class BattleLauncher {
 		}
 		return BattleState.GOING;
 	}
+
 	private static void endBattle() {
 		kick.setDisabled(true);
 		kick.setVisible(false);
 
 		swordSlash.setDisabled(true);
 		swordSlash.setVisible(false);
-		
+
 		dodge.setDisabled(true);
 		dodge.setVisible(false);
-		
+
 	}
 
 	private static void handleBattleState(BattleState state) {
@@ -166,19 +173,17 @@ public class BattleLauncher {
 			quit.setVisible(true);
 			retry.setDisabled(false);
 			quit.setDisabled(false);
-			
-			
+
 		}
 		case GOING -> {
 			enemy.takeTurn(player);
 			validateBattle();
 		}
 		default -> {
-			throw new IllegalStateException("The returned enum \""+ state +"\" can't be handled here");
+			throw new IllegalStateException("The returned enum \"" + state + "\" can't be handled here");
 		}
 
 		}
 	}
 
-	
 }
