@@ -3,6 +3,7 @@ package combat;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -12,7 +13,7 @@ import entities.CombatEntity;
 import entities.Player;
 import util.Util;
 
-// FIXME make it compatible to GUI
+// TODO connect the hp/text to labels
 // TODO add slight delay between each move
 public class BattleLauncher {
 
@@ -21,6 +22,9 @@ public class BattleLauncher {
 	private static TextButton dodge;
 	private static TextButton retry;
 	private static TextButton quit;
+	
+	private static Label playerHp;
+	private static Label enemyHp;
 
 	private static Player player;
 	private static CombatEntity enemy;
@@ -41,6 +45,9 @@ public class BattleLauncher {
 
 		dodge.setDisabled(false);
 		dodge.setVisible(true);
+		
+		playerHp.setVisible(true);
+		enemyHp.setVisible(true);
 
 		retry.setVisible(false);
 		quit.setVisible(false);
@@ -49,12 +56,18 @@ public class BattleLauncher {
 
 		launchBattle(player, enemy, stage);
 	}
+	
+	private static String buildHpText(CombatEntity entity) {
+		return entity.name + " Health :" + entity.getHp();
+	}
 
 	private static void generateButtons() {
-		Table combat = new Table();
-		combat.setFillParent(true); // table fills the whole stage/screen
-		combat.bottom();
+		Table buttonsTable = new Table();
+		buttonsTable.setFillParent(true);
+		buttonsTable.bottom();
 		
+	//	buttonsTable.setVisible(false);
+	//	buttonsTable.setDebug(true);
 		
 		kick = new TextButton("Kick", Assets.skin);
 		kick.addListener(new ClickListener() {
@@ -104,14 +117,32 @@ public class BattleLauncher {
 		retry.setDisabled(true);
 		quit.setDisabled(true);
 
-		if (combat.getChildren().isEmpty()) {
-			combat.add(kick).pad(30);
-			combat.add(swordSlash).pad(30);
-			combat.add(dodge).pad(30);
-			combat.add(retry).pad(30);
-			combat.add(quit).pad(30);
-			stage.addActor(combat);
+		if (buttonsTable.getChildren().isEmpty()) {
+			buttonsTable.add(kick).pad(30);
+			buttonsTable.add(swordSlash).pad(30);
+			buttonsTable.add(dodge).pad(30);
+			buttonsTable.add(retry).pad(30);
+			buttonsTable.add(quit).pad(30);
+			stage.addActor(buttonsTable);
 		}
+		
+		
+	}
+	
+	
+	private static void generateLabels() {
+		
+		Table labelsTable = new Table();
+		labelsTable.setFillParent(true);
+		labelsTable.bottom().right();
+	//	labelsTable.setDebug(true);
+		
+		playerHp = new Label(buildHpText(player), Assets.skin);
+	    enemyHp = new Label(buildHpText(enemy), Assets.skin);
+		
+		labelsTable.add(playerHp).pad(20).right();
+		labelsTable.add(enemyHp);
+		stage.addActor(labelsTable);
 	}
 
 	public static void launchBattle(Player p, CombatEntity e, Stage gameStage) {
@@ -121,6 +152,11 @@ public class BattleLauncher {
 
 		if (dodge == null) {
 			generateButtons();
+			Util.log("buttons generated");
+		}
+		if (playerHp == null) {
+			generateLabels();
+			Util.log("labels generated");
 		}
 
 		Util.log("_______ battle starts! _______");
@@ -135,14 +171,13 @@ public class BattleLauncher {
 
 	private static BattleState validateBattle() {
 		if (enemy.getHp() <= 0) {
-			Util.log("You won!");
-			Util.log("you gained " + enemy.gold + " gold");
+			Util.log("the player won");
 			enemy.moveGold(enemy.gold, player);
 			return BattleState.WON;
 
 		}
 		if (player.getHp() <= 0) {
-			Util.log("you lost!");
+			Util.log("the player lost");
 			handleBattleState(BattleState.LOST);
 			return BattleState.LOST;
 		}
@@ -158,6 +193,9 @@ public class BattleLauncher {
 
 		dodge.setDisabled(true);
 		dodge.setVisible(false);
+		
+		playerHp.setVisible(false);
+		enemyHp.setVisible(false);
 
 	}
 
@@ -178,6 +216,9 @@ public class BattleLauncher {
 		case GOING -> {
 			enemy.takeTurn(player);
 			validateBattle();
+			
+			playerHp.setText(buildHpText(player));
+			enemyHp.setText(buildHpText(enemy));
 		}
 		default -> {
 			throw new IllegalStateException("The returned enum \"" + state + "\" can't be handled here");
