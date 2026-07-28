@@ -58,5 +58,6 @@ public class CombatEntity extends Entity {
 	}
 
 	public void takeTurn(CombatEntity entity) {
+		throw new UnsupportedOperationException("this entity " + getClass() + " doesn't have a takeTurn method yet, this is a mistake");
 	}
 }
