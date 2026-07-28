@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Assets;
@@ -29,7 +30,7 @@ public class MainGame implements Screen {
 
 	SpriteBatch batch;
 	Player player;
-	GateKeeper gatekeeper;
+	GateKeeper gateKeeper;
 	Debug debug;
 	Physics physics;
 	final static float floorLevel = 50;
@@ -49,7 +50,7 @@ public class MainGame implements Screen {
 		player = new Player();
 		wall = new Wall();
 		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 700)));
-		gatekeeper = new GateKeeper();
+		gateKeeper = new GateKeeper();
 		story = new Dialogs(player);
 
 		debug = new Debug();
@@ -61,11 +62,16 @@ public class MainGame implements Screen {
 
 		objects = new ArrayList<Entity>();
 		objects.add(player);
-		objects.add(gatekeeper);
+		objects.add(gateKeeper);
 
 		touchables = new ArrayList<Touchable>();
 		touchables.add(wall);
 		touchables.add(stopPlayer);
+		
+		Json json = new Json();
+		json.setUsePrototypes(false);
+		System.out.println(json.toJson(player));
+		
 	}
 
 	@Override
@@ -122,12 +128,12 @@ public class MainGame implements Screen {
 					stopPlayer.useages = stopPlayer.MAX_USAGE;
 					player.setMovementLocked(true);
 					storyOn = true;
-					gatekeeper.facingLeft = true;
+					gateKeeper.facingLeft = true;
 				}
 		}
 
 		if (storyOn) {
-			story.lunchStory(player, gatekeeper, dialogLabel, takeInput, stage);
+			story.lunchStory(player, gateKeeper, dialogLabel, takeInput, stage);
 		}
 
 		touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
