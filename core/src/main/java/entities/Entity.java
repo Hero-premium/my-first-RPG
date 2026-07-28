@@ -18,7 +18,7 @@ public abstract class Entity {
 	public Vector2 velocity;
 	public Rectangle hitBox;
 	public float speed;
-	public Texture texture;
+	public transient Texture texture;
 
 	protected Entity(int gold, String name, boolean onGround, boolean isAlive, float speed, Vector2 velocity,
 			Rectangle hitBox, Texture texture) {
@@ -77,6 +77,7 @@ public abstract class Entity {
 
 		gold -= amount;
 		receiver.gold += amount;
+		Util.log("the "  + receiver.name + " gained " + amount + " gold");
 	}
 
 }
