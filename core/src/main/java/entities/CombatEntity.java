@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 public class CombatEntity extends Entity {
 
 	private int hp;
-	public int maxHp;
+	public int maxHp ;
 	public int poisonDuration = 0;
 	public boolean isDodging = false;
 	public boolean isDefending = false;

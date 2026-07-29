@@ -13,6 +13,7 @@ public class Assets {
 	public final static Texture closedSpringTrap = new Texture(Gdx.files.internal("textures/spring_trap_closed.png"));
 	public final static Texture PlaceHolder = new Texture(Gdx.files.internal("textures/place_holder.png"));
 	public final static Skin skin = new Skin(Gdx.files.internal("textures/uiskin/uiskin.json"));
+	public final static Texture wall =  new Texture(Gdx.files.internal("textures/wall.jpg"));
 
 	public final static Music mainMenu = Gdx.audio
 			.newMusic(Gdx.files.internal("music/Walen - Conspiracy Detective (freetouse.com).mp3"));
@@ -25,5 +26,6 @@ public class Assets {
 		PlaceHolder.dispose();
 		mainMenu.dispose();
 		skin.dispose();
+		wall.dispose();
 	}
 }
