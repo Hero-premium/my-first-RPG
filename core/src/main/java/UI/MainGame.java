@@ -21,9 +21,10 @@ import debug.Debug;
 import entities.Entity;
 import entities.GateKeeper;
 import entities.Player;
+import storyUtil.Dialogs;
 import touchables.Touchable;
 import touchables.Wall;
-import util.Dialogs;
+import util.Util;
 import world.Physics;
 
 public class MainGame implements Screen {
@@ -56,9 +57,8 @@ public class MainGame implements Screen {
 		debug = new Debug();
 		physics = new Physics();
 		batch = new SpriteBatch();
-		stopPlayer.hitBox.setSize(200, 700);
+		stopPlayer.hitBox.setSize(200, 800);
 		wall.hitBox.set(-350, 50, 200, 700);
-		wall.texture = null;
 
 		objects = new ArrayList<Entity>();
 		objects.add(player);
@@ -71,7 +71,6 @@ public class MainGame implements Screen {
 		Json json = new Json();
 		json.setUsePrototypes(false);
 		System.out.println(json.toJson(player));
-		
 	}
 
 	@Override
@@ -182,10 +181,12 @@ public class MainGame implements Screen {
 
 	@Override
 	public void hide() {
+		Util.log("you used hide");
 	}
 
 	@Override
 	public void dispose() {
+		Util.log("you used dispose");
 		stage.dispose();
 		batch.dispose();
 		debug.dispose();

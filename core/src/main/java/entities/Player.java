@@ -30,7 +30,10 @@ public class Player extends CombatEntity {
 			CombatLogic.applyDamage(enemy, this, damage);
 
 		} else {
-			damage += Util.rand.nextInt(2) + 3;
+			damage += Util.rand.nextInt(3);
+			if (damage == 0) {
+				Util.log("you missed!");
+			}
 			CombatLogic.applyDamage(enemy, this, damage);
 		}
 

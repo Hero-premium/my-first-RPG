@@ -9,7 +9,7 @@ import entities.Entity;
 public class Wall extends Touchable {
 
 	public Wall() {
-		super(Assets.PlaceHolder, Integer.MAX_VALUE, 0, (new Rectangle(0, 0, 50, 50)));
+		super(Assets.wall, Integer.MAX_VALUE, 0, (new Rectangle(0, 0, 50, 50)));
 	}
 
 	public void wall(Entity entity) {
