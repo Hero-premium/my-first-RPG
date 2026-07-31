@@ -9,16 +9,16 @@ import com.mygdx.game.Assets;
 import combat.CombatLogic;
 import util.Util;
 
-public class Player extends CombatEntity {
+public class Hero extends CombatEntity {
 
-	public Player() {
+	public Hero() {
 		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, 200, Assets.player);
 	}
-
+	
 	public void kick(CombatEntity enemy) {
 		Util.log(name + " used kick");
 		int damage = Util.rand.nextInt(2) + 3;
-		CombatLogic.applyDamage(enemy, this, damage);
+		CombatLogic.calculateDamage(enemy, this, damage);
 	}
 
 	public void swordSlash(CombatEntity enemy) {
@@ -26,15 +26,15 @@ public class Player extends CombatEntity {
 		int damage = 0;
 		if (80 <= Util.rand.nextInt(100)) {
 			damage = 8;
-			Util.log("critical hit!");
-			CombatLogic.applyDamage(enemy, this, damage);
+			Util.log("the player landed a critical hit with sword slash");
+			CombatLogic.calculateDamage(enemy, this, damage);
 
 		} else {
 			damage += Util.rand.nextInt(3);
 			if (damage == 0) {
-				Util.log("you missed!");
+				Util.log("the player did " + damage + " (aka missed)");
 			}
-			CombatLogic.applyDamage(enemy, this, damage);
+			CombatLogic.calculateDamage(enemy, this, damage);
 		}
 
 	}
@@ -43,9 +43,9 @@ public class Player extends CombatEntity {
 		Util.log(name + " used dodge");
 		isDodging = Util.rand.nextBoolean();
 		int damage = 1;
-		CombatLogic.applyDamage(enemy, this, damage);
+		CombatLogic.calculateDamage(enemy, this, damage);
 	}
-
+	
 	public void move(float deltaTime) {
 		
 			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {

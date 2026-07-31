@@ -11,7 +11,7 @@ public class CombatEntity extends Entity {
 	public int poisonDuration = 0;
 	public boolean isDodging = false;
 	public boolean isDefending = false;
-	public boolean isfocused = false;
+	public boolean isFocused = false;
 
 	public CombatEntity(int gold, String name, boolean onGround, boolean isAlive, float speed, Vector2 velocity,
 			Rectangle hitbox, int hp, int maxhp, Texture texture) {
@@ -58,6 +58,6 @@ public class CombatEntity extends Entity {
 	}
 
 	public void takeTurn(CombatEntity entity) {
-		throw new UnsupportedOperationException("this entity " + getClass() + " doesn't have a takeTurn method yet, this is a mistake");
+		throw new UnsupportedOperationException("this entity " + this.getClass().getName() + " doesn't have a takeTurn method yet");
 	}
 }

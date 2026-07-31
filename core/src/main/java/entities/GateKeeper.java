@@ -18,21 +18,21 @@ public class GateKeeper extends CombatEntity {
 
 	private void focus() {
 		Util.log(name + " used focus");
-		isfocused = true;
+		isFocused = true;
 		Util.log(name + " is focusing on his attack... you may atack.");
 	}
 
 	private void fireWand(CombatEntity player) {
 		Util.log(name + " used fireWand");
 		damage += 2;
-		CombatLogic.applyDamage(player, this, damage);
+		CombatLogic.calculateDamage(player, this, damage);
 		player.poisonDuration = 3;
 	}
 
 	private void shield(CombatEntity player) {
 		Util.log(name + " used Shield");
 		damage += 2;
-		CombatLogic.applyDamage(player, this, damage);
+		CombatLogic.calculateDamage(player, this, damage);
 		isDefending = true;
 	}
 
@@ -40,7 +40,7 @@ public class GateKeeper extends CombatEntity {
 	@Override
 	public void takeTurn(CombatEntity player) {
 
-		int choice = !isfocused ? Util.rand.nextInt(3) : Util.rand.nextInt(2) + 1;
+		int choice = !isFocused ? Util.rand.nextInt(3) : Util.rand.nextInt(2) + 1;
 
 		switch (choice) {
 		case 0 -> focus();
