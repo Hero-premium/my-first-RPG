@@ -12,25 +12,23 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Assets;
 
+import combat.BattleLauncher;
 import debug.Debug;
 import entities.Entity;
 import entities.GateKeeper;
-import entities.Player;
-import storyUtil.Dialogs;
+import entities.Hero;
 import touchables.Touchable;
 import touchables.Wall;
-import util.Util;
 import world.Physics;
 
 public class MainGame implements Screen {
 
 	SpriteBatch batch;
-	Player player;
+	Hero player;
 	GateKeeper gateKeeper;
 	Debug debug;
 	Physics physics;
@@ -41,18 +39,16 @@ public class MainGame implements Screen {
 	Touchable stopPlayer;
 	List<Entity> objects;
 	List<Touchable> touchables;
-	Dialogs story;
 	Stage stage;
 	Label dialogLabel;
 	TextField takeInput;
 	boolean storyOn = false;
 
 	public MainGame() {
-		player = new Player();
+		player = new Hero();
 		wall = new Wall();
 		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 700)));
 		gateKeeper = new GateKeeper();
-		story = new Dialogs(player);
 
 		debug = new Debug();
 		physics = new Physics();
@@ -68,9 +64,6 @@ public class MainGame implements Screen {
 		touchables.add(wall);
 		touchables.add(stopPlayer);
 		
-		Json json = new Json();
-		json.setUsePrototypes(false);
-		System.out.println(json.toJson(player));
 	}
 
 	@Override
@@ -100,6 +93,8 @@ public class MainGame implements Screen {
 		Assets.mainMenu.setLooping(true);
 		Assets.mainMenu.setVolume(0.1f);
 		Assets.mainMenu.play();
+		
+		BattleLauncher.launchBattle(player, gateKeeper, stage);
 	}
 
 	@Override
@@ -132,7 +127,7 @@ public class MainGame implements Screen {
 		}
 
 		if (storyOn) {
-			story.lunchStory(player, gateKeeper, dialogLabel, takeInput, stage);
+			//story.lunchStory(player, gateKeeper, dialogLabel, takeInput, stage);
 		}
 
 		touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
@@ -181,12 +176,10 @@ public class MainGame implements Screen {
 
 	@Override
 	public void hide() {
-		Util.log("you used hide");
 	}
 
 	@Override
 	public void dispose() {
-		Util.log("you used dispose");
 		stage.dispose();
 		batch.dispose();
 		debug.dispose();
