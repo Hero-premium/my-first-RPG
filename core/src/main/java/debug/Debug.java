@@ -19,10 +19,10 @@ public class Debug {
 
 	BitmapFont debugfont = new BitmapFont();
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
-	public boolean isdebug = false;
+    boolean isdebug = false;
 	static Vector2 textPos = new Vector2();
 
-	static Vector2 getCamera(OrthographicCamera camera, FitViewport viewport, int position) {
+	private static Vector2 getCamera(OrthographicCamera camera, FitViewport viewport, int position) {
 		float x = camera.position.x - viewport.getWorldWidth() / 2 + 20;
 		float y = camera.position.y + viewport.getWorldHeight() / 2 - position;
 		return textPos.set(x, y);

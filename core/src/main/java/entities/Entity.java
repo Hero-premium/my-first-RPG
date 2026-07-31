@@ -53,7 +53,7 @@ public abstract class Entity {
 		this.movementLocked = movmentLocked;
 	}
 
-	public void render(SpriteBatch batch) {
+	public void draw(SpriteBatch batch) {
 		batch.draw(texture, hitBox.x, hitBox.y, 64f, 64f, 0, 0, texture.getWidth(), texture.getHeight(), !facingLeft,
 				false);
 	}
