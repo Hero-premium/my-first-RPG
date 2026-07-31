@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Assets;
 
 import entities.CombatEntity;
-import entities.Player;
+import entities.Hero;
+import storyUtil.Dialogue;
 import util.Util;
 
 // TODO connect the hp/text to labels
@@ -26,7 +27,7 @@ public class BattleLauncher {
 	private static Label playerHp;
 	private static Label enemyHp;
 
-	private static Player player;
+	private static Hero player;
 	private static CombatEntity enemy;
 	private static Stage stage;
 
@@ -34,7 +35,7 @@ public class BattleLauncher {
 		player.isDodging = false;
 		player.resetHp();
 		enemy.resetHp();
-		enemy.isfocused = false;
+		enemy.isFocused = false;
 		enemy.isDefending = false;
 
 		kick.setDisabled(false);
@@ -97,14 +98,14 @@ public class BattleLauncher {
 			}
 		});
 
-		retry = new TextButton("retry", Assets.skin);
+		retry = new TextButton(Dialogue.getText(1), Assets.skin);
 		retry.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				retry();
 			}
 		});
-		quit = new TextButton("quit", Assets.skin);
+		quit = new TextButton(Dialogue.getText(2), Assets.skin);
 		quit.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -145,7 +146,7 @@ public class BattleLauncher {
 		stage.addActor(labelsTable);
 	}
 
-	public static void launchBattle(Player p, CombatEntity e, Stage gameStage) {
+	public static void launchBattle(Hero p, CombatEntity e, Stage gameStage) {
 		player = p;
 		enemy = e;
 	    stage = gameStage;
