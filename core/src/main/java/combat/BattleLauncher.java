@@ -11,10 +11,9 @@ import com.mygdx.game.Assets;
 
 import entities.CombatEntity;
 import entities.Hero;
-import storyUtil.Dialogue;
+import storyUtil.TextDecode;
 import util.Util;
 
-// TODO connect the hp/text to labels
 // TODO add slight delay between each move
 public class BattleLauncher {
 
@@ -98,14 +97,14 @@ public class BattleLauncher {
 			}
 		});
 
-		retry = new TextButton(Dialogue.getText(1), Assets.skin);
+		retry = new TextButton(TextDecode.getText(1), Assets.skin);
 		retry.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				retry();
 			}
 		});
-		quit = new TextButton(Dialogue.getText(2), Assets.skin);
+		quit = new TextButton(TextDecode.getText(2), Assets.skin);
 		quit.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
