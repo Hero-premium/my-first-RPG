@@ -13,7 +13,7 @@ public class Dialogue {
 	
 	private static Map<Integer, DialogNode> story = new HashMap<>();
 	// TODO make this take the language the player selected
-	private static Locale locale = Locale.of("ar");
+	private static Locale locale = Locale.of("en");
 
 	private static I18NBundle bundle = I18NBundle.createBundle(
 		    Gdx.files.internal("translation/translation"), locale
@@ -24,7 +24,8 @@ public class Dialogue {
 	}
 	
 	private static void generateStory() {
-		story.put(1, (new DialogNode("gatekeeper.askName")));
+		story.put(1, (new DialogNode("retryButton")));
+		story.put(2, (new DialogNode("quitButton")));
 		
 	}
 /**
@@ -37,7 +38,9 @@ public class Dialogue {
 	public static String getText(int id) {
 		DialogNode node = story.get(id);
 		if (node == null) throw new IllegalArgumentException("the id " + id + " doesn't exist");
-	
+		
+		// when testing re-enable the line below
+//	    Util.log("returned " + node.text + " here");
 		return bundle.get(node.text);
 	}
 	
