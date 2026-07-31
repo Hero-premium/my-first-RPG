@@ -9,17 +9,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Assets;
 
-import combat.BattleLauncher;
 import debug.Debug;
 import entities.Entity;
 import entities.GateKeeper;
+import entities.Ghost;
 import entities.Hero;
 import touchables.Touchable;
 import touchables.Wall;
@@ -27,25 +24,26 @@ import world.Physics;
 
 public class MainGame implements Screen {
 
-	SpriteBatch batch;
-	Hero player;
-	GateKeeper gateKeeper;
-	Debug debug;
-	Physics physics;
-	final static float floorLevel = 50;
-	FitViewport viewport;
-	OrthographicCamera camera;
-	Wall wall;
-	Touchable stopPlayer;
-	List<Entity> objects;
-	List<Touchable> touchables;
-	Stage stage;
-	Label dialogLabel;
-	TextField takeInput;
+	private SpriteBatch batch;
+	private Hero hero;
+	private Ghost ghost;
+	private GateKeeper gateKeeper;
+	private Debug debug;
+	private Physics physics;
+	final static float FLOOR_LEVEL = 50;
+	private FitViewport viewport;
+	private OrthographicCamera camera;
+	private Wall wall;
+	private Touchable stopPlayer;
+	private List<Entity> objects;
+	private List<Touchable> touchables;
+	private Stage stage;
+
 	boolean storyOn = false;
 
 	public MainGame() {
-		player = new Hero();
+		hero = new Hero();
+		ghost = new Ghost();
 		wall = new Wall();
 		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 700)));
 		gateKeeper = new GateKeeper();
@@ -57,13 +55,14 @@ public class MainGame implements Screen {
 		wall.hitBox.set(-350, 50, 200, 700);
 
 		objects = new ArrayList<Entity>();
-		objects.add(player);
+		objects.add(ghost);
+		objects.add(hero);
 		objects.add(gateKeeper);
 
 		touchables = new ArrayList<Touchable>();
 		touchables.add(wall);
 		touchables.add(stopPlayer);
-		
+
 	}
 
 	@Override
@@ -74,27 +73,10 @@ public class MainGame implements Screen {
 		stage = new Stage(viewport);
 		Gdx.input.setInputProcessor(stage);
 
-		dialogLabel = new Label("", Assets.skin);
-		dialogLabel.setVisible(true);
-		dialogLabel.setWrap(true);
-
-		takeInput = new TextField("", Assets.skin);
-		takeInput.setVisible(false);
-		takeInput.setPosition(250, 100, 10);
-		Table dialog = new Table();
-
-		dialog.setFillParent(true); // table fills the whole stage/screen
-		dialog.bottom();
-		dialog.add(dialogLabel).width(700).pad(10);
-
-		stage.addActor(dialog);
-		stage.addActor(takeInput);
-
 		Assets.mainMenu.setLooping(true);
 		Assets.mainMenu.setVolume(0.1f);
 		Assets.mainMenu.play();
-		
-		BattleLauncher.launchBattle(player, gateKeeper, stage);
+
 	}
 
 	@Override
@@ -102,13 +84,16 @@ public class MainGame implements Screen {
 
 		ScreenUtils.clear(0, 0, 0, 1);
 
-		player.move(delta);
+		hero.move(delta);
+		ghost.move(delta, hero);
 
 		for (Entity object : objects) {
-
 			physics.airRis(object, delta);
-			physics.gravity(object, delta, floorLevel);
-			object.velocityClamp();
+			
+			if (!(object instanceof Ghost)) {
+				physics.gravity(object, delta, FLOOR_LEVEL);
+				object.velocityClamp();
+			}
 		}
 
 		objects.removeIf(object -> !object.isAlive);
@@ -118,32 +103,32 @@ public class MainGame implements Screen {
 				touchable.update(entity);
 			}
 			if (touchable == stopPlayer)
-				if (touchable.isEntityInside(player)) {
-					stopPlayer.useages = stopPlayer.MAX_USAGE;
-					player.setMovementLocked(true);
+				if (touchable.isEntityInside(hero)) {
+					stopPlayer.useages = stopPlayer.maxUsage;
+					hero.setMovementLocked(true);
 					storyOn = true;
 					gateKeeper.facingLeft = true;
 				}
 		}
 
 		if (storyOn) {
-			//story.lunchStory(player, gateKeeper, dialogLabel, takeInput, stage);
+			// story.lunchStory(player, gateKeeper, dialogLabel, takeInput, stage);
 		}
 
-		touchables.removeIf(object -> object.useages >= object.MAX_USAGE);
+		touchables.removeIf(object -> object.useages >= object.maxUsage);
 
-		camera.position.set(player.hitBox.x + 350, 300, 0);
+		camera.position.set(hero.hitBox.x + 350, 300, 0);
 		camera.update();
 
 		batch.setProjectionMatrix(camera.combined);
 
 		batch.begin();
 
-		batch.draw(Assets.backGround, player.hitBox.x - 50, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+		batch.draw(Assets.backGround, hero.hitBox.x - 50, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
 
 		for (Entity object : objects) {
 			if (object.texture != null)
-				object.render(batch);
+				object.draw(batch);
 		}
 
 		for (Touchable object : touchables) {
@@ -157,7 +142,7 @@ public class MainGame implements Screen {
 		stage.draw();
 
 		// TEMP for me to debug remove when you send to someone
-		debug.showDebug(batch, player, viewport, objects, touchables, camera);
+		debug.showDebug(batch, hero, viewport, objects, touchables, camera);
 
 	}
 
@@ -168,14 +153,17 @@ public class MainGame implements Screen {
 
 	@Override
 	public void pause() {
+		Assets.mainMenu.pause();
 	}
 
 	@Override
 	public void resume() {
+		Assets.mainMenu.play();
 	}
 
 	@Override
 	public void hide() {
+		Assets.mainMenu.stop();
 	}
 
 	@Override

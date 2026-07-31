@@ -8,15 +8,15 @@ import entities.Entity;
 public class Touchable {
 
 	public Texture texture;
-	public int MAX_USAGE;
+	public final int maxUsage;
 	public int useages;
 	public Rectangle hitBox;
 	public boolean EntityInside = false;
 
-	public Touchable(Texture texture, int MAX_USAGE, int useages, Rectangle hitBox) {
+	public Touchable(Texture texture, int maxUsage, int useages, Rectangle hitBox) {
 
 		this.texture = texture;
-		this.MAX_USAGE = MAX_USAGE;
+		this.maxUsage = maxUsage;
 		this.useages = useages;
 		this.hitBox = hitBox;
 	}

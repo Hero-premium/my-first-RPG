@@ -11,10 +11,12 @@ import util.Util;
 
 public class Hero extends CombatEntity {
 
+	boolean possessed = false;
+
 	public Hero() {
 		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, 200, Assets.player);
 	}
-	
+
 	public void kick(CombatEntity enemy) {
 		Util.log(name + " used kick");
 		int damage = Util.rand.nextInt(2) + 3;
@@ -45,18 +47,24 @@ public class Hero extends CombatEntity {
 		int damage = 1;
 		CombatLogic.calculateDamage(enemy, this, damage);
 	}
-	
+
 	public void move(float deltaTime) {
+		if (possessed) takeControl(deltaTime);
+		else heroAi();
 		
-			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-				speed *= 1.5;
-			}
-			if (Util.isKeyJustReleased(Input.Keys.W)) {
-				speed /= 1.5;
-			}
-			
-			if (!movementLocked()) {
-				
+	}
+
+	private void takeControl(float deltaTime) {
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
+			speed *= 1.5;
+		}
+		if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
+			speed /= 1.5;
+		}
+
+		if (!movementLocked()) {
+
 			if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 				facingLeft = true;
 				hitBox.x -= speed * deltaTime;
@@ -74,6 +82,11 @@ public class Hero extends CombatEntity {
 
 			}
 		}
+
+	}
+
+	private void heroAi() {
+		// FIXME give the hero wandering and movement ai ASAP
 
 	}
 }
