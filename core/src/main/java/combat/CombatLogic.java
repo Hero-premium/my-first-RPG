@@ -5,13 +5,27 @@ import util.Util;
 
 public class CombatLogic {
 
-	public static void applyDamage(CombatEntity target, CombatEntity user, int damage) {
+	private static void applyDamage(CombatEntity target, int damage) {
+		target.modifyHp(-damage);
+		Util.log(target.name + " now has " + target.getHp());
+	}
 
+	public static void calculateDamage(CombatEntity target, CombatEntity user, int damage) {
+		
+		damage *= 10;
+		int poisonDamage = 0;
+		
+		if (target.poisonDuration > 0) {
+			poisonDamage = (Util.rand.nextInt(2) + 1) * 10;
+			damage += poisonDamage;
+			Util.log(target.name + " took extra damage because of being on fire!");
+			target.poisonDuration--;
+		}
 		if (target.isDodging) {
 			Util.log(target.name + " has dodged the " + user.name + " attack!");
 			target.isDodging = false;
-			target.isfocused = false;
-			target.poisonDuration--;
+			target.isFocused = false;
+			applyDamage(target, poisonDamage);
 			return;
 		}
 		if (target.isDefending) {
@@ -19,18 +33,11 @@ public class CombatLogic {
 			Util.log("your damage was reduced by 50% because of " + target.name + " using a sheild!");
 			target.isDefending = false;
 		}
-		if (user.isfocused) {
+		if (user.isFocused) {
 			damage *= 2;
 			Util.log(user.name + " focuses hard to deal 100% more damage!");
-			user.isfocused = false;
+			user.isFocused = false;
 		}
-		if (target.poisonDuration > 0) {
-			damage += Util.rand.nextInt(2) + 1;
-			Util.log(target.name + " took extra damage because of being on fire!");
-			target.poisonDuration--;
-		}
-		damage *= 10;
-		target.modifyHp(-damage);
-		Util.log(target.name + " now has " + target.getHp());
+		applyDamage(target, damage);
 	}
 }
