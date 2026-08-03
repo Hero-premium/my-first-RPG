@@ -14,9 +14,10 @@ public class Util {
 
 	private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-	public final static void log(String message) {
+	
+	public final static void log(Object obj) {
 		String time = LocalDateTime.now().format(FORMAT);
-		System.out.println("[" + time + "] " + message);
+		System.out.println("[" + time + "] " + obj);
 	}
 
 	public static boolean isKeyJustReleased(int key) {

@@ -60,9 +60,9 @@ public class StoryDisplay {
 		dialogsGUI.bottom();
 		dialogsGUI.add(dialogLabel).width(700).pad(10).row();
 		
-		dialogsGUI.add(option1);
-		dialogsGUI.add(option2);
-		dialogsGUI.add(option3);
+		dialogsGUI.add(option1).row();
+		dialogsGUI.add(option2).row();
+		dialogsGUI.add(option3).row();
 
 		stage.addActor(dialogsGUI);
 		stage.addActor(takeInput);
