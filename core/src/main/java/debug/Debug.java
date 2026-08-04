@@ -19,23 +19,21 @@ public class Debug {
 
 	BitmapFont debugfont = new BitmapFont();
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
-    boolean isdebug = false;
+	public boolean isdebug = false;
 	static Vector2 textPos = new Vector2();
 
-	private static Vector2 getCamera(OrthographicCamera camera, FitViewport viewport, int position) {
+	private Vector2 getCamera(OrthographicCamera camera, FitViewport viewport, int position) {
 		float x = camera.position.x - viewport.getWorldWidth() / 2 + 20;
 		float y = camera.position.y + viewport.getWorldHeight() / 2 - position;
 		return textPos.set(x, y);
 	}
 
-	public void showDebug(SpriteBatch batch, Entity player, FitViewport viewport, List<Entity> objects,
-			List<Touchable> touchables, OrthographicCamera camera) {
+	public void showInformations(SpriteBatch batch, Entity player, FitViewport viewport, OrthographicCamera camera) {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
 			isdebug = !isdebug;
 		}
 		textPos = getCamera(camera, viewport, 0);
 		if (isdebug) {
-			batch.begin();
 
 			debugfont.draw(batch, "Player x " + player.hitBox.x + " / Player y " + player.hitBox.y, textPos.x,
 					textPos.y = getCamera(camera, viewport, 20).y);
@@ -44,8 +42,11 @@ public class Debug {
 					textPos.y = getCamera(camera, viewport, 35).y);
 			debugfont.draw(batch, "Player velocityX " + player.velocity.x + " / Player velocityY " + player.velocity.y,
 					textPos.x, textPos.y = getCamera(camera, viewport, 50).y);
+		}
+	}
 
-			batch.end();
+	public void showHitboxes(OrthographicCamera camera, List<Entity> objects, List<Touchable> touchables) {
+		if (isdebug) {
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
