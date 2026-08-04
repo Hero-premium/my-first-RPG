@@ -33,8 +33,8 @@ public class MainGame implements Screen {
 	boolean storyOn = false;
 
 	public MainGame() {
-		
-		entities = Objects.generateEntities();	
+
+		entities = Objects.generateEntities();
 		touchables = Objects.generateTouchables();
 		storyDisplay = new StoryDisplay();
 
@@ -59,12 +59,14 @@ public class MainGame implements Screen {
 
 	@Override
 	public void render(float delta) {
+		
+		//System.out.println("fram drops!!!");
 
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		Objects.hero.move(delta);
 		Objects.ghost.move(delta, Objects.hero);
-		
+
 		Physics.applyPhysics(entities, delta, FLOOR_LEVEL);
 
 		entities.removeIf(object -> !object.isAlive);
@@ -83,7 +85,7 @@ public class MainGame implements Screen {
 		}
 
 		if (!storyOn) {
-		     storyDisplay.launchStory(stage);
+			storyDisplay.launchStory(stage);
 		}
 
 		touchables.removeIf(object -> object.useages >= object.maxUsage);
@@ -95,7 +97,8 @@ public class MainGame implements Screen {
 
 		batch.begin();
 
-		batch.draw(Assets.backGround, Objects.hero.hitBox.x - 50, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+		batch.draw(Assets.backGround, Objects.hero.hitBox.x - 50, 0, viewport.getWorldWidth(),
+				viewport.getWorldHeight());
 
 		for (Entity object : entities) {
 			if (object.texture != null)
@@ -107,13 +110,15 @@ public class MainGame implements Screen {
 				batch.draw(object.texture, object.hitBox.x, object.hitBox.y, object.hitBox.width, object.hitBox.height);
 		}
 
+		// TEMP for me to debug remove when you send to someone
+		debug.showInformations(batch, Objects.hero, viewport, camera);
+
 		batch.end();
+		
+		debug.showHitboxes(camera, entities, touchables);
 
 		stage.act(delta);
 		stage.draw();
-
-		// TEMP for me to debug remove when you send to someone
-		debug.showDebug(batch, Objects.hero, viewport, entities, touchables, camera);
 
 	}
 
