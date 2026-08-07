@@ -10,7 +10,7 @@ import util.Util;
 public class GateKeeper extends CombatEntity {
 
 	public GateKeeper() {
-		super(20, "GateKeeper", false, true, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250, 250,
+		super(20, "GateKeeper", false, true, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
 				Assets.PlaceHolder);
 	}
 
@@ -19,7 +19,7 @@ public class GateKeeper extends CombatEntity {
 	private void focus() {
 		Util.log(name + " used focus");
 		isFocused = true;
-		Util.log(name + " is focusing on his attack... you may atack.");
+		Util.log(name + " is focusing on his attack... you may attack.");
 	}
 
 	private void fireWand(CombatEntity player) {

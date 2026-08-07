@@ -34,7 +34,7 @@ public abstract class Entity {
 	}
 
 	/**
-	 * clapms all entities velocity to 2000
+	 * Clamps all entities velocity to 2000
 	 */
 	public void velocityClamp() {
 		velocity.x = Math.clamp(velocity.x, -2000, 2000);
@@ -61,9 +61,9 @@ public abstract class Entity {
 	/**
 	 * moves an amount of gold from an entity to another entity
 	 * 
-	 * @param amount   the amount of gold moved
-	 * @param receiver the entity receiving the gold
-	 * @throws IllegalArgumentException on negative input
+	 * @param amount - the amount of gold moved
+	 * @param receiver - the entity receiving the gold
+	 * @throws IllegalArgumentException - on negative input
 	 * 
 	 */
 	public void moveGold(int amount, Entity receiver) {
@@ -71,7 +71,7 @@ public abstract class Entity {
 			throw new IllegalArgumentException("this number can't be negative");
 		}
 		if (gold < amount) {
-			Util.log("this entity doesn't have enough gold for this transaction");
+			Util.log("WARNING - this entity doesn't have enough gold for this transaction");
 			return;
 		}
 

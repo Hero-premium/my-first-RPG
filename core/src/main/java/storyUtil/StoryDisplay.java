@@ -16,14 +16,29 @@ import util.Util;
 // TODO make the GUI the way you imagined it	
 public class StoryDisplay {
 
-	public final static int buttonsCount = 3;
+	public StoryDisplay(Stage stage) {
+		buildDialogUI(stage);
+	}
+
+	public final static int BUTTONS_COUNT = 3;
 
 	private int index = 3; // <- not a magic number - this is where the story starts
 
 	private Label dialogLabel;
 	private TextField takeInput;
 
-	private TextButton[] buttons = new TextButton[buttonsCount];
+	private TextButton[] buttons = new TextButton[BUTTONS_COUNT];
+
+	private Integer[] nextNodes;
+
+	private boolean updateData() {
+		nextNodes = TextDecode.getNextNodes(index);
+		if (nextNodes == null) {
+			Util.log("end of nodes reached");
+			return true;
+		}
+		return false;
+	}
 
 	private void buildDialogUI(Stage stage) {
 
@@ -44,8 +59,10 @@ public class StoryDisplay {
 			buttons[i].addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					index = (Integer) event.getListenerActor().getUserObject();
-					displayOptions();
+					if (event.getListenerActor().getUserObject() != null) {
+						index = (Integer) event.getListenerActor().getUserObject();
+						displayOptions();
+					}
 				}
 			});
 
@@ -60,56 +77,50 @@ public class StoryDisplay {
 		stage.setDebugAll(true);
 	}
 
-	private int useages = 0;
+// I know this exists please don't warn me about it
+	private boolean ran = false;
 
-	public void launchStory(Stage stage) {
-		if (dialogLabel == null)
-			buildDialogUI(stage);
-
-		if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && useages < 2) {
-			useages++;
+	public void launchStory() {
+		if (!ran || (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && nextNodes != null && nextNodes.length == 1)) {
+			ran = true;
 			dialogLabel.setText(TextDecode.getText(index));
 			displayOptions();
 		}
 	}
-
-	private boolean checkArray(int nextNodesLength) {
-		if (TextDecode.getNextNodes(index) == null) {
-			Util.log("end of nodes reached");
-
-			return true;
+	
+	private void clearButtons() {
+		for (int i = 0 ; i < buttons.length ; i++) {
+			buttons[i].setDisabled(true);
+			buttons[i].setVisible(false);
+			buttons[i].setText("");
+			buttons[i].setUserObject(null);
 		}
-		if (nextNodesLength == 0) {
-			Util.log("WARNING - empty array here on ID " + index);
-
-			return true;
-		}
-		return false;
 	}
 
 	private void displayOptions() {
-		int loops = 0;
-		int nextNodesLength = TextDecode.getNextNodes(index).length;
-
-		if (checkArray(nextNodesLength))
+		clearButtons();
+		if (updateData())
 			return;
+
+		if (nextNodes.length == 0) {
+			Util.log("WARNING - empty array here on ID " + index);
+			return;
+		}
 
 		// because the first node is always the other person's line this always happens
-		dialogLabel.setText(TextDecode.getText(TextDecode.getNextNodes(index)[0]));
-		if (nextNodesLength == 1) {
-			index = TextDecode.getNextNodes(index)[0];
+		dialogLabel.setText(TextDecode.getText(nextNodes[0]));
+		if (nextNodes.length == 1) {
+			index = nextNodes[0];
+			
 
 			return;
 		}
 
-		for (int i = 1; i < nextNodesLength; i++) {
-			buttons[i - 1].setText(TextDecode.getText(TextDecode.getNextNodes(index)[i]));
-			buttons[i - 1].setUserObject(TextDecode.getNextNodes(index)[i]);
-			loops++;
-		}
-		for (int i = buttons.length - 1; i >= loops; i--) {
-			buttons[i].setText("");
-			buttons[i].setUserObject(null);
+		for (int i = 1; i < nextNodes.length; i++) {
+			buttons[i - 1].setText(TextDecode.getText(nextNodes[i]));
+			buttons[i - 1].setUserObject(nextNodes[i]);
+			buttons[i - 1].setDisabled(false);
+			buttons[i - 1].setVisible(true);
 		}
 	}
 }

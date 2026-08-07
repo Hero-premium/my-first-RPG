@@ -27,7 +27,7 @@ public class Util {
 		} else if (isPressed) {
 
 			isPressed = false;
-			log("reales detected - true returned");
+			log("Release detected - true returned");
 			return true;
 		}
 		return false;
