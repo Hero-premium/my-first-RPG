@@ -29,14 +29,14 @@ public class TextDecode {
 	private static void addToStory(Integer id, String line, Integer[] nodesTree) {
 		if (story.containsKey(id))
 			throw new IllegalStateException("the id :" + id + " already exists");
-
-		if (nodesTree != null)
-			if (nodesTree.length - 1 > StoryDisplay.buttonsCount)
-				throw new IllegalArgumentException("the amount of nodes passed " + nodesTree.length
-						+ " are larger than the amounts of buttons we have");
+		if (nodesTree != null && nodesTree.length - 1 > StoryDisplay.BUTTONS_COUNT)
+			throw new IllegalArgumentException("the amount of nodes passed " + nodesTree.length
+					+ " are larger than the amounts of buttons we have");
+		if (id == null || line == null)
+			throw new IllegalArgumentException("the line or id are not applicant for being a null");
 		if (id != internalID)
 			Util.log("WARNING - the ID passed " + id + " does not match the internal ID " + internalID
-					+ "make sure you did not make a mistake");
+					+ " make sure you did not make a mistake");
 		story.put(id, (new DialogNode(line, nodesTree)));
 		internalID++;
 	}
@@ -45,16 +45,18 @@ public class TextDecode {
 		addToStory(1, "retryButton", null);
 		addToStory(2, "quitButton", null);
 		addToStory(3, "hero.hey", new Integer[] { 4 });
-		addToStory(4, "hero.askWhoYouAre", new Integer[] { 1, 4, 3, 4 });
-		addToStory(5, "optionNull", null);
-		addToStory(6, "option0", new Integer[] {});
-		addToStory(7, "option1", new Integer[] { 6 });
-		addToStory(8, "option2", new Integer[] { 6, 5 });
+		addToStory(4, "hero.askWhoYouAre", new Integer[] { 1, 4, 3, 7 });
+		addToStory(5, "optionsNull", null);
+		addToStory(6, "options0", new Integer[] {});
+		addToStory(7, "options1", new Integer[] { 8 });
+		addToStory(8, "options2", new Integer[] { 9, 10 });
+		addToStory(9, "options3", new Integer[] { 6, 5, 8 });
+		addToStory(10, "options4", new Integer[] { 1, 2, 3, 7 });
 	}
 
 	/**
-	 * this is to decode the translations, see {@link TextDecode#generateStory()} for
-	 * all IDs
+	 * this is to decode the translations, see {@link TextDecode#generateStory()}
+	 * for all IDs
 	 * 
 	 * @param id the ID of the line you want to show
 	 * @throws IllegalArgumentException if the ID you passed doesn't exist
@@ -65,14 +67,12 @@ public class TextDecode {
 		if (node == null)
 			throw new IllegalArgumentException("the id " + id + " doesn't exist");
 
-		// TEMP when testing re-enable the line below
-//	    Util.log("returned " + node.text + " here");
 		return bundle.get(node.text);
 	}
 
 	/**
-	 * this is to get each nodes next node ID, see {@link TextDecode#generateStory()}
-	 * for all IDs
+	 * this is to get each nodes next node ID, see
+	 * {@link TextDecode#generateStory()} for all IDs
 	 * 
 	 * @param id the ID of the line you want to see the next line of
 	 * @throws IllegalArgumentException if the ID you passed doesn't exist
@@ -83,9 +83,9 @@ public class TextDecode {
 		if (node == null)
 			throw new IllegalArgumentException("the id " + id + " doesn't exist");
 
-		// TEMP when testing re-enable the line below
-//	    Util.log("returned " + node.nextNode + " here");
-		return node.nextNodes;
+		if (node.nextNodes != null)
+			return node.nextNodes.clone();
+		return null;
 	}
 
 }

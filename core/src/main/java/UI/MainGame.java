@@ -36,7 +36,7 @@ public class MainGame implements Screen {
 
 		entities = Objects.generateEntities();
 		touchables = Objects.generateTouchables();
-		storyDisplay = new StoryDisplay();
+		
 
 		debug = new Debug();
 		batch = new SpriteBatch();
@@ -49,6 +49,7 @@ public class MainGame implements Screen {
 		viewport = new FitViewport(800, 600, camera);
 
 		stage = new Stage(new FitViewport(800, 600));
+		storyDisplay = new StoryDisplay(stage);
 		Gdx.input.setInputProcessor(stage);
 
 		Assets.mainMenu.setLooping(true);
@@ -59,8 +60,6 @@ public class MainGame implements Screen {
 
 	@Override
 	public void render(float delta) {
-		
-		//System.out.println("fram drops!!!");
 
 		ScreenUtils.clear(0, 0, 0, 1);
 
@@ -85,7 +84,7 @@ public class MainGame implements Screen {
 		}
 
 		if (!storyOn) {
-			storyDisplay.launchStory(stage);
+			storyDisplay.launchStory();
 		}
 
 		touchables.removeIf(object -> object.useages >= object.maxUsage);

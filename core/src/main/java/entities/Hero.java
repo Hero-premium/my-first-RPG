@@ -14,7 +14,7 @@ public class Hero extends CombatEntity {
 	boolean possessed = false;
 
 	public Hero() {
-		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, 200, Assets.player);
+		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
 	}
 
 	public void kick(CombatEntity enemy) {

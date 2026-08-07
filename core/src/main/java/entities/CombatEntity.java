@@ -7,18 +7,18 @@ import com.badlogic.gdx.math.Vector2;
 public class CombatEntity extends Entity {
 
 	private int hp;
-	public int maxHp ;
+	public final int maxHp ;
 	public int poisonDuration = 0;
 	public boolean isDodging = false;
 	public boolean isDefending = false;
 	public boolean isFocused = false;
 
 	public CombatEntity(int gold, String name, boolean onGround, boolean isAlive, float speed, Vector2 velocity,
-			Rectangle hitbox, int hp, int maxhp, Texture texture) {
+			Rectangle hitbox, int hp, Texture texture) {
 		super(gold, name, onGround, isAlive, speed, velocity, hitbox, texture);
 
 		this.hp = hp;
-		this.maxHp = maxhp;
+		this.maxHp = hp;
 	}
 
 	/**
@@ -58,6 +58,6 @@ public class CombatEntity extends Entity {
 	}
 
 	public void takeTurn(CombatEntity entity) {
-		throw new UnsupportedOperationException("this entity " + this.getClass().getName() + " doesn't have a takeTurn method yet");
+		throw new UnsupportedOperationException("this entity " + this.getClass().getName() + " doesn't have a takeTurn method");
 	}
 }
