@@ -6,7 +6,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 
-// I'm planning on putting more utility things in this class
+
 public class Util {
 	private static boolean isPressed = false;
 

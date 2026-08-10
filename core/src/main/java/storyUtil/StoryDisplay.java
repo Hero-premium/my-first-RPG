@@ -77,13 +77,11 @@ public class StoryDisplay {
 		stage.setDebugAll(true);
 	}
 
-// I know this exists please don't warn me about it
 	private boolean ran = false;
 
 	public void launchStory() {
 		if (!ran || (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && nextNodes != null && nextNodes.length == 1)) {
 			ran = true;
-			dialogLabel.setText(TextDecode.getText(index));
 			displayOptions();
 		}
 	}
@@ -101,11 +99,6 @@ public class StoryDisplay {
 		clearButtons();
 		if (updateData())
 			return;
-
-		if (nextNodes.length == 0) {
-			Util.log("WARNING - empty array here on ID " + index);
-			return;
-		}
 
 		// because the first node is always the other person's line this always happens
 		dialogLabel.setText(TextDecode.getText(nextNodes[0]));

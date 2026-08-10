@@ -34,6 +34,9 @@ public class TextDecode {
 					+ " are larger than the amounts of buttons we have");
 		if (id == null || line == null)
 			throw new IllegalArgumentException("the line or id are not applicant for being a null");
+		if (nodesTree != null && nodesTree.length == 0) {
+			throw new IllegalStateException("empty array on ID " + id);
+		}
 		if (id != internalID)
 			Util.log("WARNING - the ID passed " + id + " does not match the internal ID " + internalID
 					+ " make sure you did not make a mistake");
@@ -46,12 +49,6 @@ public class TextDecode {
 		addToStory(2, "quitButton", null);
 		addToStory(3, "hero.hey", new Integer[] { 4 });
 		addToStory(4, "hero.askWhoYouAre", new Integer[] { 1, 4, 3, 7 });
-		addToStory(5, "optionsNull", null);
-		addToStory(6, "options0", new Integer[] {});
-		addToStory(7, "options1", new Integer[] { 8 });
-		addToStory(8, "options2", new Integer[] { 9, 10 });
-		addToStory(9, "options3", new Integer[] { 6, 5, 8 });
-		addToStory(10, "options4", new Integer[] { 1, 2, 3, 7 });
 	}
 
 	/**
