@@ -18,9 +18,9 @@ public class Objects {
 	public static Hero hero;
 	public static Ghost ghost;
 	public static GateKeeper gateKeeper;
-	
+
 	private static List<Touchable> touchables;
-	
+
 	public static Wall wall;
 	public static Touchable stopPlayer;
 
@@ -40,14 +40,13 @@ public class Objects {
 
 	public static List<Touchable> generateTouchables() {
 		touchables = new ArrayList<>();
-		
+
 		wall = new Wall();
 		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800)));
-		
+
 		// TEMP remove ones you start using tiles or give it it's own method
 		wall.hitBox.set(-350, 50, 200, 700);
-		
-		
+
 		touchables.add(wall);
 		touchables.add(stopPlayer);
 

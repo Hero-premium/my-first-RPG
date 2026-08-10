@@ -22,7 +22,7 @@ public class MainGame implements Screen {
 
 	private SpriteBatch batch;
 	private Debug debug;
-	final static float FLOOR_LEVEL = 50;
+	final static public float FLOOR_LEVEL = 50;
 	private FitViewport viewport;
 	private OrthographicCamera camera;
 	private List<Entity> entities;
