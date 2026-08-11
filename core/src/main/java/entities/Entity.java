@@ -60,11 +60,11 @@ public abstract class Entity {
 
 	/**
 	 * moves an amount of gold from an entity to another entity
-	 * 
+	 *
 	 * @param amount - the amount of gold moved
 	 * @param receiver - the entity receiving the gold
 	 * @throws IllegalArgumentException - on negative input
-	 * 
+	 *
 	 */
 	public void moveGold(int amount, Entity receiver) {
 		if (amount < 0) {

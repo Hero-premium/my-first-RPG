@@ -34,7 +34,7 @@ public class CombatEntity extends Entity {
 
 	/**
 	 * sets hp to given amount also clamps hp between 0 and maxHp
-	 * 
+	 *
 	 * @param hp the new hp
 	 * @throws IllegalArgumentException on negative input
 	 */
@@ -49,7 +49,7 @@ public class CombatEntity extends Entity {
 	/**
 	 * adds the given amount of hp to the existing amount of hp also clamps hp
 	 * between 0 and maxHp
-	 * 
+	 *
 	 * @param hp how much you want to add
 	 */
 	public void modifyHp(int hp) {

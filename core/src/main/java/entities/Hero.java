@@ -49,9 +49,12 @@ public class Hero extends CombatEntity {
 	}
 
 	public void move(float deltaTime) {
-		if (possessed) takeControl(deltaTime);
-		else heroAi();
-		
+		if (!possessed) {
+			takeControl(deltaTime);
+		} else {
+			heroAi();
+		}
+
 	}
 
 	private void takeControl(float deltaTime) {

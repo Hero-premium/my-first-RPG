@@ -6,9 +6,9 @@ import entities.Entity;
 import entities.Ghost;
 
 public class Physics {
-	
+
 	private Physics() {}
-	
+
 	private static float gravity = -980f;
 	private static float air = -980;
 
@@ -45,11 +45,11 @@ public class Physics {
 		entity.hitBox.x += entity.velocity.x * deltaTime;
 
 	}
-	
+
 	public static void applyPhysics(List<Entity> entities, float delta, float FLOOR_LEVEL) {
 		for (Entity object : entities) {
 			airRes(object, delta);
-			
+
 			if (!(object instanceof Ghost)) {
 				gravity(object, delta, FLOOR_LEVEL);
 				object.velocityClamp();

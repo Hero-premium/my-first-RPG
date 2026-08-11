@@ -13,8 +13,9 @@ public class Wall extends Touchable {
 	}
 
 	public void wall(Entity entity) {
-		if (!isEntityInside(entity))
+		if (!isEntityInside(entity)) {
 			return;
+		}
 
 		Rectangle e = entity.hitBox;
 

@@ -14,7 +14,7 @@ public class Util {
 
 	private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-	
+
 	public final static void log(Object obj) {
 		String time = LocalDateTime.now().format(FORMAT);
 		System.out.println("[" + time + "] " + obj);
@@ -28,6 +28,8 @@ public class Util {
 
 			isPressed = false;
 			log("Release detected - true returned");
+			System.exit(10);
+			//Runtime.getRuntime().halt(1);
 			return true;
 		}
 		return false;
