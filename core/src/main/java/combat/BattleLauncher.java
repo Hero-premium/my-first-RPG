@@ -1,5 +1,7 @@
 package combat;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,18 +19,41 @@ import util.Util;
 // TODO add slight delay between each move
 public class BattleLauncher {
 
-	private static TextButton kick;
-	private static TextButton swordSlash;
-	private static TextButton dodge;
-	private static TextButton retry;
-	private static TextButton quit;
-	
+	private BattleLauncher() {
+		throw new AssertionError("No combat.BattleLauncher instance for you!");
+	}
+
+	private static TextButton[] gameOverButtons = new TextButton[2];
+
+	private static TextButton[] combatButtons = new TextButton[3];
+
 	private static Label playerHp;
 	private static Label enemyHp;
 
 	private static Hero player;
 	private static CombatEntity enemy;
 	private static Stage stage;
+	private static boolean generated = false;
+
+	private static void generateUI() {
+		generateButtons();
+		generateLabels();
+		Util.log("GUI generated successfully");
+	}
+
+	private static void setCombatButtonsVisibility(boolean state) {
+		for (TextButton combatButton : combatButtons) {
+			combatButton.setDisabled(!state);
+			combatButton.setVisible(state);
+		}
+	}
+
+	private static void setGameOverButtonsVisibility(boolean state) {
+		for (TextButton gameOverButton : gameOverButtons) {
+			gameOverButton.setDisabled(!state);
+			gameOverButton.setVisible(state);
+		}
+	}
 
 	private static void retry() {
 		player.isDodging = false;
@@ -37,26 +62,15 @@ public class BattleLauncher {
 		enemy.isFocused = false;
 		enemy.isDefending = false;
 
-		kick.setDisabled(false);
-		kick.setVisible(true);
+		setCombatButtonsVisibility(true);
+		setGameOverButtonsVisibility(false);
 
-		swordSlash.setDisabled(false);
-		swordSlash.setVisible(true);
-
-		dodge.setDisabled(false);
-		dodge.setVisible(true);
-		
 		playerHp.setVisible(true);
 		enemyHp.setVisible(true);
 
-		retry.setVisible(false);
-		quit.setVisible(false);
-		retry.setDisabled(true);
-		quit.setDisabled(true);
-
 		launchBattle(player, enemy, stage);
 	}
-	
+
 	private static String buildHpText(CombatEntity entity) {
 		return entity.name + " Health :" + entity.getHp();
 	}
@@ -65,81 +79,69 @@ public class BattleLauncher {
 		Table buttonsTable = new Table();
 		buttonsTable.setFillParent(true);
 		buttonsTable.bottom();
-		
-	//	buttonsTable.setVisible(false);
-	//	buttonsTable.setDebug(true);
-		
-		kick = new TextButton("Kick", Assets.skin);
-		kick.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				player.kick(enemy);
-				handleBattleState(validateBattle());
-			}
-		});
 
-		swordSlash = new TextButton("Sword slash", Assets.skin);
-		swordSlash.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				player.swordSlash(enemy);
-				handleBattleState(validateBattle());
-			}
-		});
+		String[] combatButtonNames = { TextDecode.getText(3), TextDecode.getText(4), TextDecode.getText(5) };
+		List<Runnable> playerMoves = List.of( //
+				() -> player.kick(enemy), //
+				() -> player.swordSlash(enemy), //
+				() -> player.dodge(enemy)); //
 
-		dodge = new TextButton("dodge", Assets.skin);
-		dodge.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				player.dodge(enemy);
-				handleBattleState(validateBattle());
-
-			}
-		});
-
-		retry = new TextButton(TextDecode.getText(1), Assets.skin);
-		retry.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				retry();
-			}
-		});
-		quit = new TextButton(TextDecode.getText(2), Assets.skin);
-		quit.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
-			}
-
-		});
-		retry.setVisible(false);
-		quit.setVisible(false);
-		retry.setDisabled(true);
-		quit.setDisabled(true);
-
-		if (buttonsTable.getChildren().isEmpty()) {
-			buttonsTable.add(kick).pad(30);
-			buttonsTable.add(swordSlash).pad(30);
-			buttonsTable.add(dodge).pad(30);
-			buttonsTable.add(retry).pad(30);
-			buttonsTable.add(quit).pad(30);
-			stage.addActor(buttonsTable);
+		if (combatButtons.length != combatButtonNames.length) {
+			throw new IllegalStateException("the amount of combatButtonNames we have \"" + combatButtonNames.length
+					+ "\" does not match the amount of buttons you're trying to generate" + combatButtons.length);
 		}
-		
-		
+		for (int i = 0; i < combatButtons.length; i++) {
+			combatButtons[i] = new TextButton(combatButtonNames[i], Assets.skin);
+			combatButtons[i].setUserObject(playerMoves.get(i));
+			combatButtons[i].addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					Runnable action = (Runnable) event.getListenerActor().getUserObject();
+					action.run();
+					handleBattleState(validateBattle());
+				}
+			});
+
+			buttonsTable.add(combatButtons[i]).pad(30);
+		}
+
+		String[] gameOverButtonNames = { TextDecode.getText(1), TextDecode.getText(2) };
+		List<Runnable> gameOverActions = List.of( //
+				() -> retry(), //
+				() -> Gdx.app.exit()); //
+
+		if (gameOverButtons.length != gameOverButtonNames.length) {
+			throw new IllegalStateException("the amount of combatButtonNames we have \"" + gameOverButtonNames.length
+					+ "\" does not match the amount of buttons you're trying to generate" + gameOverButtons.length);
+		}
+		for (int i = 0; i < gameOverButtons.length; i++) {
+			gameOverButtons[i] = new TextButton(gameOverButtonNames[i], Assets.skin);
+			gameOverButtons[i].setUserObject(gameOverActions.get(i));
+			gameOverButtons[i].addListener(new ClickListener() {
+				@Override
+				public void clicked(InputEvent event, float x, float y) {
+					Runnable action = (Runnable) event.getListenerActor().getUserObject();
+					action.run();
+				}
+			});
+
+			buttonsTable.add(gameOverButtons[i]).pad(30);
+		}
+		setGameOverButtonsVisibility(false);
+
+		stage.addActor(buttonsTable);
+
 	}
-	
-	
+
 	private static void generateLabels() {
-		
+
 		Table labelsTable = new Table();
 		labelsTable.setFillParent(true);
 		labelsTable.bottom().right();
-	//	labelsTable.setDebug(true);
-		
+
 		playerHp = new Label(buildHpText(player), Assets.skin);
-	    enemyHp = new Label(buildHpText(enemy), Assets.skin);
-		
+		enemyHp = new Label(buildHpText(enemy), Assets.skin);
+
 		labelsTable.add(playerHp).pad(20).right();
 		labelsTable.add(enemyHp);
 		stage.addActor(labelsTable);
@@ -148,15 +150,11 @@ public class BattleLauncher {
 	public static void launchBattle(Hero p, CombatEntity e, Stage gameStage) {
 		player = p;
 		enemy = e;
-	    stage = gameStage;
+		stage = gameStage;
 
-		if (dodge == null) {
-			generateButtons();
-			Util.log("buttons generated");
-		}
-		if (playerHp == null) {
-			generateLabels();
-			Util.log("labels generated");
+		if (!generated) {
+			generateUI();
+			generated = true;
 		}
 
 		Util.log("_______ battle starts! _______");
@@ -167,7 +165,7 @@ public class BattleLauncher {
 
 	enum BattleState {
 		GOING, WON, LOST
-	};
+	}
 
 	private static BattleState validateBattle() {
 		if (enemy.getHp() <= 0) {
@@ -185,15 +183,8 @@ public class BattleLauncher {
 	}
 
 	private static void endBattle() {
-		kick.setDisabled(true);
-		kick.setVisible(false);
+		setCombatButtonsVisibility(false);
 
-		swordSlash.setDisabled(true);
-		swordSlash.setVisible(false);
-
-		dodge.setDisabled(true);
-		dodge.setVisible(false);
-		
 		playerHp.setVisible(false);
 		enemyHp.setVisible(false);
 
@@ -207,16 +198,12 @@ public class BattleLauncher {
 		}
 		case LOST -> {
 			endBattle();
-			retry.setVisible(true);
-			quit.setVisible(true);
-			retry.setDisabled(false);
-			quit.setDisabled(false);
-
+			setGameOverButtonsVisibility(true);
 		}
 		case GOING -> {
 			enemy.takeTurn(player);
 			validateBattle();
-			
+
 			playerHp.setText(buildHpText(player));
 			enemyHp.setText(buildHpText(enemy));
 		}
