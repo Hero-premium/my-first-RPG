@@ -13,7 +13,7 @@ import com.mygdx.game.Assets;
 
 import util.Util;
 
-// TODO make the GUI the way you imagined it	
+// TODO make the GUI the way you imagined it
 public class StoryDisplay {
 
 	public StoryDisplay(Stage stage) {
@@ -85,26 +85,27 @@ public class StoryDisplay {
 			displayOptions();
 		}
 	}
-	
+
 	private void clearButtons() {
-		for (int i = 0 ; i < buttons.length ; i++) {
-			buttons[i].setDisabled(true);
-			buttons[i].setVisible(false);
-			buttons[i].setText("");
-			buttons[i].setUserObject(null);
+		for (TextButton button : buttons) {
+			button.setDisabled(true);
+			button.setVisible(false);
+			button.setText("");
+			button.setUserObject(null);
 		}
 	}
 
 	private void displayOptions() {
 		clearButtons();
-		if (updateData())
+		if (updateData()) {
 			return;
+		}
 
 		// because the first node is always the other person's line this always happens
 		dialogLabel.setText(TextDecode.getText(nextNodes[0]));
 		if (nextNodes.length == 1) {
 			index = nextNodes[0];
-			
+
 
 			return;
 		}

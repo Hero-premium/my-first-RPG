@@ -11,10 +11,10 @@ public class CombatLogic {
 	}
 
 	public static void calculateDamage(CombatEntity target, CombatEntity user, int damage) {
-		
+
 		damage *= 10;
 		int poisonDamage = 0;
-		
+
 		if (target.poisonDuration > 0) {
 			poisonDamage = (Util.rand.nextInt(2) + 1) * 10;
 			damage += poisonDamage;

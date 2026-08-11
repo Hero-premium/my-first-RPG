@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Assets;
 
+import combat.BattleLauncher;
 import debug.Debug;
 import entities.Entity;
 import storyUtil.StoryDisplay;
@@ -30,13 +31,15 @@ public class MainGame implements Screen {
 	private Stage stage;
 	private StoryDisplay storyDisplay;
 
+
+	private boolean battleOn = true;
 	boolean storyOn = false;
 
 	public MainGame() {
 
 		entities = Objects.generateEntities();
 		touchables = Objects.generateTouchables();
-		
+
 
 		debug = new Debug();
 		batch = new SpriteBatch();
@@ -74,17 +77,22 @@ public class MainGame implements Screen {
 			for (Entity entity : entities) {
 				touchable.update(entity);
 			}
-			if (touchable == Objects.stopPlayer)
+			if (touchable == Objects.stopPlayer) {
 				if (touchable.isEntityInside(Objects.hero)) {
 					Objects.stopPlayer.useages = Objects.stopPlayer.maxUsage;
 					Objects.hero.setMovementLocked(true);
 					storyOn = true;
 					Objects.gateKeeper.facingLeft = true;
 				}
+			}
 		}
 
-		if (!storyOn) {
+		if (storyOn) {
 			storyDisplay.launchStory();
+		}
+		if (battleOn) {
+			BattleLauncher.launchBattle(Objects.hero, Objects.gateKeeper, stage);
+			battleOn = false;
 		}
 
 		touchables.removeIf(object -> object.useages >= object.maxUsage);
@@ -100,20 +108,22 @@ public class MainGame implements Screen {
 				viewport.getWorldHeight());
 
 		for (Entity object : entities) {
-			if (object.texture != null)
+			if (object.texture != null) {
 				object.draw(batch);
+			}
 		}
 
 		for (Touchable object : touchables) {
-			if (object.texture != null)
+			if (object.texture != null) {
 				batch.draw(object.texture, object.hitBox.x, object.hitBox.y, object.hitBox.width, object.hitBox.height);
+			}
 		}
 
 		// TEMP for me to debug remove when you send to someone
 		debug.showInformations(batch, Objects.hero, viewport, camera);
 
 		batch.end();
-		
+
 		debug.showHitboxes(camera, entities, touchables);
 
 		stage.act(delta);
