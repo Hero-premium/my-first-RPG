@@ -17,10 +17,31 @@ public class Hero extends CombatEntity {
 		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
 	}
 
+	public void dodge(CombatEntity enemy) {
+		Util.log(name + " used dodge");
+		isDodging = Util.rand.nextBoolean();
+		int damage = 1;
+		CombatLogic.calculateDamage(enemy, this, damage);
+	}
+
+	private void heroAi() {
+		// FIXME give the hero wandering and movement ai ASAP
+
+	}
+
 	public void kick(CombatEntity enemy) {
 		Util.log(name + " used kick");
 		int damage = Util.rand.nextInt(2) + 3;
 		CombatLogic.calculateDamage(enemy, this, damage);
+	}
+
+	public void move(float deltaTime) {
+		if (possessed) {
+			takeControl(deltaTime);
+		} else {
+			heroAi();
+		}
+
 	}
 
 	public void swordSlash(CombatEntity enemy) {
@@ -37,22 +58,6 @@ public class Hero extends CombatEntity {
 				Util.log("the player did " + damage + " (aka missed)");
 			}
 			CombatLogic.calculateDamage(enemy, this, damage);
-		}
-
-	}
-
-	public void dodge(CombatEntity enemy) {
-		Util.log(name + " used dodge");
-		isDodging = Util.rand.nextBoolean();
-		int damage = 1;
-		CombatLogic.calculateDamage(enemy, this, damage);
-	}
-
-	public void move(float deltaTime) {
-		if (!possessed) {
-			takeControl(deltaTime);
-		} else {
-			heroAi();
 		}
 
 	}
@@ -85,11 +90,6 @@ public class Hero extends CombatEntity {
 
 			}
 		}
-
-	}
-
-	private void heroAi() {
-		// FIXME give the hero wandering and movement ai ASAP
 
 	}
 }

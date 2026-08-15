@@ -1,4 +1,4 @@
-package storyUtil;
+package storyutil;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -16,28 +16,21 @@ import util.Util;
 // TODO make the GUI the way you imagined it
 public class StoryDisplay {
 
-	public StoryDisplay(Stage stage) {
-		buildDialogUI(stage);
-	}
-
 	public final static int BUTTONS_COUNT = 3;
 
-	private int index = 3; // <- not a magic number - this is where the story starts
+	private int index = 6; // <- not a magic number - this is where the story starts
 
 	private Label dialogLabel;
-	private TextField takeInput;
 
+	private TextField takeInput;
 	private TextButton[] buttons = new TextButton[BUTTONS_COUNT];
 
 	private Integer[] nextNodes;
 
-	private boolean updateData() {
-		nextNodes = TextDecode.getNextNodes(index);
-		if (nextNodes == null) {
-			Util.log("end of nodes reached");
-			return true;
-		}
-		return false;
+	private boolean firstTime = true;
+
+	public StoryDisplay(Stage stage) {
+		buildDialogUI(stage);
 	}
 
 	private void buildDialogUI(Stage stage) {
@@ -74,16 +67,6 @@ public class StoryDisplay {
 
 		stage.addActor(dialogsGUI);
 		stage.addActor(takeInput);
-		stage.setDebugAll(true);
-	}
-
-	private boolean ran = false;
-
-	public void launchStory() {
-		if (!ran || (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && nextNodes != null && nextNodes.length == 1)) {
-			ran = true;
-			displayOptions();
-		}
 	}
 
 	private void clearButtons() {
@@ -97,6 +80,7 @@ public class StoryDisplay {
 
 	private void displayOptions() {
 		clearButtons();
+		if (TextDecode.getAction(index) != null) TextDecode.getAction(index).run();
 		if (updateData()) {
 			return;
 		}
@@ -105,7 +89,6 @@ public class StoryDisplay {
 		dialogLabel.setText(TextDecode.getText(nextNodes[0]));
 		if (nextNodes.length == 1) {
 			index = nextNodes[0];
-
 
 			return;
 		}
@@ -116,5 +99,21 @@ public class StoryDisplay {
 			buttons[i - 1].setDisabled(false);
 			buttons[i - 1].setVisible(true);
 		}
+	}
+
+	public void launchStory() {
+		if (firstTime || (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && nextNodes != null && nextNodes.length == 1)) {
+			firstTime = false;
+			displayOptions();
+		}
+	}
+
+	private boolean updateData() {
+		nextNodes = TextDecode.getNextNodes(index);
+		if (nextNodes == null) {
+			Util.log("end of nodes reached");
+			return true;
+		}
+		return false;
 	}
 }

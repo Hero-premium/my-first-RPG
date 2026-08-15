@@ -13,19 +13,16 @@ import touchables.Touchable;
 import touchables.Wall;
 
 public class Objects {
-	private static List<Entity> entities;
 
 	public static Hero hero;
 	public static Ghost ghost;
 	public static GateKeeper gateKeeper;
 
-	private static List<Touchable> touchables;
-
 	public static Wall wall;
 	public static Touchable stopPlayer;
 
 	public static List<Entity> generateEntities() {
-		entities = new ArrayList<>();
+		List<Entity> entities = new ArrayList<>();
 
 		hero = new Hero();
 		ghost = new Ghost();
@@ -39,7 +36,7 @@ public class Objects {
 	}
 
 	public static List<Touchable> generateTouchables() {
-		touchables = new ArrayList<>();
+		List<Touchable> touchables = new ArrayList<>();
 
 		wall = new Wall();
 		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800)));

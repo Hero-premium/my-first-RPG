@@ -14,7 +14,11 @@ public class GateKeeper extends CombatEntity {
 				Assets.PlaceHolder);
 	}
 
-	private int damage = 0;
+	private void fireWand(CombatEntity player) {
+		Util.log(name + " used fireWand");
+		CombatLogic.calculateDamage(player, this, 2);
+		player.poisonDuration = 3;
+	}
 
 	private void focus() {
 		Util.log(name + " used focus");
@@ -22,17 +26,9 @@ public class GateKeeper extends CombatEntity {
 		Util.log(name + " is focusing on his attack... you may attack.");
 	}
 
-	private void fireWand(CombatEntity player) {
-		Util.log(name + " used fireWand");
-		damage += 2;
-		CombatLogic.calculateDamage(player, this, damage);
-		player.poisonDuration = 3;
-	}
-
 	private void shield(CombatEntity player) {
 		Util.log(name + " used Shield");
-		damage += 2;
-		CombatLogic.calculateDamage(player, this, damage);
+		CombatLogic.calculateDamage(player, this, 2);
 		isDefending = true;
 	}
 
@@ -47,7 +43,6 @@ public class GateKeeper extends CombatEntity {
 		case 1 -> fireWand(player);
 		case 2 -> shield(player);
 		}
-		damage = 0;
 	}
 
 }

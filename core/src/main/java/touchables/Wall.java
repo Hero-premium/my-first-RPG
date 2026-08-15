@@ -9,10 +9,15 @@ import entities.Entity;
 public class Wall extends Touchable {
 
 	public Wall() {
-		super(Assets.wall, Integer.MAX_VALUE, 0, (new Rectangle(0, 0, 50, 50)));
+		super(Assets.wall, Integer.MAX_VALUE, Integer.MIN_VALUE, (new Rectangle(0, 0, 50, 50)));
 	}
 
-	public void wall(Entity entity) {
+	@Override
+	public void update(Entity entity) {
+		wall(entity);
+	}
+
+	private void wall(Entity entity) {
 		if (!isEntityInside(entity)) {
 			return;
 		}
@@ -34,10 +39,5 @@ public class Wall extends Touchable {
 			// push out vertically
 			e.y += (overlapBottom < overlapTop) ? -minOverlapY : minOverlapY;
 		}
-	}
-
-	@Override
-	public void update(Entity entity) {
-		wall(entity);
 	}
 }
