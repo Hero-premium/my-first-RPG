@@ -14,16 +14,16 @@ import com.mygdx.game.Assets;
 import combat.BattleLauncher;
 import debug.Debug;
 import entities.Entity;
-import storyUtil.StoryDisplay;
+import storyutil.StoryDisplay;
 import touchables.Touchable;
 import util.Objects;
 import world.Physics;
 
 public class MainGame implements Screen {
 
+	private final float floorLevel = 50;
 	private SpriteBatch batch;
 	private Debug debug;
-	final static public float FLOOR_LEVEL = 50;
 	private FitViewport viewport;
 	private OrthographicCamera camera;
 	private List<Entity> entities;
@@ -31,34 +31,34 @@ public class MainGame implements Screen {
 	private Stage stage;
 	private StoryDisplay storyDisplay;
 
-
-	private boolean battleOn = true;
-	boolean storyOn = false;
+	boolean battleOn = false;
+	boolean storyOn = true;
 
 	public MainGame() {
 
 		entities = Objects.generateEntities();
 		touchables = Objects.generateTouchables();
 
-
 		debug = new Debug();
 		batch = new SpriteBatch();
-
 	}
 
 	@Override
-	public void show() {
-		camera = new OrthographicCamera();
-		viewport = new FitViewport(800, 600, camera);
+	public void dispose() {
+		stage.dispose();
+		batch.dispose();
+		debug.dispose();
+		Assets.dispose();
+	}
 
-		stage = new Stage(new FitViewport(800, 600));
-		storyDisplay = new StoryDisplay(stage);
-		Gdx.input.setInputProcessor(stage);
+	@Override
+	public void hide() {
+		Assets.mainMenu.stop();
+	}
 
-		Assets.mainMenu.setLooping(true);
-		Assets.mainMenu.setVolume(0.1f);
-		Assets.mainMenu.play();
-
+	@Override
+	public void pause() {
+		Assets.mainMenu.pause();
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class MainGame implements Screen {
 		Objects.hero.move(delta);
 		Objects.ghost.move(delta, Objects.hero);
 
-		Physics.applyPhysics(entities, delta, FLOOR_LEVEL);
+		Physics.applyPhysics(entities, delta, floorLevel);
 
 		entities.removeIf(object -> !object.isAlive);
 
@@ -138,25 +138,21 @@ public class MainGame implements Screen {
 	}
 
 	@Override
-	public void pause() {
-		Assets.mainMenu.pause();
-	}
-
-	@Override
 	public void resume() {
 		Assets.mainMenu.play();
 	}
 
 	@Override
-	public void hide() {
-		Assets.mainMenu.stop();
-	}
+	public void show() {
+		camera = new OrthographicCamera();
+		viewport = new FitViewport(800, 600, camera);
 
-	@Override
-	public void dispose() {
-		stage.dispose();
-		batch.dispose();
-		debug.dispose();
-		Assets.dispose();
+		stage = new Stage(new FitViewport(800, 600));
+		storyDisplay = new StoryDisplay(stage);
+		Gdx.input.setInputProcessor(stage);
+
+		Assets.mainMenu.setLooping(true);
+		Assets.mainMenu.setVolume(0.1f);
+		Assets.mainMenu.play();
 	}
 }

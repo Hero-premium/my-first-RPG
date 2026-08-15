@@ -7,24 +7,9 @@ import entities.Ghost;
 
 public class Physics {
 
-	private Physics() {}
-
 	private static float gravity = -980f;
+
 	private static float air = -980;
-
-	private static void gravity(Entity entity, float deltaTime, float floorLevel) {
-
-		entity.velocity.y += gravity * deltaTime;
-
-		entity.hitBox.y += entity.velocity.y * deltaTime;
-
-		if (entity.hitBox.y < floorLevel) {
-			entity.hitBox.y = floorLevel;
-			entity.velocity.y = 0f;
-			entity.onGround = true;
-		}
-	}
-
 	private static void airRes(Entity entity, float deltaTime) {
 		if (!entity.facingLeft) {
 			if (entity.velocity.x <= 0) {
@@ -56,5 +41,20 @@ public class Physics {
 			}
 		}
 	}
+
+	private static void gravity(Entity entity, float deltaTime, float floorLevel) {
+
+		entity.velocity.y += gravity * deltaTime;
+
+		entity.hitBox.y += entity.velocity.y * deltaTime;
+
+		if (entity.hitBox.y < floorLevel) {
+			entity.hitBox.y = floorLevel;
+			entity.velocity.y = 0f;
+			entity.onGround = true;
+		}
+	}
+
+	private Physics() {}
 
 }

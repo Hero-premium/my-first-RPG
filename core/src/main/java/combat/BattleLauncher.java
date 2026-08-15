@@ -13,14 +13,14 @@ import com.mygdx.game.Assets;
 
 import entities.CombatEntity;
 import entities.Hero;
-import storyUtil.TextDecode;
+import storyutil.TextDecode;
 import util.Util;
 
 // TODO add slight delay between each move
 public class BattleLauncher {
 
-	private BattleLauncher() {
-		throw new AssertionError("No combat.BattleLauncher instance for you!");
+	enum BattleState {
+		GOING, WON, LOST
 	}
 
 	private static TextButton[] gameOverButtons = new TextButton[2];
@@ -35,44 +35,16 @@ public class BattleLauncher {
 	private static Stage stage;
 	private static boolean generated = false;
 
-	private static void generateUI() {
-		generateButtons();
-		generateLabels();
-		Util.log("GUI generated successfully");
-	}
-
-	private static void setCombatButtonsVisibility(boolean state) {
-		for (TextButton combatButton : combatButtons) {
-			combatButton.setDisabled(!state);
-			combatButton.setVisible(state);
-		}
-	}
-
-	private static void setGameOverButtonsVisibility(boolean state) {
-		for (TextButton gameOverButton : gameOverButtons) {
-			gameOverButton.setDisabled(!state);
-			gameOverButton.setVisible(state);
-		}
-	}
-
-	private static void retry() {
-		player.isDodging = false;
-		player.resetHp();
-		enemy.resetHp();
-		enemy.isFocused = false;
-		enemy.isDefending = false;
-
-		setCombatButtonsVisibility(true);
-		setGameOverButtonsVisibility(false);
-
-		playerHp.setVisible(true);
-		enemyHp.setVisible(true);
-
-		launchBattle(player, enemy, stage);
-	}
-
 	private static String buildHpText(CombatEntity entity) {
 		return entity.name + " Health :" + entity.getHp();
+	}
+
+	private static void endBattle() {
+		setCombatButtonsVisibility(false);
+
+		playerHp.setVisible(false);
+		enemyHp.setVisible(false);
+
 	}
 
 	private static void generateButtons() {
@@ -147,6 +119,34 @@ public class BattleLauncher {
 		stage.addActor(labelsTable);
 	}
 
+	private static void generateUI() {
+		generateButtons();
+		generateLabels();
+		Util.log("GUI generated successfully");
+	}
+
+	private static void handleBattleState(BattleState state) {
+		switch (state) {
+		case WON -> {
+			updateLabels();
+			endBattle();
+			player.setMovementLocked(false);
+		}
+		case LOST -> {
+			endBattle();
+			setGameOverButtonsVisibility(true);
+			updateLabels();
+		}
+		case GOING -> {
+			enemy.takeTurn(player);
+			validateBattle();
+			updateLabels();
+		}
+		default -> throw new IllegalStateException("The returned enum \"" + state + "\" can't be handled here");
+
+		}
+	}
+
 	public static void launchBattle(Hero p, CombatEntity e, Stage gameStage) {
 		player = p;
 		enemy = e;
@@ -163,55 +163,57 @@ public class BattleLauncher {
 
 	}
 
-	enum BattleState {
-		GOING, WON, LOST
+	private static void retry() {
+		player.isDodging = false;
+		player.resetHp();
+		enemy.resetHp();
+		enemy.isFocused = false;
+		enemy.isDefending = false;
+
+		setCombatButtonsVisibility(true);
+		setGameOverButtonsVisibility(false);
+
+		playerHp.setVisible(true);
+		enemyHp.setVisible(true);
+
+		launchBattle(player, enemy, stage);
+	}
+
+	private static void setCombatButtonsVisibility(boolean state) {
+		for (TextButton combatButton : combatButtons) {
+			combatButton.setDisabled(!state);
+			combatButton.setVisible(state);
+		}
+	}
+
+	private static void setGameOverButtonsVisibility(boolean state) {
+		for (TextButton gameOverButton : gameOverButtons) {
+			gameOverButton.setDisabled(!state);
+			gameOverButton.setVisible(state);
+		}
+	}
+
+	private static void updateLabels() {
+		playerHp.setText(buildHpText(player));
+		enemyHp.setText(buildHpText(enemy));
 	}
 
 	private static BattleState validateBattle() {
 		if (enemy.getHp() <= 0) {
 			Util.log("the player won");
-			enemy.moveGold(enemy.gold, player);
+			enemy.moveGold(enemy.gold(), player);
 			return BattleState.WON;
 
 		}
 		if (player.getHp() <= 0) {
 			Util.log("the player lost");
-			handleBattleState(BattleState.LOST);
 			return BattleState.LOST;
 		}
 		return BattleState.GOING;
 	}
 
-	private static void endBattle() {
-		setCombatButtonsVisibility(false);
-
-		playerHp.setVisible(false);
-		enemyHp.setVisible(false);
-
-	}
-
-	private static void handleBattleState(BattleState state) {
-		switch (state) {
-		case WON -> {
-			endBattle();
-			player.setMovementLocked(false);
-		}
-		case LOST -> {
-			endBattle();
-			setGameOverButtonsVisibility(true);
-		}
-		case GOING -> {
-			enemy.takeTurn(player);
-			validateBattle();
-
-			playerHp.setText(buildHpText(player));
-			enemyHp.setText(buildHpText(enemy));
-		}
-		default -> {
-			throw new IllegalStateException("The returned enum \"" + state + "\" can't be handled here");
-		}
-
-		}
+	private BattleLauncher() {
+		throw new AssertionError("No combat.BattleLauncher instance for you!");
 	}
 
 }

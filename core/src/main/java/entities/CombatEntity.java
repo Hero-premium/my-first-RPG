@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class CombatEntity extends Entity {
+public abstract class CombatEntity extends Entity {
 
 	private int hp;
 	public final int maxHp ;
@@ -21,15 +21,26 @@ public class CombatEntity extends Entity {
 		this.maxHp = hp;
 	}
 
+	public int getHp() {
+		return hp;
+	}
+
+	/**
+	 * adds the given amount of hp to the existing amount of hp also clamps hp
+	 * between 0 and maxHp
+	 *
+	 * @param hp how much you want to add - pass a negative number to deal damage
+	 */
+	public final void modifyHp(int hp) {
+		this.hp += hp;
+		this.hp = Math.clamp(this.hp, 0, maxHp);
+	}
+
 	/**
 	 * resets hp to its max
 	 */
-	public void resetHp() {
+	public final void resetHp() {
 		this.hp = this.maxHp;
-	}
-
-	public int getHp() {
-		return hp;
 	}
 
 	/**
@@ -38,22 +49,11 @@ public class CombatEntity extends Entity {
 	 * @param hp the new hp
 	 * @throws IllegalArgumentException on negative input
 	 */
-	public void setHp(int hp) {
+	public final void setHp(int hp) {
 		if (hp < 0) {
 			throw new IllegalArgumentException("you can't set hp to negative");
 		}
 		this.hp = hp;
-		this.hp = Math.clamp(this.hp, 0, maxHp);
-	}
-
-	/**
-	 * adds the given amount of hp to the existing amount of hp also clamps hp
-	 * between 0 and maxHp
-	 *
-	 * @param hp how much you want to add
-	 */
-	public void modifyHp(int hp) {
-		this.hp += hp;
 		this.hp = Math.clamp(this.hp, 0, maxHp);
 	}
 
