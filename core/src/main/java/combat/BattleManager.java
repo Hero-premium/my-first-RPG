@@ -1,6 +1,7 @@
 package combat;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,13 +14,13 @@ import com.mygdx.game.Assets;
 
 import entities.CombatEntity;
 import entities.Hero;
-import storyutil.TextDecode;
+import storyutil.TextManager;
 import util.Util;
 
 // TODO add slight delay between each move
-public class BattleLauncher {
+public final class BattleManager {
 
-	enum BattleState {
+	private enum BattleState {
 		GOING, WON, LOST
 	}
 
@@ -33,7 +34,6 @@ public class BattleLauncher {
 	private static Hero player;
 	private static CombatEntity enemy;
 	private static Stage stage;
-	private static boolean generated = false;
 
 	private static String buildHpText(CombatEntity entity) {
 		return entity.name + " Health :" + entity.getHp();
@@ -52,57 +52,53 @@ public class BattleLauncher {
 		buttonsTable.setFillParent(true);
 		buttonsTable.bottom();
 
-		String[] combatButtonNames = { TextDecode.getText(3), TextDecode.getText(4), TextDecode.getText(5) };
+		String[] combatButtonNames = { TextManager.getText(3), TextManager.getText(4), TextManager.getText(5) };
+		String[] gameOverButtonNames = { TextManager.getText(1), TextManager.getText(2) };
+
 		List<Runnable> playerMoves = List.of( //
-				() -> player.kick(enemy), //
-				() -> player.swordSlash(enemy), //
-				() -> player.dodge(enemy)); //
-
-		if (combatButtons.length != combatButtonNames.length) {
-			throw new IllegalStateException("the amount of combatButtonNames we have \"" + combatButtonNames.length
-					+ "\" does not match the amount of buttons you're trying to generate" + combatButtons.length);
-		}
-		for (int i = 0; i < combatButtons.length; i++) {
-			combatButtons[i] = new TextButton(combatButtonNames[i], Assets.skin);
-			combatButtons[i].setUserObject(playerMoves.get(i));
-			combatButtons[i].addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					Runnable action = (Runnable) event.getListenerActor().getUserObject();
-					action.run();
+				() -> {
+					player.kick(enemy);
 					handleBattleState(validateBattle());
-				}
-			});
-
-			buttonsTable.add(combatButtons[i]).pad(30);
-		}
-
-		String[] gameOverButtonNames = { TextDecode.getText(1), TextDecode.getText(2) };
+				}, //
+				() -> {
+					player.swordSlash(enemy);
+					handleBattleState(validateBattle());
+				}, //
+				() -> {
+					player.dodge(enemy);
+					handleBattleState(validateBattle());
+				});
 		List<Runnable> gameOverActions = List.of( //
 				() -> retry(), //
 				() -> Gdx.app.exit()); //
 
-		if (gameOverButtons.length != gameOverButtonNames.length) {
-			throw new IllegalStateException("the amount of combatButtonNames we have \"" + gameOverButtonNames.length
-					+ "\" does not match the amount of buttons you're trying to generate" + gameOverButtons.length);
+		generateButton(buttonsTable, combatButtonNames, playerMoves, combatButtons);
+		generateButton(buttonsTable, gameOverButtonNames, gameOverActions, gameOverButtons);
+		
+		setGameOverButtonsVisibility(false);
+
+		stage.addActor(buttonsTable);
+
+	}
+
+	private static void generateButton(Table buttonsTable, String[] buttonNames, List<Runnable> actions,
+			TextButton[] buttons) {
+		if (buttons.length != buttonNames.length) {
+			throw new IllegalStateException("the amount of combatButtonNames we have \"" + buttonNames.length
+					+ "\" does not match the amount of buttons you're trying to generate" + buttons.length);
 		}
-		for (int i = 0; i < gameOverButtons.length; i++) {
-			gameOverButtons[i] = new TextButton(gameOverButtonNames[i], Assets.skin);
-			gameOverButtons[i].setUserObject(gameOverActions.get(i));
-			gameOverButtons[i].addListener(new ClickListener() {
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = new TextButton(buttonNames[i], Assets.skin);
+			buttons[i].setUserObject(actions.get(i));
+			buttons[i].addListener(new ClickListener() {
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
 					Runnable action = (Runnable) event.getListenerActor().getUserObject();
 					action.run();
 				}
 			});
-
-			buttonsTable.add(gameOverButtons[i]).pad(30);
+			buttonsTable.add(buttons[i]).row();
 		}
-		setGameOverButtonsVisibility(false);
-
-		stage.addActor(buttonsTable);
-
 	}
 
 	private static void generateLabels() {
@@ -128,33 +124,37 @@ public class BattleLauncher {
 	private static void handleBattleState(BattleState state) {
 		switch (state) {
 		case WON -> {
-			updateLabels();
 			endBattle();
 			player.setMovementLocked(false);
 		}
 		case LOST -> {
 			endBattle();
 			setGameOverButtonsVisibility(true);
-			updateLabels();
 		}
 		case GOING -> {
 			enemy.takeTurn(player);
-			validateBattle();
-			updateLabels();
 		}
 		default -> throw new IllegalStateException("The returned enum \"" + state + "\" can't be handled here");
-
 		}
+		updateLabels();
 	}
 
 	public static void launchBattle(Hero p, CombatEntity e, Stage gameStage) {
+		Objects.requireNonNull(p, "hero cannot be null");
+		Objects.requireNonNull(e, "enemy cannot be null");
+		Objects.requireNonNull(gameStage, "stage cannot be null");
+				
 		player = p;
 		enemy = e;
 		stage = gameStage;
 
-		if (!generated) {
+		/*
+		 * to avoid recreating the combat GUI on the same stage and to make sure they
+		 * get generated when they're needed, gameOverButtons[1] is just a random pick
+		 * because everything gets generated at once
+		 */
+		if (!stage.getActors().contains(gameOverButtons[1], true)) {
 			generateUI();
-			generated = true;
 		}
 
 		Util.log("_______ battle starts! _______");
@@ -212,8 +212,8 @@ public class BattleLauncher {
 		return BattleState.GOING;
 	}
 
-	private BattleLauncher() {
-		throw new AssertionError("No combat.BattleLauncher instance for you!");
+	private BattleManager() {
+		throw new AssertionError("No combat.BattleManager instance for you!");
 	}
 
 }
