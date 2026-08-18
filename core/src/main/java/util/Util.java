@@ -6,14 +6,17 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 
+public final class Util {
 
-public class Util {
+	private Util() {
+		throw new AssertionError("No util.Util instance for you!");
+	}
+
 	private static boolean isPressed = false;
 
 	public static final Random rand = new Random();
 
 	private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
-
 
 	public static boolean isKeyJustReleased(int key) {
 		if (Gdx.input.isKeyPressed(key)) {
@@ -28,9 +31,12 @@ public class Util {
 		return false;
 	}
 
-	public final static void log(Object obj) {
+	public static void log(Object obj) {
 		String time = LocalDateTime.now().format(FORMAT);
 		System.out.println("[" + time + "] " + obj);
 	}
 
+	public static void logWarn(Object obj) {
+		log("\u001B[33m" + "WARNING - " + obj);
+	}
 }

@@ -25,7 +25,7 @@ public class Hero extends CombatEntity {
 	}
 
 	private void heroAi() {
-		// FIXME give the hero wandering and movement ai ASAP
+		// TODO give the hero wandering and movement ai ASAP
 
 	}
 
