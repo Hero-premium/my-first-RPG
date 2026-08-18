@@ -6,6 +6,7 @@ import util.Util;
 public class CombatLogic {
 
 	private static void applyDamage(CombatEntity target, int damage) {
+		if (damage % 10 != 0) Util.logWarn("you may or may not have forgot to use the *10 multiplier");
 		target.modifyHp(-damage);
 		Util.log(target.name + " now has " + target.getHp());
 	}
