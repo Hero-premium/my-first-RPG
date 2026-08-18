@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Assets;
 
-import combat.BattleLauncher;
+import combat.BattleManager;
 import debug.Debug;
 import entities.Entity;
 import storyutil.StoryDisplay;
@@ -91,7 +91,7 @@ public class MainGame implements Screen {
 			storyDisplay.launchStory();
 		}
 		if (battleOn) {
-			BattleLauncher.launchBattle(Objects.hero, Objects.gateKeeper, stage);
+			BattleManager.launchBattle(Objects.hero, Objects.gateKeeper, stage);
 			battleOn = false;
 		}
 

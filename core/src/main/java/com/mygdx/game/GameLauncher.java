@@ -2,11 +2,11 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 
-import UI.MainGame;
+import UI.LoadingScreen;
 
-public class Main extends Game {
+public class GameLauncher extends Game {
 	@Override
 	public void create() {
-		this.setScreen(new MainGame());
+		this.setScreen(new LoadingScreen(this));
 	}
 }
