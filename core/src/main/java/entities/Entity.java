@@ -58,7 +58,7 @@ public abstract class Entity {
 		}
 		Objects.requireNonNull(receiver, "the receiver cannot be null");
 		if (gold < amount) {
-			Util.log("WARNING - this entity doesn't have enough gold for this transaction");
+			Util.logWarn("this entity doesn't have enough gold for this transaction");
 			return;
 		}
 

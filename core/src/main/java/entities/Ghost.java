@@ -11,7 +11,7 @@ import util.Util;
 public class Ghost extends Entity {
 
 	public Ghost() {
-		super(0, "", false, true, 256, (new Vector2(0, 0)), (new Rectangle(0f, 0f, 50f, 60f)), Assets.PlaceHolder);
+		super(0, "", false, true, 256, (new Vector2(0, 0)), (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
 	}
 
 	public void move(float deltaTime, Hero hero) {
