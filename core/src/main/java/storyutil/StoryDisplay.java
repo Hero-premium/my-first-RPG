@@ -80,13 +80,14 @@ public class StoryDisplay {
 
 	private void displayOptions() {
 		clearButtons();
-		if (TextDecode.getAction(index) != null) TextDecode.getAction(index).run();
+		Runnable action = TextManager.getAction(index) ;
+		if (action != null) action.run();
 		if (updateData()) {
 			return;
 		}
 
 		// because the first node is always the other person's line this always happens
-		dialogLabel.setText(TextDecode.getText(nextNodes[0]));
+		dialogLabel.setText(TextManager.getText(nextNodes[0]));
 		if (nextNodes.length == 1) {
 			index = nextNodes[0];
 
@@ -94,7 +95,7 @@ public class StoryDisplay {
 		}
 
 		for (int i = 1; i < nextNodes.length; i++) {
-			buttons[i - 1].setText(TextDecode.getText(nextNodes[i]));
+			buttons[i - 1].setText(TextManager.getText(nextNodes[i]));
 			buttons[i - 1].setUserObject(nextNodes[i]);
 			buttons[i - 1].setDisabled(false);
 			buttons[i - 1].setVisible(true);
@@ -109,7 +110,7 @@ public class StoryDisplay {
 	}
 
 	private boolean updateData() {
-		nextNodes = TextDecode.getNextNodes(index);
+		nextNodes = TextManager.getNextNodes(index);
 		if (nextNodes == null) {
 			Util.log("end of nodes reached");
 			return true;

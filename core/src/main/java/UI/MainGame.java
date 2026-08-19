@@ -15,6 +15,7 @@ import combat.BattleManager;
 import debug.Debug;
 import entities.Entity;
 import storyutil.StoryDisplay;
+import storyutil.TextManager;
 import touchables.Touchable;
 import util.Objects;
 import world.Physics;
@@ -30,9 +31,7 @@ public class MainGame implements Screen {
 	private List<Touchable> touchables;
 	private Stage stage;
 	private StoryDisplay storyDisplay;
-
-	boolean battleOn = false;
-	boolean storyOn = true;
+	private boolean storyOn = true;
 
 	public MainGame() {
 
@@ -41,6 +40,8 @@ public class MainGame implements Screen {
 
 		debug = new Debug();
 		batch = new SpriteBatch();
+
+		TextManager.setAction(16, () -> BattleManager.launchBattle(Objects.hero, Objects.gateKeeper, stage));
 	}
 
 	@Override
@@ -89,10 +90,6 @@ public class MainGame implements Screen {
 
 		if (storyOn) {
 			storyDisplay.launchStory();
-		}
-		if (battleOn) {
-			BattleManager.launchBattle(Objects.hero, Objects.gateKeeper, stage);
-			battleOn = false;
 		}
 
 		touchables.removeIf(object -> object.useages >= object.maxUsage);
