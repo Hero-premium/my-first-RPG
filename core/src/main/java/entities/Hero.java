@@ -14,7 +14,7 @@ public class Hero extends CombatEntity {
 	boolean possessed = false;
 
 	public Hero() {
-		super(10, "", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
+		super(10, "Hero", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
 	}
 
 	public void dodge(CombatEntity enemy) {
@@ -49,13 +49,13 @@ public class Hero extends CombatEntity {
 		int damage = 0;
 		if (80 <= Util.rand.nextInt(100)) {
 			damage = 8;
-			Util.log("the player landed a critical hit with sword slash");
+			Util.log(name + " landed a critical hit with sword slash");
 			CombatLogic.calculateDamage(enemy, this, damage);
 
 		} else {
 			damage += Util.rand.nextInt(3);
 			if (damage == 0) {
-				Util.log("the player did " + damage + " (aka missed)");
+				Util.log(name + " did " + damage + " (aka missed)");
 			}
 			CombatLogic.calculateDamage(enemy, this, damage);
 		}

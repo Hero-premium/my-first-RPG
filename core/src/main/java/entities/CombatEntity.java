@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import util.Util;
+
 public abstract class CombatEntity extends Entity {
 
 	private int hp;
@@ -17,7 +19,7 @@ public abstract class CombatEntity extends Entity {
 			Rectangle hitbox, int hp, Texture texture) {
 		super(gold, name, onGround, isAlive, speed, velocity, hitbox, texture);
 
-		this.hp = hp;
+		this.hp = Util.requireNonNegative(hp);
 		this.maxHp = hp;
 	}
 
@@ -50,10 +52,7 @@ public abstract class CombatEntity extends Entity {
 	 * @throws IllegalArgumentException on negative input
 	 */
 	public final void setHp(int hp) {
-		if (hp < 0) {
-			throw new IllegalArgumentException("you can't set hp to negative");
-		}
-		this.hp = hp;
+		this.hp = Util.requireNonNegative(hp);
 		this.hp = Math.clamp(this.hp, 0, maxHp);
 	}
 

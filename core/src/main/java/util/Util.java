@@ -37,6 +37,16 @@ public final class Util {
 	}
 
 	public static void logWarn(Object obj) {
-		log("\u001B[33m" + "WARNING - " + obj);
+		log("\u001B[33m" + "WARNING - " + obj + "\u001B[0m");
+	}
+
+	public static int requireNonNegative(int number) {
+		return requireNonNegative(number, "this number cannot be negative");
+	}
+
+	public static int requireNonNegative(int number, String msg) {
+		if (number < 0)
+			throw new IllegalArgumentException(msg);
+		return number;
 	}
 }
