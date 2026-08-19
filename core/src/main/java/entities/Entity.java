@@ -25,7 +25,7 @@ public abstract class Entity {
 	protected Entity(int gold, String name, boolean onGround, boolean isAlive, float speed, Vector2 velocity,
 			Rectangle hitBox, Texture texture) {
 
-		this.gold = gold;
+		this.gold = Util.requireNonNegative(gold);
 		this.name = name;
 		this.onGround = onGround;
 		this.isAlive = isAlive;
@@ -40,7 +40,7 @@ public abstract class Entity {
 				false);
 	}
 
-	public int gold() {
+	public int getGold() {
 		return gold;
 	}
 
@@ -53,9 +53,7 @@ public abstract class Entity {
 	 * @throws NullPointerException - if the receiver was null
 	 */
 	public void moveGold(int amount, Entity receiver) {
-		if (amount < 0) {
-			throw new IllegalArgumentException("this number can't be negative");
-		}
+		Util.requireNonNegative(amount);
 		Objects.requireNonNull(receiver, "the receiver cannot be null");
 		if (gold < amount) {
 			Util.logWarn("this entity doesn't have enough gold for this transaction");
@@ -71,7 +69,9 @@ public abstract class Entity {
 		return movementLocked;
 	}
 
-	// to be overridden by other classes
+	/**
+	 *  to be overridden by other classes
+	 */
 	public void passiveAbility() {
 	}
 
