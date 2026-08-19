@@ -44,11 +44,13 @@ public final class BattleManager {
 
 		playerHp.setVisible(false);
 		enemyHp.setVisible(false);
+		Util.log("Battle is over");
 
 	}
 
 	private static void generateButtons() {
 		Table buttonsTable = new Table();
+		buttonsTable.setName("buttonsTable");
 		buttonsTable.setFillParent(true);
 		buttonsTable.bottom();
 
@@ -74,7 +76,7 @@ public final class BattleManager {
 
 		generateButton(buttonsTable, combatButtonNames, playerMoves, combatButtons);
 		generateButton(buttonsTable, gameOverButtonNames, gameOverActions, gameOverButtons);
-		
+
 		setGameOverButtonsVisibility(false);
 
 		stage.addActor(buttonsTable);
@@ -84,7 +86,7 @@ public final class BattleManager {
 	private static void generateButton(Table buttonsTable, String[] buttonNames, List<Runnable> actions,
 			TextButton[] buttons) {
 		if (buttons.length != buttonNames.length) {
-			throw new IllegalStateException("the amount of combatButtonNames we have \"" + buttonNames.length
+			throw new IllegalStateException("the amount of buttonNames we have \"" + buttonNames.length
 					+ "\" does not match the amount of buttons you're trying to generate" + buttons.length);
 		}
 		for (int i = 0; i < buttons.length; i++) {
@@ -126,6 +128,7 @@ public final class BattleManager {
 		case WON -> {
 			endBattle();
 			player.setMovementLocked(false);
+			enemy.moveGold(enemy.getGold(), player);
 		}
 		case LOST -> {
 			endBattle();
@@ -133,6 +136,13 @@ public final class BattleManager {
 		}
 		case GOING -> {
 			enemy.takeTurn(player);
+
+			/*
+			 * the line below triggers when the player losses, in using validateBattle
+			 * knowing it will return lost just so i can get it's side effects (the prints)
+			 */
+			if (player.getHp() <= 0)
+				handleBattleState(validateBattle());
 		}
 		default -> throw new IllegalStateException("The returned enum \"" + state + "\" can't be handled here");
 		}
@@ -140,20 +150,15 @@ public final class BattleManager {
 	}
 
 	public static void launchBattle(Hero p, CombatEntity e, Stage gameStage) {
-		Objects.requireNonNull(p, "hero cannot be null");
-		Objects.requireNonNull(e, "enemy cannot be null");
-		Objects.requireNonNull(gameStage, "stage cannot be null");
-				
-		player = p;
-		enemy = e;
-		stage = gameStage;
+		player = Objects.requireNonNull(p, "hero cannot be null");
+		enemy = Objects.requireNonNull(e, "enemy cannot be null");
+		stage = Objects.requireNonNull(gameStage, "stage cannot be null");
 
 		/*
 		 * to avoid recreating the combat GUI on the same stage and to make sure they
-		 * get generated when they're needed, gameOverButtons[1] is just a random pick
-		 * because everything gets generated at once
+		 * get generated when they're needed
 		 */
-		if (!stage.getActors().contains(gameOverButtons[1], true)) {
+		if (stage.getRoot().findActor("buttonsTable") == null) {
 			generateUI();
 		}
 
@@ -169,9 +174,11 @@ public final class BattleManager {
 		enemy.resetHp();
 		enemy.isFocused = false;
 		enemy.isDefending = false;
+		player.poisonDuration = 0;
 
 		setCombatButtonsVisibility(true);
 		setGameOverButtonsVisibility(false);
+		updateLabels();
 
 		playerHp.setVisible(true);
 		enemyHp.setVisible(true);
@@ -201,9 +208,7 @@ public final class BattleManager {
 	private static BattleState validateBattle() {
 		if (enemy.getHp() <= 0) {
 			Util.log("the player won");
-			enemy.moveGold(enemy.gold(), player);
 			return BattleState.WON;
-
 		}
 		if (player.getHp() <= 0) {
 			Util.log("the player lost");
