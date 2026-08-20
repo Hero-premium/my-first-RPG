@@ -3,40 +3,46 @@ package world;
 import java.util.List;
 
 import entities.Entity;
-import entities.Ghost;
 
 public class Physics {
 
-	private static float gravity = -980f;
+	private static float gravity = 980f;
+	private static float air = 980f;
 
-	private static float air = -980;
-	private static void airRes(Entity entity, float deltaTime) {
-		if (!entity.facingLeft) {
-			if (entity.velocity.x <= 0) {
-				entity.velocity.x = 0;
-				return;
-			}
-			entity.velocity.x += air * deltaTime;
-
+	private static void handlePositiveMovement(Entity entity, float deltaTime) {
+		if (entity.velocity.x < air * deltaTime) {
+			entity.velocity.x = 0;
 		} else {
-
-			if (entity.velocity.x >= 0) {
-				entity.velocity.x = 0;
-				return;
-			}
-
 			entity.velocity.x -= air * deltaTime;
 		}
+	}
+
+	private static void handleNegativeMovement(Entity entity, float deltaTime) {
+		float air = -Physics.air;
+		if (entity.velocity.x > air * deltaTime) {
+			entity.velocity.x = 0;
+		} else {
+			entity.velocity.x -= air * deltaTime;
+		}
+	}
+
+	private static void airRes(Entity entity, float deltaTime) {
+		if (entity.velocity.x > 0) {
+			handlePositiveMovement(entity, deltaTime);
+		} else if (entity.velocity.x < 0) {
+			handleNegativeMovement(entity, deltaTime);
+		}
+
 		entity.hitBox.x += entity.velocity.x * deltaTime;
 
 	}
 
-	public static void applyPhysics(List<Entity> entities, float delta, float FLOOR_LEVEL) {
+	public static void applyPhysics(List<Entity> entities, float delta, float floorLevel) {
 		for (Entity object : entities) {
 			airRes(object, delta);
 
-			if (!(object instanceof Ghost)) {
-				gravity(object, delta, FLOOR_LEVEL);
+			if (!(object instanceof Flyable)) {
+				gravity(object, delta, floorLevel);
 				object.velocityClamp();
 			}
 		}
@@ -44,7 +50,7 @@ public class Physics {
 
 	private static void gravity(Entity entity, float deltaTime, float floorLevel) {
 
-		entity.velocity.y += gravity * deltaTime;
+		entity.velocity.y -= gravity * deltaTime;
 
 		entity.hitBox.y += entity.velocity.y * deltaTime;
 
@@ -55,6 +61,8 @@ public class Physics {
 		}
 	}
 
-	private Physics() {}
+	private Physics() {
+		throw new AssertionError("No world.Physics instance for you!");
+	}
 
 }

@@ -7,8 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Assets;
 
 import util.Util;
+import world.Flyable;
 
-public class Ghost extends Entity {
+public class Ghost extends Entity implements Flyable {
 
 	public Ghost() {
 		super(0, "", false, true, 256, (new Vector2(0, 0)), (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);

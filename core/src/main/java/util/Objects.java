@@ -39,6 +39,7 @@ public class Objects {
 		List<Touchable> touchables = new ArrayList<>();
 
 		wall = new Wall();
+
 		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800)));
 
 		// TEMP remove ones you start using tiles or give it it's own method
