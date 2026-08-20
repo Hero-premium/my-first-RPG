@@ -9,8 +9,8 @@ import util.Util;
 public abstract class CombatEntity extends Entity {
 
 	private int hp;
-	public final int maxHp ;
-	public int poisonDuration = 0;
+	public final int maxHp;
+	private int poisonDuration = 0;
 	public boolean isDodging = false;
 	public boolean isDefending = false;
 	public boolean isFocused = false;
@@ -56,7 +56,24 @@ public abstract class CombatEntity extends Entity {
 		this.hp = Math.clamp(this.hp, 0, maxHp);
 	}
 
+	public void resetBattleStates() {
+		setPoisonDuration(0);
+		isDodging = false;
+		isDefending = false;
+		isFocused = false;
+
+	}
+
 	public void takeTurn(CombatEntity entity) {
-		throw new UnsupportedOperationException("this entity " + this.getClass().getName() + " doesn't have a takeTurn method");
+		throw new UnsupportedOperationException(
+				"this entity " + this.getClass().getName() + " doesn't have a takeTurn method");
+	}
+
+	public int getPoisonDuration() {
+		return poisonDuration;
+	}
+
+	public void setPoisonDuration(int poisonDuration) {
+		this.poisonDuration = Util.requireNonNegative(poisonDuration);
 	}
 }
