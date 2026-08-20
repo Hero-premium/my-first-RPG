@@ -16,11 +16,11 @@ public class CombatLogic {
 		damage *= 10;
 		int poisonDamage = 0;
 
-		if (target.poisonDuration > 0) {
+		if (target.getPoisonDuration() > 0) {
 			poisonDamage = (Util.rand.nextInt(2) + 1) * 10;
 			damage += poisonDamage;
 			Util.log(target.name + " took extra damage because of being on fire!");
-			target.poisonDuration--;
+			target.setPoisonDuration(target.getPoisonDuration() - 1);
 		}
 		if (target.isDodging) {
 			Util.log(target.name + " has dodged the " + user.name + " attack!");
