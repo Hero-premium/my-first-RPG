@@ -1,5 +1,6 @@
 package UI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -18,6 +19,7 @@ import storyutil.StoryDisplay;
 import storyutil.TextManager;
 import touchables.Touchable;
 import util.Objects;
+import util.Updatable;
 import world.Physics;
 
 public class MainGame implements Screen {
@@ -29,14 +31,16 @@ public class MainGame implements Screen {
 	private OrthographicCamera camera;
 	private List<Entity> entities;
 	private List<Touchable> touchables;
+	private List<Updatable> updatables;
 	private Stage stage;
 	private StoryDisplay storyDisplay;
-	private boolean storyOn = true;
+	private boolean storyOn = false;
 
 	public MainGame() {
 
 		entities = Objects.generateEntities();
 		touchables = Objects.generateTouchables();
+		updatables = new ArrayList<>(entities);
 
 		debug = new Debug();
 		batch = new SpriteBatch();
@@ -67,21 +71,20 @@ public class MainGame implements Screen {
 
 		ScreenUtils.clear(0, 0, 0, 1);
 
-		Objects.hero.move(delta);
-		Objects.ghost.move(delta, Objects.hero);
-
+		for (Updatable object : updatables) {
+			object.update(delta);
+		}
 		Physics.applyPhysics(entities, delta, floorLevel);
-
-		entities.removeIf(object -> !object.isAlive);
 
 		for (Touchable touchable : touchables) {
 			for (Entity entity : entities) {
 				touchable.update(entity);
 			}
+
 			if (touchable == Objects.stopPlayer) {
 				if (touchable.isEntityInside(Objects.hero)) {
 					Objects.stopPlayer.useages = Objects.stopPlayer.maxUsage;
-					Objects.hero.setMovementLocked(true);
+					Objects.hero.movementLocked = true;
 					storyOn = true;
 					Objects.gateKeeper.facingLeft = true;
 				}
