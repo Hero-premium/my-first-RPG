@@ -4,17 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.Assets;
 
 import combat.CombatLogic;
 import util.Util;
 
-public class Hero extends CombatEntity {
+public class Hero extends CombatEntity implements CombatAnimation {
 
-	boolean possessed = false;
+	boolean possessed = true;
 
 	public Hero() {
-		super(10, "Hero", false, true, 128f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
+		super(10, "Hero", false, 5000f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
 	}
 
 	public void dodge(CombatEntity enemy) {
@@ -22,6 +23,7 @@ public class Hero extends CombatEntity {
 		isDodging = Util.rand.nextBoolean();
 		int damage = 1;
 		CombatLogic.calculateDamage(enemy, this, damage);
+		firstMove();
 	}
 
 	private void heroAi() {
@@ -33,9 +35,11 @@ public class Hero extends CombatEntity {
 		Util.log(name + " used kick");
 		int damage = Util.rand.nextInt(2) + 3;
 		CombatLogic.calculateDamage(enemy, this, damage);
+		secondMove();
 	}
 
-	public void move(float deltaTime) {
+	@Override
+	public void update(float deltaTime) {
 		if (possessed) {
 			takeControl(deltaTime);
 		} else {
@@ -59,6 +63,7 @@ public class Hero extends CombatEntity {
 			}
 			CombatLogic.calculateDamage(enemy, this, damage);
 		}
+		thirdMove();
 
 	}
 
@@ -71,15 +76,15 @@ public class Hero extends CombatEntity {
 			speed /= 1.5;
 		}
 
-		if (!movementLocked()) {
+		if (!movementLocked) {
 
 			if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 				facingLeft = true;
-				hitBox.x -= speed * deltaTime;
+				velocity.x -= speed * deltaTime;
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 				facingLeft = false;
-				hitBox.x += speed * deltaTime;
+				velocity.x += speed * deltaTime;
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && onGround) {
 				velocity.y = 450;
@@ -90,6 +95,31 @@ public class Hero extends CombatEntity {
 
 			}
 		}
+
+	}
+
+	@Override
+	public void firstMove() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void secondMove() {
+		float movement = 1000;
+		velocity.x += movement;
+		Timer.schedule(new Timer.Task() {
+			@Override
+			public void run() {
+				velocity.x -= movement;
+			}
+		}, 2.5f);
+
+	}
+
+	@Override
+	public void thirdMove() {
+		// TODO Auto-generated method stub
 
 	}
 }

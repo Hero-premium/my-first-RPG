@@ -6,7 +6,8 @@ import util.Util;
 public class CombatLogic {
 
 	private static void applyDamage(CombatEntity target, int damage) {
-		if (damage % 10 != 0) Util.logWarn("you may or may not have forgot to use the *10 multiplier");
+		if (damage % 10 != 0)
+			Util.logWarn("you may or may not have forgot to use the *10 multiplier");
 		target.modifyHp(-damage);
 		Util.log(target.name + " now has " + target.getHp());
 	}
@@ -20,7 +21,7 @@ public class CombatLogic {
 			poisonDamage = (Util.rand.nextInt(2) + 1) * 10;
 			damage += poisonDamage;
 			Util.log(target.name + " took extra damage because of being on fire!");
-			target.setPoisonDuration(target.getPoisonDuration() - 1);
+			target.modifyPoisonDuration(-1);
 		}
 		if (target.isDodging) {
 			Util.log(target.name + " has dodged the " + user.name + " attack!");
@@ -31,7 +32,7 @@ public class CombatLogic {
 		}
 		if (target.isDefending) {
 			damage /= 2;
-			Util.log("your damage was reduced by 50% because of " + target.name + " using a sheild!");
+			Util.log("your damage was reduced by 50% because of " + target.name + " using a shield!");
 			target.isDefending = false;
 		}
 		if (user.isFocused) {
