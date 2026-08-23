@@ -7,17 +7,17 @@ import com.mygdx.game.Assets;
 import combat.CombatLogic;
 import util.Util;
 
-public class GateKeeper extends CombatEntity {
+public class GateKeeper extends CombatEntity implements CombatAnimation {
 
 	public GateKeeper() {
-		super(20, "GateKeeper", false, true, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
+		super(20, "GateKeeper", false, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
 				Assets.placeHolder);
 	}
 
 	private void fireWand(CombatEntity player) {
 		Util.log(name + " used fireWand");
 		CombatLogic.calculateDamage(player, this, 2);
-		player.poisonDuration = 3;
+		player.setPoisonDuration(3);
 	}
 
 	private void focus() {
@@ -46,8 +46,31 @@ public class GateKeeper extends CombatEntity {
 		case 0 -> focus();
 		case 1 -> fireWand(player);
 		case 2 -> shield(player);
-		default -> throw new IllegalStateException();
+		default -> throw new AssertionError("the switch in entities.GateKeeper takeTurn ran into an unexpected case");
 		}
+	}
+
+	@Override
+	public void update(float deltaTime) {
+		// no-op, yet
+	}
+
+	@Override
+	public void firstMove() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void secondMove() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void thirdMove() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

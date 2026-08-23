@@ -6,16 +6,22 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Assets;
 
+import util.Objects;
 import util.Util;
 import world.Flyable;
 
 public class Ghost extends Entity implements Flyable {
 
 	public Ghost() {
-		super(0, "", false, true, 256, (new Vector2(0, 0)), (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
+		super(0, "", false, 256, (new Vector2(0, 0)), (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
 	}
 
-	public void move(float deltaTime, Hero hero) {
+	@Override
+	public void update(float deltaTime) {
+		move(deltaTime, Objects.hero);
+	}
+
+	private void move(float deltaTime, Hero hero) {
 		if (!hero.possessed) {
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
 				speed *= 1.5;
@@ -24,7 +30,7 @@ public class Ghost extends Entity implements Flyable {
 				speed /= 1.5;
 			}
 
-			if (!movementLocked()) {
+			if (!movementLocked) {
 
 				if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 					facingLeft = true;
