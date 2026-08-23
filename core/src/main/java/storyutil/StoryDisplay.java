@@ -58,7 +58,8 @@ public class StoryDisplay {
 					}
 				}
 			});
-
+			buttons[i].setDisabled(true);
+			buttons[i].setVisible(false);
 			dialogsGUI.add(buttons[i]).row();
 
 		}
@@ -80,8 +81,9 @@ public class StoryDisplay {
 
 	private void displayOptions() {
 		clearButtons();
-		Runnable action = TextManager.getAction(index) ;
-		if (action != null) action.run();
+		Runnable action = TextManager.getAction(index);
+		if (action != null)
+			action.run();
 		if (updateData()) {
 			return;
 		}

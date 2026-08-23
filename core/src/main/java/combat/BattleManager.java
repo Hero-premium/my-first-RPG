@@ -112,7 +112,7 @@ public final class BattleManager {
 		playerHp = new Label(buildHpText(player), Assets.skin);
 		enemyHp = new Label(buildHpText(enemy), Assets.skin);
 
-		labelsTable.add(playerHp).pad(20).right();
+		labelsTable.add(playerHp).pad(20).row();
 		labelsTable.add(enemyHp);
 		stage.addActor(labelsTable);
 	}
@@ -127,7 +127,7 @@ public final class BattleManager {
 		switch (state) {
 		case WON -> {
 			endBattle();
-			player.setMovementLocked(false);
+			player.movementLocked = false;
 			enemy.moveGold(enemy.getGold(), player);
 		}
 		case LOST -> {
@@ -144,7 +144,7 @@ public final class BattleManager {
 			if (player.getHp() <= 0)
 				handleBattleState(validateBattle());
 		}
-		default -> throw new IllegalStateException("The returned enum \"" + state + "\" can't be handled here");
+		default -> throw new AssertionError("The returned enum \"" + state + "\" was unexpected");
 		}
 		updateLabels();
 	}
@@ -169,12 +169,10 @@ public final class BattleManager {
 	}
 
 	private static void retry() {
-		player.isDodging = false;
+		player.resetBattleStates();
+		enemy.resetBattleStates();
 		player.resetHp();
 		enemy.resetHp();
-		enemy.isFocused = false;
-		enemy.isDefending = false;
-		player.poisonDuration = 0;
 
 		setCombatButtonsVisibility(true);
 		setGameOverButtonsVisibility(false);

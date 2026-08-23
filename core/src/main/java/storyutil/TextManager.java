@@ -88,8 +88,8 @@ public final class TextManager {
 	 * @param id the ID of the line you want to see the next line of
 	 * @throws IllegalArgumentException if the ID you passed doesn't exist
 	 * @throws NullPointerException     if a null was passed
-	 * @return Integer[] - the ID of the line that links for the lines you called - or
-	 *         null - if there's no next node
+	 * @return Integer[] - the ID of the line that links for the lines you called -
+	 *         or null - if there's no next node
 	 */
 	public static Integer[] getNextNodes(Integer id) {
 		return resolveNode(id).getNextNodes();
@@ -116,29 +116,32 @@ public final class TextManager {
 	public static String getText(Integer id) {
 		return bundle.get(resolveNode(id).text);
 	}
-	
+
 	/**
 	 * to get the action of the id you're trying to get
 	 * 
 	 * @param id the ID of the line you want to get the action of
 	 * @throws IllegalArgumentException if the ID you passed doesn't exist
 	 * @throws NullPointerException     if a null was passed
-	 * @return Runnable - the action you called 
-	 *  <p> or null - if the action being called hasn't been set yet 
+	 * @return Runnable - the action you called
+	 *         <p>
+	 *         or null - if the action being called hasn't been set yet
 	 */
 	public static Runnable getAction(Integer id) {
 		return resolveNode(id).getAction();
 	}
+
 	/**
 	 * to give a node an action
 	 * <p>
 	 * note that you can't change the action once set
 	 * 
-	 * @param id the ID of the line you want to set the action of
+	 * @param id     the ID of the line you want to set the action of
 	 * @param action the new action
 	 * @throws IllegalArgumentException if the ID you passed doesn't exist
 	 * @throws NullPointerException     if a null was passed
-	 * @throws IllegalStateException if you called this on a node that has been already set
+	 * @throws IllegalStateException    if you called this on a node that has been
+	 *                                  already set
 	 */
 	public static void setAction(Integer id, Runnable action) {
 		resolveNode(id).setAction(action);
