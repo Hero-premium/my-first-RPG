@@ -4,53 +4,48 @@ import java.util.List;
 
 import entities.Entity;
 
-public class Physics {
+public final class Physics {
 
-	private static float gravity = 980f;
-	private static float air = 980f;
-
-	private static void handlePositiveMovement(Entity entity, float deltaTime) {
-		if (entity.velocity.x < air * deltaTime) {
-			entity.velocity.x = 0;
-		} else {
-			entity.velocity.x -= air * deltaTime;
-		}
-	}
-
-	private static void handleNegativeMovement(Entity entity, float deltaTime) {
-		float air = -Physics.air;
-		if (entity.velocity.x > air * deltaTime) {
-			entity.velocity.x = 0;
-		} else {
-			entity.velocity.x -= air * deltaTime;
-		}
-	}
+	private static final float GRAVITY = 980f;
+	private static final float AIR = 980f;
 
 	private static void airRes(Entity entity, float deltaTime) {
-		if (entity.velocity.x > 0) {
-			handlePositiveMovement(entity, deltaTime);
-		} else if (entity.velocity.x < 0) {
-			handleNegativeMovement(entity, deltaTime);
+		if (entity.velocity.x == 0)
+			return;
+
+		if (Math.abs(entity.velocity.x) < AIR * deltaTime) {
+			entity.velocity.x = 0;
+		} else {
+			float air = Physics.AIR * Math.signum(entity.velocity.x);
+			entity.velocity.x -= air * deltaTime;
 		}
 
 		entity.hitBox.x += entity.velocity.x * deltaTime;
-
 	}
 
+	/**
+	 * applies airResistance and velocity clamping to all entities and applies
+	 * gravity to all non-flying entities
+	 * 
+	 * @param entities   the list containing all entities
+	 * @param delta      deltaTime to prevent movement issues on higher FPS
+	 * @param floorLevel the floor level this screen uses, no entity can go below it
+	 *                   unless it can fly
+	 */
 	public static void applyPhysics(List<Entity> entities, float delta, float floorLevel) {
 		for (Entity object : entities) {
+			object.velocityClamp();
 			airRes(object, delta);
 
 			if (!(object instanceof Flyable)) {
 				gravity(object, delta, floorLevel);
-				object.velocityClamp();
 			}
 		}
 	}
 
 	private static void gravity(Entity entity, float deltaTime, float floorLevel) {
 
-		entity.velocity.y -= gravity * deltaTime;
+		entity.velocity.y -= GRAVITY * deltaTime;
 
 		entity.hitBox.y += entity.velocity.y * deltaTime;
 
