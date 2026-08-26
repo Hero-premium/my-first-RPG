@@ -49,4 +49,14 @@ public final class Util {
 			throw new IllegalArgumentException(msg);
 		return number;
 	}
+	
+	public static float requireNonNegative(float number) {
+		return requireNonNegative(number, "this number cannot be negative");
+	}
+
+	public static float requireNonNegative(float number, String msg) {
+		if (number < 0)
+			throw new IllegalArgumentException(msg);
+		return number;
+	}
 }
