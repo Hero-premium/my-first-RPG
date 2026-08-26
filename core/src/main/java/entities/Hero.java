@@ -3,7 +3,6 @@ package entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.Assets;
 
@@ -15,7 +14,7 @@ public class Hero extends CombatEntity implements CombatAnimation {
 	boolean possessed = true;
 
 	public Hero() {
-		super(10, "Hero", false, 5000f, new Vector2(0, 0), new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
+		super(10, "Hero", 2000f, new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
 	}
 
 	public void dodge(CombatEntity enemy) {
@@ -100,7 +99,7 @@ public class Hero extends CombatEntity implements CombatAnimation {
 
 	@Override
 	public void firstMove() {
-		// TODO Auto-generated method stub
+		secondMove();
 
 	}
 
@@ -119,7 +118,18 @@ public class Hero extends CombatEntity implements CombatAnimation {
 
 	@Override
 	public void thirdMove() {
-		// TODO Auto-generated method stub
+		secondMove();
 
 	}
+
+	/**
+	 * Do not call this, the hero combat is GUI based
+	 * 
+	 * @throws UnsupportedOperationException always
+	 */
+	@Override
+	public void takeTurn(CombatEntity entity) {
+		throw new UnsupportedOperationException("the Hero can't takeTurn");
+	}
+
 }

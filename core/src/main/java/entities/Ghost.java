@@ -3,7 +3,6 @@ package entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Assets;
 
 import util.Objects;
@@ -13,7 +12,7 @@ import world.Flyable;
 public class Ghost extends Entity implements Flyable {
 
 	public Ghost() {
-		super(0, "", false, 256, (new Vector2(0, 0)), (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
+		super(0, "", 256, (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
 	}
 
 	@Override
