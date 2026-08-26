@@ -1,7 +1,6 @@
 package entities;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Assets;
 
 import combat.CombatLogic;
@@ -10,8 +9,7 @@ import util.Util;
 public class GateKeeper extends CombatEntity implements CombatAnimation {
 
 	public GateKeeper() {
-		super(20, "GateKeeper", false, 12f, new Vector2(0, 0), new Rectangle(200f, 200f, 64f, 64f), 250,
-				Assets.placeHolder);
+		super(20, "GateKeeper", 12f, new Rectangle(200f, 200f, 64f, 64f), 250, Assets.placeHolder);
 	}
 
 	private void fireWand(CombatEntity player) {

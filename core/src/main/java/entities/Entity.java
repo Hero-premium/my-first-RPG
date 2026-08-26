@@ -14,31 +14,39 @@ public abstract class Entity implements Updatable {
 
 	private int gold;
 	public String name;
-	public boolean facingLeft = false;
+	public boolean facingLeft;
 	public boolean onGround;
-	public boolean movementLocked = false;
+	public boolean movementLocked;
 	public final Vector2 velocity;
 	public final Rectangle hitBox;
 	public float speed;
 	public final transient Texture texture;
 
-	protected Entity(int gold, String name, boolean onGround, float speed, Vector2 velocity, Rectangle hitBox,
-			Texture texture) {
+	protected Entity(int gold, String name, float speed, Rectangle hitBox, Texture texture) {
 
 		this.gold = Util.requireNonNegative(gold);
-		this.name = name;
-		this.onGround = onGround;
-		this.velocity = Objects.requireNonNull(velocity);
-		this.speed = speed;
+		this.name = Objects.requireNonNull(name);
+		this.facingLeft = false;
+		this.onGround = false;
+		this.movementLocked = false;
+		this.velocity = new Vector2();
+		this.speed = Util.requireNonNegative(speed);
 		this.hitBox = Objects.requireNonNull(hitBox);
 		this.texture = Objects.requireNonNull(texture);
 	}
-
+	/**
+	 * This is meant to be called in the render loop after batch.begin to draw the entity on the screen
+	 * 
+	 * @param batch the SpriteBatch used in this screen
+	 * @throws IllegalStateException if this was called before SpriteBatch.begin
+	 */
 	public void draw(SpriteBatch batch) {
-		batch.draw(texture, hitBox.x, hitBox.y, 64f, 64f, 0, 0, texture.getWidth(), texture.getHeight(), !facingLeft,
+		batch.draw(texture, hitBox.x, hitBox.y, hitBox.width, hitBox.height, 0, 0, texture.getWidth(), texture.getHeight(), !facingLeft,
 				false);
 	}
-
+	/**
+	 * @return the entity's current gold
+	 */
 	public int getGold() {
 		return gold;
 	}
@@ -73,7 +81,7 @@ public abstract class Entity implements Updatable {
 	}
 
 	/**
-	 * Clamps all entities velocity to 2000
+	 * Clamps all entities x and y velocity to 2000
 	 */
 	public void velocityClamp() {
 		velocity.x = Math.clamp(velocity.x, -2000, 2000);
