@@ -1,8 +1,5 @@
 package UI;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,52 +12,39 @@ import com.mygdx.game.Assets;
 
 import combat.BattleManager;
 import debug.Debug;
-import entities.Entity;
-import storyutil.StoryDisplay;
 import storyutil.TextManager;
-import touchables.Touchable;
-import util.Objects;
-import util.Updatable;
-import world.Physics;
+import util.ObjectsManager;
 
 public class MainGame implements Screen {
 
-	private final float floorLevel = 50;
+	// private final float floorLevel = 50;
 	private SpriteBatch batch;
 	private Debug debug;
 	private FitViewport viewport;
 	private OrthographicCamera camera;
-	private List<Entity> entities;
-	private List<Touchable> touchables;
-	private List<Updatable> updatables;
+	private ObjectsManager objects;
 	private Stage stage;
-	private StoryDisplay storyDisplay;
-	private boolean storyOn = false;
-	
+
 	@SuppressWarnings("unused")
 	private Game game;
 
 	public MainGame(Game game) {
 		this.game = game;
 
-		entities = Objects.generateEntities();
-		touchables = Objects.generateTouchables();
-		updatables = new ArrayList<>(entities);
-
 		debug = new Debug();
 		batch = new SpriteBatch();
 
-		TextManager.setAction(16, () -> BattleManager.launchBattle(Objects.hero, Objects.gateKeeper, stage));
+		TextManager.setAction(16, () -> BattleManager.launchBattle(objects.hero, objects.gateKeeper, stage));
 	}
 
 	@Override
 	public void show() {
 		camera = new OrthographicCamera();
-		viewport = new FitViewport(1920, 1080, camera);
+		viewport = new FitViewport(800, 600, camera);
 
-		stage = new Stage(new FitViewport(1920, 1080));
-		storyDisplay = new StoryDisplay(stage);
+		stage = new Stage(new FitViewport(800, 600));
 		Gdx.input.setInputProcessor(stage);
+		objects = new ObjectsManager().createMainGameObjects(stage);
 
 		Assets.mainMenu.setLooping(true);
 		Assets.mainMenu.setVolume(0.1f);
@@ -71,61 +55,26 @@ public class MainGame implements Screen {
 	public void render(float delta) {
 
 		ScreenUtils.clear(0, 0, 0, 1);
+		objects.update(delta);
 
-		for (Updatable object : updatables) {
-			object.update(delta);
-		}
-		Physics.applyPhysics(entities, delta, floorLevel);
-
-		for (Touchable touchable : touchables) {
-			for (Entity entity : entities) {
-				touchable.update(entity);
-			}
-
-			if (touchable == Objects.stopPlayer) {
-				if (touchable.isEntityInside(Objects.hero)) {
-					Objects.stopPlayer.useages = Objects.stopPlayer.maxUsage;
-					Objects.hero.movementLocked = true;
-					storyOn = true;
-					Objects.gateKeeper.facingLeft = true;
-				}
-			}
-		}
-
-		if (storyOn) {
-			storyDisplay.launchStory();
-		}
-
-		touchables.removeIf(object -> object.useages >= object.maxUsage);
-
-		camera.position.set(Objects.hero.hitBox.x + 350, 300, 0);
+		camera.position.set(objects.hero.hitBox.x + 350, 300, 0);
 		camera.update();
 
 		batch.setProjectionMatrix(camera.combined);
 
 		batch.begin();
 
-		batch.draw(Assets.backGround, Objects.hero.hitBox.x - 50, 0, viewport.getWorldWidth(),
+		batch.draw(Assets.backGround, objects.hero.hitBox.x - 50, 0, viewport.getWorldWidth(),
 				viewport.getWorldHeight());
 
-		for (Entity object : entities) {
-			if (object.texture != null) {
-				object.draw(batch);
-			}
-		}
-
-		for (Touchable object : touchables) {
-			if (object.texture != null) {
-				batch.draw(object.texture, object.hitBox.x, object.hitBox.y, object.hitBox.width, object.hitBox.height);
-			}
-		}
+		objects.draw(batch);
 
 		// TEMP for me to debug remove when you send to someone
-		debug.showInformations(batch, Objects.hero, viewport, camera);
+		debug.showInformations(batch, objects.hero, viewport, camera);
 
 		batch.end();
 
-		debug.showHitboxes(camera, entities, touchables);
+		objects.showHitboxes(camera, debug);
 
 		stage.act(delta);
 		stage.draw();
