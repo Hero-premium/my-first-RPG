@@ -3,6 +3,7 @@ package UI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -35,8 +36,12 @@ public class MainGame implements Screen {
 	private Stage stage;
 	private StoryDisplay storyDisplay;
 	private boolean storyOn = false;
+	
+	@SuppressWarnings("unused")
+	private Game game;
 
-	public MainGame() {
+	public MainGame(Game game) {
+		this.game = game;
 
 		entities = Objects.generateEntities();
 		touchables = Objects.generateTouchables();
@@ -49,21 +54,17 @@ public class MainGame implements Screen {
 	}
 
 	@Override
-	public void dispose() {
-		stage.dispose();
-		batch.dispose();
-		debug.dispose();
-		Assets.dispose();
-	}
+	public void show() {
+		camera = new OrthographicCamera();
+		viewport = new FitViewport(1920, 1080, camera);
 
-	@Override
-	public void hide() {
-		Assets.mainMenu.stop();
-	}
+		stage = new Stage(new FitViewport(1920, 1080));
+		storyDisplay = new StoryDisplay(stage);
+		Gdx.input.setInputProcessor(stage);
 
-	@Override
-	public void pause() {
-		Assets.mainMenu.pause();
+		Assets.mainMenu.setLooping(true);
+		Assets.mainMenu.setVolume(0.1f);
+		Assets.mainMenu.play();
 	}
 
 	@Override
@@ -138,21 +139,26 @@ public class MainGame implements Screen {
 	}
 
 	@Override
+	public void hide() {
+		Assets.mainMenu.stop();
+	}
+
+	@Override
+	public void pause() {
+		Assets.mainMenu.pause();
+	}
+
+	@Override
 	public void resume() {
 		Assets.mainMenu.play();
 	}
 
 	@Override
-	public void show() {
-		camera = new OrthographicCamera();
-		viewport = new FitViewport(800, 600, camera);
-
-		stage = new Stage(new FitViewport(800, 600));
-		storyDisplay = new StoryDisplay(stage);
-		Gdx.input.setInputProcessor(stage);
-
-		Assets.mainMenu.setLooping(true);
-		Assets.mainMenu.setVolume(0.1f);
-		Assets.mainMenu.play();
+	public void dispose() {
+		stage.dispose();
+		batch.dispose();
+		debug.dispose();
+		Assets.dispose();
 	}
+
 }
