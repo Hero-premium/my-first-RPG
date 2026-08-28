@@ -1,6 +1,6 @@
 package world;
 
-import java.util.List;
+import com.badlogic.gdx.utils.Array;
 
 import entities.Entity;
 
@@ -32,7 +32,7 @@ public final class Physics {
 	 * @param floorLevel the floor level this screen uses, no entity can go below it
 	 *                   unless it can fly
 	 */
-	public static void applyPhysics(List<Entity> entities, float delta, float floorLevel) {
+	public static void applyPhysics(Array<Entity> entities, float delta, float floorLevel) {
 		for (Entity object : entities) {
 			object.velocityClamp();
 			airRes(object, delta);
