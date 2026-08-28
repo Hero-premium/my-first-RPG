@@ -28,9 +28,10 @@ public class Debug {
 	}
 
 	private Vector2 getCamera(OrthographicCamera camera, FitViewport viewport, int position) {
-		float x = camera.position.x - viewport.getWorldWidth() / 2 + 20;
-		float y = camera.position.y + viewport.getWorldHeight() / 2 - position;
-		return textPos.set(x, y);
+		return textPos.set(//
+				camera.position.x - viewport.getWorldWidth() / 2 + 20,
+				camera.position.y + viewport.getWorldHeight() / 2 - position//
+				);
 	}
 
 	public void showHitboxes(OrthographicCamera camera, List<Entity> objects, List<Touchable> touchables) {
@@ -52,19 +53,20 @@ public class Debug {
 	}
 
 	public void showInformations(SpriteBatch batch, Entity player, FitViewport viewport, OrthographicCamera camera) {
-		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
 			isdebug = !isdebug;
 		}
+
 		getCamera(camera, viewport, 0);
 		if (isdebug) {
 
 			debugfont.draw(batch, "Player x " + player.hitBox.x + " / Player y " + player.hitBox.y, textPos.x,
-					textPos.y = getCamera(camera, viewport, 20).y);
+					getCamera(camera, viewport, 20).y);
 
 			debugfont.draw(batch, "FPS " + Gdx.graphics.getFramesPerSecond(), textPos.x,
 					textPos.y = getCamera(camera, viewport, 35).y);
 			debugfont.draw(batch, "Player velocityX " + player.velocity.x + " / Player velocityY " + player.velocity.y,
-					textPos.x, textPos.y = getCamera(camera, viewport, 50).y);
+					textPos.x, getCamera(camera, viewport, 50).y);
 		}
 	}
 }

@@ -2,7 +2,6 @@ package entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 import util.Util;
 
@@ -10,21 +9,24 @@ public abstract class CombatEntity extends Entity {
 
 	private int hp;
 	/**
-	 * an entities max hp, defined once in the contractor, an entity can never go
-	 * past it thanks to the getters and setters
+	 * An entity's max hp, defined once in the constructor. hp can never exceed this
+	 * value, since {@link #setHp(int)} clamps against it.
 	 */
 	public final int maxHp;
-	private int poisonDuration = 0;
-	public boolean isDodging = false;
-	public boolean isDefending = false;
-	public boolean isFocused = false;
+	private int poisonDuration;
+	public boolean isDodging;
+	public boolean isDefending;
+	public boolean isFocused;
 
-	public CombatEntity(int gold, String name, boolean onGround, float speed, Vector2 velocity, Rectangle hitbox,
-			int hp, Texture texture) {
-		super(gold, name, onGround, speed, velocity, hitbox, texture);
+	protected CombatEntity(int gold, String name, float speed, Rectangle hitbox, int hp, Texture texture) {
+		super(gold, name, speed, hitbox, texture);
 
 		this.hp = Util.requireNonNegative(hp);
 		this.maxHp = hp;
+		this.poisonDuration = 0;
+		this.isDodging = false;
+		this.isDefending = false;
+		this.isFocused = false;
 	}
 
 	/**
@@ -55,12 +57,15 @@ public abstract class CombatEntity extends Entity {
 	/**
 	 * sets hp to given amount also clamps hp between 0 and maxHp
 	 *
-	 * @param hp - the new hp
+	 * @param hp the new hp
 	 */
 	public final void setHp(int hp) {
 		this.hp = Math.clamp(hp, 0, maxHp);
 	}
 
+	/**
+	 * Sets isDodging, isDefending, isFocused to false and sets poisonDuration to 0.
+	 */
 	public void resetBattleStates() {
 		setPoisonDuration(0);
 		isDodging = false;
@@ -70,17 +75,11 @@ public abstract class CombatEntity extends Entity {
 	}
 
 	/**
-	 * a method that throws by default, but is meant to be overridden by other
-	 * entities that take combat actions
-	 * 
-	 * @param entity - the entity being attacked
-	 * @throws UnsupportedOperationException if the caller entity didn't override
-	 *                                       this method.
+	 * Performs this entity's turn against the specified entity.
+	 *
+	 * @param entity the entity being attacked
 	 */
-	public void takeTurn(CombatEntity entity) {
-		throw new UnsupportedOperationException(
-				"this entity " + this.getClass().getName() + " doesn't have a takeTurn method");
-	}
+	public abstract void takeTurn(CombatEntity entity);
 
 	/**
 	 * 
@@ -106,7 +105,7 @@ public abstract class CombatEntity extends Entity {
 	/**
 	 * adds the given amount of poisonDuration to the existing amount
 	 *
-	 * @param poisonDuration - how much you want to add - pass a negative number
+	 * @param poisonDuration how much you want to add - pass a negative number
 	 *                       remove from the duration
 	 */
 	public void modifyPoisonDuration(int poisonDuration) {
