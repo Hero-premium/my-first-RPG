@@ -1,5 +1,7 @@
 package storyutil;
 
+import java.util.Objects;
+
 class DialogNode {
 
 	final String text;
@@ -7,7 +9,7 @@ class DialogNode {
 	private Runnable action;
 
 	DialogNode(String text, Integer[] nextNodes, Runnable action) {
-		this.text = text;
+		this.text = Objects.requireNonNull(text);
 		this.nextNodes = nextNodes;
 		this.action = action;
 	}
@@ -18,7 +20,7 @@ class DialogNode {
 
 	void setAction(Runnable action) {
 		if (this.action != null)
-			throw new IllegalStateException("the action cannot be reassigned " + this.action.toString());
+			throw new IllegalStateException("The action linked with the text " + text + " cannot be reassigned");
 		this.action = action;
 	}
 
