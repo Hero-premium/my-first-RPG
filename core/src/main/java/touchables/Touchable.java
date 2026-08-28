@@ -1,6 +1,7 @@
 package touchables;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 import entities.Entity;
@@ -11,7 +12,7 @@ public class Touchable {
 	public final int maxUsage;
 	public int useages;
 	public Rectangle hitBox;
-	public boolean EntityInside = false;
+	public boolean entityInside = false;
 
 	public Touchable(Texture texture, int maxUsage, int useages, Rectangle hitBox) {
 
@@ -28,5 +29,9 @@ public class Touchable {
 	// to be overridden
 	public void update(Entity entity) {
 	}
-
+	
+	public void draw(SpriteBatch batch) {
+		if (texture != null)
+			batch.draw(texture, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+	}
 }
