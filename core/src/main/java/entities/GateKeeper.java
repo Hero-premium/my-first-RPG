@@ -9,7 +9,7 @@ import util.Util;
 public class GateKeeper extends CombatEntity implements CombatAnimation {
 
 	public GateKeeper() {
-		super(20, "GateKeeper", 12f, new Rectangle(200f, 200f, 64f, 64f), 250, Assets.placeHolder);
+		super(20, "GateKeeper", 12f, new Rectangle(200f, 200f, 64f, 64f), 250, Assets.gateKeeper);
 	}
 
 	private void fireWand(CombatEntity player) {
