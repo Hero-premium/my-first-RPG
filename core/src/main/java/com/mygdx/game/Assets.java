@@ -23,6 +23,7 @@ public final class Assets {
 	public static Texture wall;
 	public static Skin skin;
 	public static Music mainMenu;
+	public static Texture gateKeeper;
 
 	public static boolean load() {
 		if (!loading) {
@@ -48,6 +49,7 @@ public final class Assets {
 		wall = manager.get("textures/wall.jpg", Texture.class);
 		skin = manager.get("textures/uiskin/uiskin.json", Skin.class);
 		mainMenu = manager.get("music/Walen - Conspiracy Detective (freetouse.com).mp3", Music.class);
+		gateKeeper = placeHolder;
 		return true;
 	}
 

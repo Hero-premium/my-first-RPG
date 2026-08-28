@@ -1,7 +1,5 @@
 package debug;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -10,18 +8,21 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import entities.Entity;
 import touchables.Touchable;
 
 public class Debug {
+	
+	
 
 	private Vector2 textPos = new Vector2();
 	private BitmapFont debugfont = new BitmapFont();
 	private ShapeRenderer shapeRenderer = new ShapeRenderer();
 	public boolean isdebug = false;
-
+	
 	public void dispose() {
 		debugfont.dispose();
 		shapeRenderer.dispose();
@@ -34,7 +35,7 @@ public class Debug {
 				);
 	}
 
-	public void showHitboxes(OrthographicCamera camera, List<Entity> objects, List<Touchable> touchables) {
+	public void showHitboxes(OrthographicCamera camera, Array<Entity> objects, Array<Touchable> touchables) {
 		if (isdebug) {
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
