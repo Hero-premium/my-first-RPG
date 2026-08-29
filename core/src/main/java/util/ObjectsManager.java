@@ -18,92 +18,91 @@ import world.Physics;
 
 public class ObjectsManager {
 
-	public Hero hero;
-	private Ghost ghost;
-	public GateKeeper gateKeeper;
+    public Hero hero;
+    public GateKeeper gateKeeper;
+    private Ghost ghost;
+    private Wall wall;
+    private Touchable stopPlayer;
 
-	private Wall wall;
-	private Touchable stopPlayer;
+    private Array<Entity> entities;
+    private Array<Touchable> touchables;
 
-	private Array<Entity> entities;
-	private Array<Touchable> touchables;
+    private StoryDisplay storyDisplay;
 
-	private StoryDisplay storyDisplay;
+    public ObjectsManager createMainGameObjects(Stage stage) {
+        storyDisplay = new StoryDisplay(stage);
+        generateEntities();
+        generateTouchables();
+        return this;
+    }
 
-	public ObjectsManager createMainGameObjects(Stage stage) {
-		storyDisplay = new StoryDisplay(stage);
-		generateEntities();
-		generateTouchables();
-		return this;
-	}
+    private void generateEntities() {
+        entities = new Array<>();
 
-	private void generateEntities() {
-		entities = new Array<>();
+        hero = new Hero();
+        ghost = new Ghost(hero);
+        gateKeeper = new GateKeeper();
 
-		hero = new Hero();
-		ghost = new Ghost(hero);
-		gateKeeper = new GateKeeper();
+        entities.add(ghost);
+        entities.add(hero);
+        entities.add(gateKeeper);
+    }
 
-		entities.add(ghost);
-		entities.add(hero);
-		entities.add(gateKeeper);
-	}
+    private void generateTouchables() {
+        touchables = new Array<>();
 
-	private void generateTouchables() {
-		touchables = new Array<>();
+        wall = new Wall();
 
-		wall = new Wall();
+        stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800)));
 
-		stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800)));
+        // TEMP remove ones you start using tiles or give it its own method
+        wall.hitBox.set(-350, 50, 200, 700);
 
-		// TEMP remove ones you start using tiles or give it it's own method
-		wall.hitBox.set(-350, 50, 200, 700);
+        touchables.add(wall);
+        touchables.add(stopPlayer);
+    }
 
-		touchables.add(wall);
-		touchables.add(stopPlayer);
-	}
+    public void update(float delta) {
+        Physics.applyPhysics(entities, delta, 50);
+        for (Entity object : entities) {
+            object.update();
+        }
 
-	public void update(float delta) {
-		Physics.applyPhysics(entities, delta, 50);
-		for (Entity object : entities) {
-			object.update();
-		}
+        for (Touchable touchable : touchables) {
+            for (Entity entity : entities) {
+                touchable.update(entity);
 
-		for (Touchable touchable : touchables) {
-			for (Entity entity : entities) {
-				touchable.update(entity);
+                if (touchable == stopPlayer && touchable.isEntityInside(hero)) {
+                    stopPlayer.useages = stopPlayer.maxUsage;
+                    hero.movementLocked = true;
+                    storyDisplay.setStoryActive(true);
+                    gateKeeper.facingLeft = true;
+                }
+            }
 
-				if (touchable == stopPlayer && touchable.isEntityInside(hero)) {
-					stopPlayer.useages = stopPlayer.maxUsage;
-					hero.movementLocked = true;
-					storyDisplay.setStoryActive(true);
-					gateKeeper.facingLeft = true;
-				}
-			}
+        }
 
-		}
+        storyDisplay.runStory();
 
-		storyDisplay.runStory();
+        for (int i = 0; i < touchables.size; i++) {
+            Touchable touchable = touchables.get(i);
+            if (touchable.useages >= touchable.maxUsage) {
+                touchables.removeIndex(i);
+                i--;
+            }
+        }
+    }
 
-		for (int i = 0; i < touchables.size; i++) {
-			Touchable touchable = touchables.get(i);
-			if (touchable.useages >= touchable.maxUsage) {
-				touchables.removeIndex(i);
-				i--;
-			}
-		}
-	}
+    public void draw(SpriteBatch batch) {
+        for (Entity draw : entities) {
+            draw.draw(batch);
+        }
+        for (Touchable drawable : touchables) {
+            drawable.draw(batch);
+        }
+    }
 
-	public void draw(SpriteBatch batch) {
-		for (Entity draw : entities) {
-			draw.draw(batch);
-		}
-		for (Touchable drawable : touchables) {
-			drawable.draw(batch);
-		}
-	}
-
-	public void showHitboxes(OrthographicCamera camera, Debug debug) {
-		debug.showHitboxes(camera, entities, touchables);
-	}
+    public void showHitboxes(OrthographicCamera camera, Debug debug) {
+        debug.showHitboxes(camera, entities, touchables);
+    }
 }

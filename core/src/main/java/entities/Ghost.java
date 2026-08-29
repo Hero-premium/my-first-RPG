@@ -9,50 +9,51 @@ import util.Util;
 import world.Flyable;
 
 public class Ghost extends Entity implements Flyable {
-	private Hero hero;
-	public Ghost(Hero hero) {
-		super(0, "", 32, (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
-		this.hero = hero;
-	}
+    private Hero hero;
 
-	@Override
-	public void update() {
-		move();
-	}
+    public Ghost(Hero hero) {
+        super(0, "", 32, (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
+        this.hero = hero;
+    }
 
-	private void move() {
-		if (!hero.possessed) {
-			if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-				speed *= 1.5;
-			}
-			if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
-				speed /= 1.5;
-			}
+    @Override
+    public void update() {
+        move();
+    }
 
-			if (!movementLocked) {
+    private void move() {
+        if (!hero.possessed) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
+                speed *= 1.5;
+            }
+            if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
+                speed /= 1.5;
+            }
 
-				if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-					facingLeft = true;
-					velocity.x -= speed;
-				}
-				if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-					facingLeft = false;
-					velocity.x += speed;
-				}
-				if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-					velocity.y += speed;
-				}
-				if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-					velocity.y -= speed;
-				}
+            if (!movementLocked) {
 
-				if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-					velocity.x += facingLeft ? -450 : 450;
+                if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                    facingLeft = true;
+                    velocity.x -= speed;
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                    facingLeft = false;
+                    velocity.x += speed;
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                    velocity.y += speed;
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                    velocity.y -= speed;
+                }
 
-				}
-			}
+                if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+                    velocity.x += facingLeft ? -450 : 450;
 
-		}
-	}
+                }
+            }
+
+        }
+    }
 
 }

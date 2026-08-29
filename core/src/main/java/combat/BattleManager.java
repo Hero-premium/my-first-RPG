@@ -1,7 +1,5 @@
 package combat;
 
-import java.util.Objects;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,205 +8,202 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.game.Assets;
-
 import entities.CombatEntity;
 import entities.Hero;
 import storyutil.TextManager;
 import util.Util;
 
+import java.util.Objects;
+
 // TODO add slight delay between each move
 public final class BattleManager {
 
-	private enum BattleState {
-		GOING, WON, LOST
-	}
+    private static final TextButton[] gameOverButtons = new TextButton[2];
+    private static final TextButton[] combatButtons = new TextButton[4];
+    private static Label playerHp;
+    private static Label enemyHp;
+    private static Hero player;
+    private static CombatEntity enemy;
+    private static Stage stage;
+    private BattleManager() {
+        throw new AssertionError("No combat.BattleManager instance for you!");
+    }
 
-	private static TextButton[] gameOverButtons = new TextButton[2];
+    private static String buildHpText(CombatEntity entity) {
+        return entity.name + " Health: " + entity.getHp();
+    }
 
-	private static TextButton[] combatButtons = new TextButton[4];
+    private static void endBattle() {
+        setCombatButtonsVisibility(false);
 
-	private static Label playerHp;
-	private static Label enemyHp;
+        playerHp.setVisible(false);
+        enemyHp.setVisible(false);
+        Util.log("Battle is over");
 
-	private static Hero player;
-	private static CombatEntity enemy;
-	private static Stage stage;
+    }
 
-	private static String buildHpText(CombatEntity entity) {
-		return entity.name + " Health: " + entity.getHp();
-	}
+    private static void buildAllButtons() {
+        Table buttonsTable = new Table();
+        buttonsTable.setName("buttonsTable");
+        buttonsTable.setFillParent(true);
+        buttonsTable.bottom();
 
-	private static void endBattle() {
-		setCombatButtonsVisibility(false);
+        String[] combatButtonNames = {TextManager.getText(3), TextManager.getText(4), TextManager.getText(5),
+            "secret dev move!"};
+        String[] gameOverButtonNames = {TextManager.getText(1), TextManager.getText(2)};
 
-		playerHp.setVisible(false);
-		enemyHp.setVisible(false);
-		Util.log("Battle is over");
+        Runnable[] playerMoves = { //
+            () -> player.kick(enemy), //
+            () -> player.swordSlash(enemy), //
+            () -> player.dodge(enemy), //
+            () -> enemy.modifyHp(-1000)};
+        Runnable[] gameOverActions = { //
+            BattleManager::retry, //
+            () -> Gdx.app.exit()}; //
 
-	}
+        generateButton(buttonsTable, combatButtonNames, playerMoves, combatButtons);
+        generateButton(buttonsTable, gameOverButtonNames, gameOverActions, gameOverButtons);
 
-	private static void buildAllButtons() {
-		Table buttonsTable = new Table();
-		buttonsTable.setName("buttonsTable");
-		buttonsTable.setFillParent(true);
-		buttonsTable.bottom();
+        setGameOverButtonsVisibility(false);
 
-		String[] combatButtonNames = { TextManager.getText(3), TextManager.getText(4), TextManager.getText(5),
-				"secret dev move!" };
-		String[] gameOverButtonNames = { TextManager.getText(1), TextManager.getText(2) };
+        stage.addActor(buttonsTable);
 
-		Runnable[] playerMoves = { //
-				() -> player.kick(enemy), //
-				() -> player.swordSlash(enemy), //
-				() -> player.dodge(enemy), //
-				() -> enemy.modifyHp(-1000) };
-		Runnable[] gameOverActions = { //
-				() -> retry(), //
-				() -> Gdx.app.exit() }; //
+    }
 
-		generateButton(buttonsTable, combatButtonNames, playerMoves, combatButtons);
-		generateButton(buttonsTable, gameOverButtonNames, gameOverActions, gameOverButtons);
+    private static void generateButton(Table buttonsTable, String[] buttonNames, Runnable[] actions,
+                                       TextButton[] buttons) {
+        if (buttons.length != buttonNames.length) {
+            throw new IllegalStateException("the amount of buttonNames we have \"" + buttonNames.length
+                + "\" does not match the amount of buttons you're trying to generate" + buttons.length);
+        }
+        for (int i = 0; i < buttons.length; i++) {
+            Runnable action = actions[i];
+            buttons[i] = new TextButton(buttonNames[i], Assets.skin);
+            buttons[i].addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    action.run();
+                    handleBattleState(validateBattle());
+                }
+            });
+            buttonsTable.add(buttons[i]).row();
+        }
+    }
 
-		setGameOverButtonsVisibility(false);
+    private static void generateLabels() {
 
-		stage.addActor(buttonsTable);
+        Table labelsTable = new Table();
+        labelsTable.setFillParent(true);
+        labelsTable.bottom().right();
 
-	}
+        playerHp = new Label(buildHpText(player), Assets.skin);
+        enemyHp = new Label(buildHpText(enemy), Assets.skin);
 
-	private static void generateButton(Table buttonsTable, String[] buttonNames, Runnable[] actions,
-			TextButton[] buttons) {
-		if (buttons.length != buttonNames.length) {
-			throw new IllegalStateException("the amount of buttonNames we have \"" + buttonNames.length
-					+ "\" does not match the amount of buttons you're trying to generate" + buttons.length);
-		}
-		for (int i = 0; i < buttons.length; i++) {
-			Runnable action = actions[i];
-			buttons[i] = new TextButton(buttonNames[i], Assets.skin);
-			buttons[i].addListener(new ChangeListener() {
-				@Override
-				public void changed(ChangeEvent event, Actor actor) {
-					action.run();
-					handleBattleState(validateBattle());
-				}
-			});
-			buttonsTable.add(buttons[i]).row();
-		}
-	}
+        labelsTable.add(playerHp).pad(20).row();
+        labelsTable.add(enemyHp);
+        stage.addActor(labelsTable);
+    }
 
-	private static void generateLabels() {
+    private static void generateUI() {
+        buildAllButtons();
+        generateLabels();
+        Util.log("GUI generated successfully");
+    }
 
-		Table labelsTable = new Table();
-		labelsTable.setFillParent(true);
-		labelsTable.bottom().right();
+    private static void handleBattleState(BattleState state) {
+        switch (state) {
+            case WON -> {
+                endBattle();
+                player.movementLocked = false;
+                enemy.moveGold(enemy.getGold(), player);
+            }
+            case LOST -> {
+                endBattle();
+                setGameOverButtonsVisibility(true);
+            }
+            case GOING -> {
+                enemy.takeTurn(player);
 
-		playerHp = new Label(buildHpText(player), Assets.skin);
-		enemyHp = new Label(buildHpText(enemy), Assets.skin);
+                /*
+                 * the line below triggers when the player losses, in using validateBattle
+                 * knowing it will return lost just so I can get it's side effects (the prints)
+                 */
+                if (player.getHp() <= 0)
+                    handleBattleState(validateBattle());
+            }
+            default -> throw new AssertionError("The returned enum \"" + state + "\" was unexpected");
+        }
+        updateLabels();
+    }
 
-		labelsTable.add(playerHp).pad(20).row();
-		labelsTable.add(enemyHp);
-		stage.addActor(labelsTable);
-	}
+    public static void launchBattle(Hero p, CombatEntity e, Stage gameStage) {
+        player = Objects.requireNonNull(p, "hero cannot be null");
+        enemy = Objects.requireNonNull(e, "enemy cannot be null");
+        stage = Objects.requireNonNull(gameStage, "stage cannot be null");
 
-	private static void generateUI() {
-		buildAllButtons();
-		generateLabels();
-		Util.log("GUI generated successfully");
-	}
+        /*
+         * to avoid recreating the combat GUI on the same stage and to make sure they
+         * get generated when they're needed
+         */
+        if (stage.getRoot().findActor("buttonsTable") == null) {
+            generateUI();
+        }
 
-	private static void handleBattleState(BattleState state) {
-		switch (state) {
-		case WON -> {
-			endBattle();
-			player.movementLocked = false;
-			enemy.moveGold(enemy.getGold(), player);
-		}
-		case LOST -> {
-			endBattle();
-			setGameOverButtonsVisibility(true);
-		}
-		case GOING -> {
-			enemy.takeTurn(player);
+        Util.log("_______ battle starts! _______");
+        Util.log(player.name + " has " + player.getHp() + " hit points");
+        Util.log(enemy.name + " has " + enemy.getHp() + " hit points");
 
-			/*
-			 * the line below triggers when the player losses, in using validateBattle
-			 * knowing it will return lost just so i can get it's side effects (the prints)
-			 */
-			if (player.getHp() <= 0)
-				handleBattleState(validateBattle());
-		}
-		default -> throw new AssertionError("The returned enum \"" + state + "\" was unexpected");
-		}
-		updateLabels();
-	}
+    }
 
-	public static void launchBattle(Hero p, CombatEntity e, Stage gameStage) {
-		player = Objects.requireNonNull(p, "hero cannot be null");
-		enemy = Objects.requireNonNull(e, "enemy cannot be null");
-		stage = Objects.requireNonNull(gameStage, "stage cannot be null");
+    private static void retry() {
+        player.resetBattleStates();
+        enemy.resetBattleStates();
+        player.resetHp();
+        enemy.resetHp();
 
-		/*
-		 * to avoid recreating the combat GUI on the same stage and to make sure they
-		 * get generated when they're needed
-		 */
-		if (stage.getRoot().findActor("buttonsTable") == null) {
-			generateUI();
-		}
+        setCombatButtonsVisibility(true);
+        setGameOverButtonsVisibility(false);
+        updateLabels();
 
-		Util.log("_______ battle starts! _______");
-		Util.log(player.name + " has " + player.getHp() + " hit points");
-		Util.log(enemy.name + " has " + enemy.getHp() + " hit points");
+        playerHp.setVisible(true);
+        enemyHp.setVisible(true);
 
-	}
+        launchBattle(player, enemy, stage);
+    }
 
-	private static void retry() {
-		player.resetBattleStates();
-		enemy.resetBattleStates();
-		player.resetHp();
-		enemy.resetHp();
+    private static void setCombatButtonsVisibility(boolean state) {
+        for (TextButton combatButton : combatButtons) {
+            combatButton.setDisabled(!state);
+            combatButton.setVisible(state);
+        }
+    }
 
-		setCombatButtonsVisibility(true);
-		setGameOverButtonsVisibility(false);
-		updateLabels();
+    private static void setGameOverButtonsVisibility(boolean state) {
+        for (TextButton gameOverButton : gameOverButtons) {
+            gameOverButton.setDisabled(!state);
+            gameOverButton.setVisible(state);
+        }
+    }
 
-		playerHp.setVisible(true);
-		enemyHp.setVisible(true);
+    private static void updateLabels() {
+        playerHp.setText(buildHpText(player));
+        enemyHp.setText(buildHpText(enemy));
+    }
 
-		launchBattle(player, enemy, stage);
-	}
+    private static BattleState validateBattle() {
+        if (enemy.getHp() <= 0) {
+            Util.log("the player won");
+            return BattleState.WON;
+        }
+        if (player.getHp() <= 0) {
+            Util.log("the player lost");
+            return BattleState.LOST;
+        }
+        return BattleState.GOING;
+    }
 
-	private static void setCombatButtonsVisibility(boolean state) {
-		for (TextButton combatButton : combatButtons) {
-			combatButton.setDisabled(!state);
-			combatButton.setVisible(state);
-		}
-	}
-
-	private static void setGameOverButtonsVisibility(boolean state) {
-		for (TextButton gameOverButton : gameOverButtons) {
-			gameOverButton.setDisabled(!state);
-			gameOverButton.setVisible(state);
-		}
-	}
-
-	private static void updateLabels() {
-		playerHp.setText(buildHpText(player));
-		enemyHp.setText(buildHpText(enemy));
-	}
-
-	private static BattleState validateBattle() {
-		if (enemy.getHp() <= 0) {
-			Util.log("the player won");
-			return BattleState.WON;
-		}
-		if (player.getHp() <= 0) {
-			Util.log("the player lost");
-			return BattleState.LOST;
-		}
-		return BattleState.GOING;
-	}
-
-	private BattleManager() {
-		throw new AssertionError("No combat.BattleManager instance for you!");
-	}
+    private enum BattleState {
+        GOING, WON, LOST
+    }
 
 }

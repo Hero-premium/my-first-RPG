@@ -8,30 +8,30 @@ import entities.Entity;
 
 public class Touchable {
 
-	public Texture texture;
-	public final int maxUsage;
-	public int useages;
-	public Rectangle hitBox;
-	public boolean entityInside = false;
+    public final int maxUsage;
+    public Texture texture;
+    public int useages;
+    public Rectangle hitBox;
+    public boolean entityInside = false;
 
-	public Touchable(Texture texture, int maxUsage, int useages, Rectangle hitBox) {
+    public Touchable(Texture texture, int maxUsage, int useages, Rectangle hitBox) {
 
-		this.texture = texture;
-		this.maxUsage = maxUsage;
-		this.useages = useages;
-		this.hitBox = hitBox;
-	}
+        this.texture = texture;
+        this.maxUsage = maxUsage;
+        this.useages = useages;
+        this.hitBox = hitBox;
+    }
 
-	public boolean isEntityInside(Entity entity) {
-		return (entity.hitBox.overlaps(hitBox));
-	}
+    public boolean isEntityInside(Entity entity) {
+        return (entity.hitBox.overlaps(hitBox));
+    }
 
-	// to be overridden
-	public void update(Entity entity) {
-	}
-	
-	public void draw(SpriteBatch batch) {
-		if (texture != null)
-			batch.draw(texture, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
-	}
+    // to be overridden
+    public void update(Entity entity) {
+    }
+
+    public void draw(SpriteBatch batch) {
+        if (texture != null)
+            batch.draw(texture, hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+    }
 }
