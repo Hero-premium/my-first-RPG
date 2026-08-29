@@ -2,9 +2,9 @@ package entities;
 
 public interface CombatAnimation {
 
-	void firstMove();
+    void firstMove();
 
-	void secondMove();
+    void secondMove();
 
-	void thirdMove();
+    void thirdMove();
 }

@@ -1,7 +1,9 @@
 package world;
 
 /**
- * give this interface to an Entity and will not be effected by gravity
+ * Give this interface to an Entity, and it will not be affected by gravity
+ *
+ * @see Physics
  */
 public interface Flyable {
 

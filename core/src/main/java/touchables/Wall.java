@@ -8,36 +8,36 @@ import entities.Entity;
 // FIXME going through walls bug
 public class Wall extends Touchable {
 
-	public Wall() {
-		super(Assets.wall, Integer.MAX_VALUE, Integer.MIN_VALUE, (new Rectangle(0, 0, 50, 50)));
-	}
+    public Wall() {
+        super(Assets.wall, Integer.MAX_VALUE, Integer.MIN_VALUE, (new Rectangle(0, 0, 50, 50)));
+    }
 
-	@Override
-	public void update(Entity entity) {
-		wall(entity);
-	}
+    @Override
+    public void update(Entity entity) {
+        wall(entity);
+    }
 
-	private void wall(Entity entity) {
-		if (!isEntityInside(entity)) {
-			return;
-		}
+    private void wall(Entity entity) {
+        if (!isEntityInside(entity)) {
+            return;
+        }
 
-		Rectangle e = entity.hitBox;
+        Rectangle e = entity.hitBox;
 
-		float overlapLeft = (e.x + e.width) - hitBox.x;
-		float overlapRight = (hitBox.x + hitBox.width) - e.x;
-		float overlapBottom = (e.y + e.height) - hitBox.y;
-		float overlapTop = (hitBox.y + hitBox.height) - e.y;
+        float overlapLeft = (e.x + e.width) - hitBox.x;
+        float overlapRight = (hitBox.x + hitBox.width) - e.x;
+        float overlapBottom = (e.y + e.height) - hitBox.y;
+        float overlapTop = (hitBox.y + hitBox.height) - e.y;
 
-		float minOverlapX = Math.min(overlapLeft, overlapRight);
-		float minOverlapY = Math.min(overlapBottom, overlapTop);
+        float minOverlapX = Math.min(overlapLeft, overlapRight);
+        float minOverlapY = Math.min(overlapBottom, overlapTop);
 
-		if (minOverlapX < minOverlapY) {
-			// push out horizontally
-			e.x += (overlapLeft < overlapRight) ? -minOverlapX : minOverlapX;
-		} else {
-			// push out vertically
-			e.y += (overlapBottom < overlapTop) ? -minOverlapY : minOverlapY;
-		}
-	}
+        if (minOverlapX < minOverlapY) {
+            // push out horizontally
+            e.x += (overlapLeft < overlapRight) ? -minOverlapX : minOverlapX;
+        } else {
+            // push out vertically
+            e.y += (overlapBottom < overlapTop) ? -minOverlapY : minOverlapY;
+        }
+    }
 }
