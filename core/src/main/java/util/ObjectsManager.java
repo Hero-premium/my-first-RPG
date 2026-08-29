@@ -66,7 +66,7 @@ public class ObjectsManager {
 	public void update(float delta) {
 		Physics.applyPhysics(entities, delta, 50);
 		for (Entity object : entities) {
-			object.update(delta);
+			object.update();
 		}
 
 		for (Touchable touchable : touchables) {

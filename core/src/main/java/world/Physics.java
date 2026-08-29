@@ -22,6 +22,20 @@ public final class Physics {
 
 		entity.hitBox.x += entity.velocity.x * deltaTime;
 	}
+	
+	private static void flyablesGravity(Entity entity, float deltaTime) {
+		if (entity.velocity.y == 0)
+			return;
+
+		if (Math.abs(entity.velocity.y) < GRAVITY * deltaTime) {
+			entity.velocity.y = 0;
+		} else {
+			float gravity = Physics.GRAVITY * Math.signum(entity.velocity.y);
+			entity.velocity.y -= gravity * deltaTime;
+		}
+
+		entity.hitBox.y += entity.velocity.y * deltaTime;
+	}
 
 	/**
 	 * applies airResistance and velocity clamping to all entities and applies
@@ -39,6 +53,9 @@ public final class Physics {
 
 			if (!(object instanceof Flyable)) {
 				gravity(object, delta, floorLevel);
+			} else {
+				flyablesGravity(object, delta);
+				// TODO add flyable logic
 			}
 		}
 	}
