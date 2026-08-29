@@ -11,10 +11,10 @@ import util.Util;
 
 public class Hero extends CombatEntity implements CombatAnimation {
 
-	boolean possessed = true;
+	boolean possessed = false;
 
 	public Hero() {
-		super(10, "Hero", 2000f, new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
+		super(10, "Hero", 32f, new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
 	}
 
 	public void dodge(CombatEntity enemy) {
@@ -38,9 +38,9 @@ public class Hero extends CombatEntity implements CombatAnimation {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update() {
 		if (possessed) {
-			takeControl(deltaTime);
+			takeControl();
 		} else {
 			heroAi();
 		}
@@ -66,7 +66,7 @@ public class Hero extends CombatEntity implements CombatAnimation {
 
 	}
 
-	private void takeControl(float deltaTime) {
+	private void takeControl() {
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
 			speed *= 1.5;
@@ -79,11 +79,11 @@ public class Hero extends CombatEntity implements CombatAnimation {
 
 			if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 				facingLeft = true;
-				velocity.x -= speed * deltaTime;
+				velocity.x -= speed;
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 				facingLeft = false;
-				velocity.x += speed * deltaTime;
+				velocity.x += speed;
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && onGround) {
 				velocity.y = 450;

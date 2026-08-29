@@ -90,6 +90,6 @@ public abstract class Entity {
 		velocity.y = Math.clamp(velocity.y, -2000, 2000);
 	}
 
-	public abstract void update(float deltaTime);
+	public abstract void update();
 
 }

@@ -49,7 +49,7 @@ public class GateKeeper extends CombatEntity implements CombatAnimation {
 	}
 
 	@Override
-	public void update(float deltaTime) {
+	public void update() {
 		// no-op, yet
 	}
 

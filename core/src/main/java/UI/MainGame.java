@@ -53,7 +53,6 @@ public class MainGame implements Screen {
 
 	@Override
 	public void render(float delta) {
-
 		ScreenUtils.clear(0, 0, 0, 1);
 		objects.update(delta);
 
@@ -61,9 +60,7 @@ public class MainGame implements Screen {
 		camera.update();
 
 		batch.setProjectionMatrix(camera.combined);
-
 		batch.begin();
-
 		batch.draw(Assets.backGround, objects.hero.hitBox.x - 50, 0, viewport.getWorldWidth(),
 				viewport.getWorldHeight());
 
@@ -73,7 +70,6 @@ public class MainGame implements Screen {
 		debug.showInformations(batch, objects.hero, viewport, camera);
 
 		batch.end();
-
 		objects.showHitboxes(camera, debug);
 
 		stage.act(delta);
