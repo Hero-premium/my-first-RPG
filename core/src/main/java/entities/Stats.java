@@ -1,5 +1,7 @@
 package entities;
 
+// TODO present me believes this class needs a rework, future me gets to decide
+
 public class Stats {
     private int poisonDuration;
     public boolean isDodging;

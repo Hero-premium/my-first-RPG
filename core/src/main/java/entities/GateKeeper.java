@@ -10,6 +10,7 @@ public class GateKeeper extends CombatEntity {
 
     public GateKeeper() {
         super(20, "GateKeeper", 12f, new Rectangle(200f, 200f, 64f, 64f), 250, Assets.gateKeeper);
+        isGUIBased = true;
     }
 
     private void fireWand(CombatEntity player) {
@@ -33,6 +34,8 @@ public class GateKeeper extends CombatEntity {
     // TODO add a smarter AI -# psttttt make it self aware
     @Override
     public void takeTurn(CombatEntity player) {
+        if (isGUIBased)
+            throw new IllegalStateException("cannot call AI based combat while the GateKeeper is fighting in GUI");
         if (health.getHp() <= 0) {
             Util.log("the gateKeeper tried attacking from the grave");
             return;
@@ -51,7 +54,9 @@ public class GateKeeper extends CombatEntity {
 
     @Override
     protected void registerMoves() {
-
+        movesManager.addNewMove("focus", (CombatEntity _) -> focus());
+        movesManager.addNewMove("fireWand", this::fireWand);
+        movesManager.addNewMove("shield", this::shield);
     }
 
     @Override

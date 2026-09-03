@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public abstract class CombatEntity extends Entity {
 
     /**
-     * The object responsible for
+     * The object responsible for holding combat stats
      */
     public final Stats stats;
     /**
@@ -17,7 +17,9 @@ public abstract class CombatEntity extends Entity {
      */
     public final CombatMovesManager movesManager;
     /**
+     * Defines whether this entity currently fights via gui or AI based
      *
+     * @see combat.BattleManager
      */
     public boolean isGUIBased;
     /**
@@ -67,6 +69,9 @@ public abstract class CombatEntity extends Entity {
             if (!movesRegistered) {
                 registerMoves();
                 movesRegistered = true;
+                if (moves.isEmpty()) {
+                    throw new IllegalStateException("registerMoves() ran but registered zero moves");
+                }
             }
             return new Array<>(moves);
         }
