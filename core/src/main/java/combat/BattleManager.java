@@ -21,10 +21,9 @@ public final class BattleManager {
 
     private final TextButton[] gameOverButtons = new TextButton[2];
     private final TextButton[] combatButtons = new TextButton[3];
+    private final CombatEntity[] fighter = new CombatEntity[2];
     private Label playerHp;
     private Label enemyHp;
-    private CombatEntity player;
-    private CombatEntity enemy;
     private Stage stage;
 
     public BattleManager(Stage stage) {
@@ -79,8 +78,8 @@ public final class BattleManager {
             buttons[i].addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    action.accept(other(entity));
-                    handleBattleState(validateBattle(entity), entity);
+                    action.accept(BattleUtils.other(entity, fighter));
+                    handleBattleState(BattleUtils.validateBattle(entity, fighter), entity);
                 }
             });
             buttonsTable.add(buttons[i]).row();
@@ -107,8 +106,8 @@ public final class BattleManager {
         labelsTable.setFillParent(true);
         labelsTable.bottom().right();
 
-        playerHp = new Label(buildHpText(player), Assets.skin);
-        enemyHp = new Label(buildHpText(enemy), Assets.skin);
+        playerHp = new Label(buildHpText(fighter[0]), Assets.skin);
+        enemyHp = new Label(buildHpText(fighter[1]), Assets.skin);
 
         labelsTable.add(playerHp).pad(20).row();
         labelsTable.add(enemyHp);
@@ -121,25 +120,25 @@ public final class BattleManager {
         Util.log("GUI generated successfully");
     }
 
-    private void handleBattleState(BattleState state, CombatEntity entity) {
+    private void handleBattleState(BattleUtils.BattleState state, CombatEntity entity) {
         switch (state) {
             case WON -> {
                 endBattle();
                 entity.movementLocked = false;
-                other(entity).moveGold(other(entity).getGold(), entity);
+                BattleUtils.other(entity, fighter).moveGold(BattleUtils.other(entity, fighter).getGold(), entity);
             }
             case LOST -> {
                 endBattle();
                 setGameOverButtonsVisibility(true);
             }
             case GOING -> {
-                other(entity).takeTurn(entity);
+                BattleUtils.other(entity, fighter).takeTurn(entity);
 
                 /*
                  * the line below triggers when the player losses, in using validateBattle
                  * knowing it will return lost just so I can get it's side effects (the prints)
                  */
-                if (entity.health.getHp() <= 0) handleBattleState(validateBattle(entity), entity);
+                if (entity.health.getHp() <= 0) handleBattleState(BattleUtils.validateBattle(entity, fighter), entity);
             }
             default -> throw new AssertionError("The returned enum \"" + state + "\" was unexpected");
         }
@@ -155,36 +154,32 @@ public final class BattleManager {
      * @throws NullPointerException  if one of the fighters was null.
      */
     public void launchBattle(CombatEntity player, CombatEntity enemy) {
-        this.player = Objects.requireNonNull(player, "hero cannot be null");
-        this.enemy = Objects.requireNonNull(enemy, "enemy cannot be null");
+        fighter[0] = Objects.requireNonNull(player, "hero cannot be null");
+        fighter[1] = Objects.requireNonNull(enemy, "enemy cannot be null");
 
         Util.log("_______ battle starts! _______");
-        Util.log(this.player.name + " has " + this.player.health.getHp() + " hit points");
-        Util.log(this.enemy.name + " has " + this.enemy.health.getHp() + " hit points");
+        Util.log(fighter[0].name + " has " + fighter[0].health.getHp() + " hit points");
+        Util.log(fighter[1].name + " has " + fighter[1].health.getHp() + " hit points");
 
-
-        if (!this.player.isGUIBased && !this.enemy.isGUIBased) {
-            new AiBattleManager().launchBattle(this.player, this.enemy);
+        if (!fighter[0].isGUIBased && !fighter[1].isGUIBased) {
+            new AiBattleManager().launchBattle(fighter[0], fighter[1]);
             return;
         }
 
         if (stage == null)
             throw new IllegalStateException("attempted launching a GUI based fight without passing a stage");
-        /*
-         * to avoid recreating the combat GUI on the same stage and to make sure they
-         * get generated when they're needed
-         */
+
         if (stage.getRoot().findActor("buttonsTable") == null) {
-            if (this.player.isGUIBased) generateUI(this.player);
-            else generateUI(this.enemy);
+            if (fighter[0].isGUIBased) generateUI(fighter[0]);
+            else generateUI(fighter[1]);
         }
     }
 
     private void retry() {
-        player.stats.resetBattleStates();
-        enemy.stats.resetBattleStates();
-        player.health.resetHp();
-        enemy.health.resetHp();
+        fighter[0].stats.resetBattleStates();
+        fighter[1].stats.resetBattleStates();
+        fighter[0].health.resetHp();
+        fighter[1].health.resetHp();
 
         setCombatButtonsVisibility(true);
         setGameOverButtonsVisibility(false);
@@ -193,7 +188,7 @@ public final class BattleManager {
         playerHp.setVisible(true);
         enemyHp.setVisible(true);
 
-        launchBattle(player, enemy);
+        launchBattle(fighter[0], fighter[1]);
     }
 
     private void setCombatButtonsVisibility(boolean state) {
@@ -211,27 +206,7 @@ public final class BattleManager {
     }
 
     private void updateLabels() {
-        playerHp.setText(buildHpText(player));
-        enemyHp.setText(buildHpText(enemy));
-    }
-
-    private BattleState validateBattle(CombatEntity entity) {
-        if (entity.health.getHp() <= 0) {
-            Util.log("the player lost");
-            return BattleState.LOST;
-        }
-        if (other(entity).health.getHp() <= 0) {
-            Util.log("the player won");
-            return BattleState.WON;
-        }
-        return BattleState.GOING;
-    }
-
-    private enum BattleState {
-        GOING, WON, LOST
-    }
-
-    private CombatEntity other(CombatEntity entity) {
-        return entity == player ? enemy : player;
+        playerHp.setText(buildHpText(fighter[0]));
+        enemyHp.setText(buildHpText(fighter[1]));
     }
 }
