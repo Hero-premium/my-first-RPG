@@ -87,8 +87,8 @@ public final class TextManager {
      * {@link TextManager#generateStory()} for all IDs
      *
      * @param id the ID of the line you want to see the next line of
-     * @return Integer[] - the ID of the line that links for the lines you called -
-     * or null - if there's no next node
+     * @return Integer[] the ID of the line that links for the lines you called -
+     * or {@code null} if there's no next node
      * @throws IllegalArgumentException if the ID you passed doesn't exist
      * @throws NullPointerException     if a null was passed
      */
@@ -147,5 +147,4 @@ public final class TextManager {
     public static void setAction(Integer id, Runnable action) {
         resolveNode(id).setAction(action);
     }
-
 }

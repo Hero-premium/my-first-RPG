@@ -9,7 +9,7 @@ import util.Util;
 import world.Flyable;
 
 public class Ghost extends Entity implements Flyable {
-    private Hero hero;
+    private final Hero hero;
 
     public Ghost(Hero hero) {
         super(0, "", 32, (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
