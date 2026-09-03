@@ -17,28 +17,28 @@ public class CombatLogic {
         damage *= 10;
         int poisonDamage = 0;
 
-        if (target.getPoisonDuration() > 0) {
+        if (target.stats.getPoisonDuration() > 0) {
             poisonDamage = (Util.RANDOM.nextInt(2) + 1) * 10;
             damage += poisonDamage;
             Util.log(target.name + " took extra damage because of being on fire!");
-            target.modifyPoisonDuration(-1);
+            target.stats.modifyPoisonDuration(-1);
         }
-        if (target.isDodging) {
+        if (target.stats.isDodging) {
             Util.log(target.name + " has dodged the " + user.name + " attack!");
-            target.isDodging = false;
-            target.isFocused = false;
+            target.stats.isDodging = false;
+            target.stats.isFocused = false;
             applyDamage(target, poisonDamage);
             return;
         }
-        if (target.isDefending) {
+        if (target.stats.isDefending) {
             damage /= 2;
             Util.log("your damage was reduced by 50% because of " + target.name + " using a shield!");
-            target.isDefending = false;
+            target.stats.isDefending = false;
         }
-        if (user.isFocused) {
+        if (user.stats.isFocused) {
             damage *= 2;
             Util.log(user.name + " focuses hard to deal 100% more damage!");
-            user.isFocused = false;
+            user.stats.isFocused = false;
         }
         applyDamage(target, damage);
     }

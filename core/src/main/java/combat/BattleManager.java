@@ -182,8 +182,8 @@ public final class BattleManager {
     }
 
     private void retry() {
-        player.resetBattleStates();
-        enemy.resetBattleStates();
+        player.stats.resetBattleStates();
+        enemy.stats.resetBattleStates();
         player.health.resetHp();
         enemy.health.resetHp();
 

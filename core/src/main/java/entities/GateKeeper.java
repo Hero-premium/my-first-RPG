@@ -15,19 +15,19 @@ public class GateKeeper extends CombatEntity {
     private void fireWand(CombatEntity player) {
         Util.log(name + " used fireWand");
         CombatLogic.calculateDamage(player, this, 2);
-        player.setPoisonDuration(3);
+        player.stats.setPoisonDuration(3);
     }
 
     private void focus() {
         Util.log(name + " used focus");
-        isFocused = true;
+        stats.isFocused = true;
         Util.log(name + " is focusing on his attack... you may attack.");
     }
 
     private void shield(CombatEntity player) {
         Util.log(name + " used Shield");
         CombatLogic.calculateDamage(player, this, 2);
-        isDefending = true;
+        stats.isDefending = true;
     }
 
     // TODO add a smarter AI -# psttttt make it self aware
@@ -38,7 +38,7 @@ public class GateKeeper extends CombatEntity {
             return;
         }
 
-        int choice = !isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
+        int choice = !stats.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
 
         switch (choice) {
             case 0 -> focus();
@@ -58,20 +58,4 @@ public class GateKeeper extends CombatEntity {
     public void update() {
         // no-op, yet
     }
-
-    public void firstMove() {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void secondMove() {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void thirdMove() {
-        // TODO Auto-generated method stub
-
-    }
-
 }
