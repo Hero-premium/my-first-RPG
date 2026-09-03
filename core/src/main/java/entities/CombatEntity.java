@@ -3,74 +3,33 @@ package entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import util.Util;
 
 import java.util.function.Consumer;
 
 public abstract class CombatEntity extends Entity {
-
-    /**
-     * An entity's max hp, defined once in the constructor. hp can never exceed this
-     * value
-     */
-    public final int maxHp;
+    private int poisonDuration;
     public boolean isDodging;
     public boolean isDefending;
     public boolean isFocused;
-    private int hp;
-    private int poisonDuration;
+
     /**
      *
      */
     public final CombatMovesManager movesManager;
     public boolean isGUIBased;
+    public final Health health;
 
     protected CombatEntity(int gold, String name, float speed, Rectangle hitbox, int hp, Texture texture) {
         super(gold, name, speed, hitbox, texture);
 
-        this.hp = Util.requireNonNegative(hp);
-        this.maxHp = hp;
+        this.health = new Health(hp);
+        this.movesManager = new CombatMovesManager();
+
         this.poisonDuration = 0;
         this.isDodging = false;
         this.isDefending = false;
         this.isFocused = false;
-        this.movesManager = new CombatMovesManager();
         this.isGUIBased = false;
-    }
-
-    /**
-     * Hp cannot go under 0 or above {@code maxHp}
-     *
-     * @return entity current hp,
-     */
-    public int getHp() {
-        return hp;
-    }
-
-    /**
-     * sets hp to given amount also clamps hp between 0 and maxHp
-     *
-     * @param hp the new hp
-     */
-    public final void setHp(int hp) {
-        this.hp = Math.clamp(hp, 0, maxHp);
-    }
-
-    /**
-     * adds the given amount of hp to the existing amount of hp also clamps hp
-     * between 0 and maxHp
-     *
-     * @param hp how much you want to add - pass a negative number to deal damage
-     */
-    public final void modifyHp(int hp) {
-        setHp(getHp() + hp);
-    }
-
-    /**
-     * resets hp to its max
-     */
-    public final void resetHp() {
-        setHp(maxHp);
     }
 
     /**
@@ -130,6 +89,7 @@ public abstract class CombatEntity extends Entity {
 
     public class CombatMovesManager {
         private boolean movesRegistered = false;
+
         public record Move(String name, Consumer<CombatEntity> move) {
         }
 
@@ -141,7 +101,7 @@ public abstract class CombatEntity extends Entity {
 
         /**
          *
-         * @return
+         * @return a copy of the current moves list
          */
         public Array<Move> getMoves() {
             if (!movesRegistered) {
@@ -152,9 +112,10 @@ public abstract class CombatEntity extends Entity {
         }
 
         /**
+         * Adds a new move to the moves list, make sure to call this inside {@link #registerMoves()} to avoid any issues
          *
-         * @param name
-         * @param move
+         * @param name the name of the move
+         * @param move the move itself
          */
         protected void addNewMove(String name, Consumer<CombatEntity> move) {
             moves.add((new Move(name, move)));

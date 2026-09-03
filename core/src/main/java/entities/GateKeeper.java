@@ -33,7 +33,7 @@ public class GateKeeper extends CombatEntity {
     // TODO add a smarter AI -# psttttt make it self aware
     @Override
     public void takeTurn(CombatEntity player) {
-        if (getHp() <= 0) {
+        if (health.getHp() <= 0) {
             Util.log("the gateKeeper tried attacking from the grave");
             return;
         }
