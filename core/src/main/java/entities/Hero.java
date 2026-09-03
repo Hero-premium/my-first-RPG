@@ -21,7 +21,7 @@ public class Hero extends CombatEntity {
 
     private void dodge(CombatEntity enemy) {
         Util.log(name + " used dodge");
-        isDodging = Util.RANDOM.nextBoolean();
+        stats.isDodging = Util.RANDOM.nextBoolean();
         int damage = 1;
         CombatLogic.calculateDamage(enemy, this, damage);
         firstMove();
@@ -124,13 +124,13 @@ public class Hero extends CombatEntity {
     /**
      *
      * @param entity the entity being attacked
-     * @throws IllegalStateException
+     * @throws IllegalStateException if called when this entity isn't in a fighting state
      */
     @Override
     public void takeTurn(CombatEntity entity) {
         //TODO give hero his own AI instead of the testing GateKeeper's AI
         if (isGUIBased) throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
-        int choice = !isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
+        int choice = !stats.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
 
         switch (choice) {
             case 0 -> kick(entity);
