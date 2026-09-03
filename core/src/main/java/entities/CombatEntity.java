@@ -2,14 +2,16 @@ package entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-
+import com.badlogic.gdx.utils.Array;
 import util.Util;
+
+import java.util.function.Consumer;
 
 public abstract class CombatEntity extends Entity {
 
     /**
      * An entity's max hp, defined once in the constructor. hp can never exceed this
-     * value, since {@link #setHp(int)} clamps against it.
+     * value
      */
     public final int maxHp;
     public boolean isDodging;
@@ -17,6 +19,11 @@ public abstract class CombatEntity extends Entity {
     public boolean isFocused;
     private int hp;
     private int poisonDuration;
+    /**
+     *
+     */
+    public final CombatMovesManager movesManager;
+    public boolean isGUIBased;
 
     protected CombatEntity(int gold, String name, float speed, Rectangle hitbox, int hp, Texture texture) {
         super(gold, name, speed, hitbox, texture);
@@ -27,11 +34,14 @@ public abstract class CombatEntity extends Entity {
         this.isDodging = false;
         this.isDefending = false;
         this.isFocused = false;
+        this.movesManager = new CombatMovesManager();
+        this.isGUIBased = false;
     }
 
     /**
+     * Hp cannot go under 0 or above {@code maxHp}
      *
-     * @return entity current hp
+     * @return entity current hp,
      */
     public int getHp() {
         return hp;
@@ -82,6 +92,7 @@ public abstract class CombatEntity extends Entity {
     public abstract void takeTurn(CombatEntity entity);
 
     /**
+     * poisonDuration cannot go under 0 or above 10, to prevent game breaking bugs'
      *
      * @return entity current poisonDuration
      */
@@ -111,4 +122,43 @@ public abstract class CombatEntity extends Entity {
     public void modifyPoisonDuration(int poisonDuration) {
         setPoisonDuration(getPoisonDuration() + poisonDuration);
     }
+
+    /**
+     * Call {@link CombatMovesManager#addNewMove(String, Consumer)} here to ensure they get added to the moves list.
+     */
+    protected abstract void registerMoves();
+
+    public class CombatMovesManager {
+        private boolean movesRegistered = false;
+        public record Move(String name, Consumer<CombatEntity> move) {
+        }
+
+        private final Array<Move> moves;
+
+        private CombatMovesManager() {
+            moves = new Array<>();
+        }
+
+        /**
+         *
+         * @return
+         */
+        public Array<Move> getMoves() {
+            if (!movesRegistered) {
+                registerMoves();
+                movesRegistered = true;
+            }
+            return new Array<>(moves);
+        }
+
+        /**
+         *
+         * @param name
+         * @param move
+         */
+        protected void addNewMove(String name, Consumer<CombatEntity> move) {
+            moves.add((new Move(name, move)));
+        }
+    }
 }
+
