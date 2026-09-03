@@ -6,18 +6,20 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.Assets;
 
+
 import combat.CombatLogic;
 import util.Util;
 
-public class Hero extends CombatEntity implements CombatAnimation {
+public class Hero extends CombatEntity {
 
     boolean possessed = true;
 
     public Hero() {
         super(10, "Hero", 32f, new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
+        super.isGUIBased = false;
     }
 
-    public void dodge(CombatEntity enemy) {
+    private void dodge(CombatEntity enemy) {
         Util.log(name + " used dodge");
         isDodging = Util.RANDOM.nextBoolean();
         int damage = 1;
@@ -30,7 +32,7 @@ public class Hero extends CombatEntity implements CombatAnimation {
 
     }
 
-    public void kick(CombatEntity enemy) {
+    private void kick(CombatEntity enemy) {
         Util.log(name + " used kick");
         int damage = Util.RANDOM.nextInt(2) + 3;
         CombatLogic.calculateDamage(enemy, this, damage);
@@ -47,7 +49,7 @@ public class Hero extends CombatEntity implements CombatAnimation {
 
     }
 
-    public void swordSlash(CombatEntity enemy) {
+    private void swordSlash(CombatEntity enemy) {
         Util.log(name + " used swordSlash");
         int damage = 0;
         if (80 <= Util.RANDOM.nextInt(100)) {
@@ -97,13 +99,11 @@ public class Hero extends CombatEntity implements CombatAnimation {
 
     }
 
-    @Override
     public void firstMove() {
         secondMove();
 
     }
 
-    @Override
     public void secondMove() {
         float movement = 1000;
         velocity.x += movement;
@@ -116,20 +116,35 @@ public class Hero extends CombatEntity implements CombatAnimation {
 
     }
 
-    @Override
     public void thirdMove() {
         secondMove();
 
     }
 
     /**
-     * Do not call this, the hero combat is GUI based
      *
-     * @throws UnsupportedOperationException always
+     * @param entity the entity being attacked
+     * @throws IllegalStateException
      */
     @Override
     public void takeTurn(CombatEntity entity) {
-        throw new UnsupportedOperationException("the Hero can't takeTurn");
+        //TODO give hero his own AI instead of the testing GateKeeper's AI
+        if (isGUIBased) throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
+        int choice = !isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
+
+        switch (choice) {
+            case 0 -> kick(entity);
+            case 1 -> swordSlash(entity);
+            case 2 -> dodge(entity);
+            default ->
+                throw new AssertionError("the switch in entities.Hero takeTurn ran into an unexpected case");
+        }
     }
 
+    @Override
+    protected void registerMoves() {
+        movesManager.addNewMove("kick", (CombatEntity e) -> kick(e));
+        movesManager.addNewMove("swordSlash", (CombatEntity e) -> swordSlash(e));
+        movesManager.addNewMove("dodge", (CombatEntity e) -> dodge(e));
+    }
 }

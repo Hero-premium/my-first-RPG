@@ -6,7 +6,7 @@ import com.mygdx.game.Assets;
 import combat.CombatLogic;
 import util.Util;
 
-public class GateKeeper extends CombatEntity implements CombatAnimation {
+public class GateKeeper extends CombatEntity {
 
     public GateKeeper() {
         super(20, "GateKeeper", 12f, new Rectangle(200f, 200f, 64f, 64f), 250, Assets.gateKeeper);
@@ -50,23 +50,25 @@ public class GateKeeper extends CombatEntity implements CombatAnimation {
     }
 
     @Override
+    protected void registerMoves() {
+
+    }
+
+    @Override
     public void update() {
         // no-op, yet
     }
 
-    @Override
     public void firstMove() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
     public void secondMove() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
     public void thirdMove() {
         // TODO Auto-generated method stub
 
