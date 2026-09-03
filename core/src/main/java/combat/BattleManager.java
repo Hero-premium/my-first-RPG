@@ -38,7 +38,7 @@ public final class BattleManager {
     }
 
     private String buildHpText(CombatEntity entity) {
-        return entity.name + " Health: " + entity.getHp();
+        return entity.name + " Health: " + entity.health.getHp();
     }
 
     private void endBattle() {
@@ -140,7 +140,7 @@ public final class BattleManager {
                  * the line below triggers when the player losses, in using validateBattle
                  * knowing it will return lost just so I can get it's side effects (the prints)
                  */
-                if (player.getHp() <= 0) handleBattleState(validateBattle());
+                if (player.health.getHp() <= 0) handleBattleState(validateBattle());
             }
             default -> throw new AssertionError("The returned enum \"" + state + "\" was unexpected");
         }
@@ -148,17 +148,20 @@ public final class BattleManager {
     }
 
     /**
+     * Launches a battle between two combat entities.
      *
-     * @param player
-     * @param enemy
+     * @param player one of the fighters.
+     * @param enemy  one of the fighters.
+     * @throws IllegalStateException if one of the fighters has {@code isGUIBased == true} and you didn't pass a stage.
+     * @throws NullPointerException  if one of the fighters was null.
      */
     public void launchBattle(CombatEntity player, CombatEntity enemy) {
         this.player = Objects.requireNonNull(player, "hero cannot be null");
         this.enemy = Objects.requireNonNull(enemy, "enemy cannot be null");
 
         Util.log("_______ battle starts! _______");
-        Util.log(this.player.name + " has " + this.player.getHp() + " hit points");
-        Util.log(this.enemy.name + " has " + this.enemy.getHp() + " hit points");
+        Util.log(this.player.name + " has " + this.player.health.getHp() + " hit points");
+        Util.log(this.enemy.name + " has " + this.enemy.health.getHp() + " hit points");
 
 
         if (!this.player.isGUIBased && !this.enemy.isGUIBased) {
@@ -166,7 +169,8 @@ public final class BattleManager {
             return;
         }
 
-        Objects.requireNonNull(stage, "attempted launching a GUI based fight without passing a stage");
+        if (stage == null)
+            throw new IllegalStateException("attempted launching a GUI based fight without passing a stage");
         /*
          * to avoid recreating the combat GUI on the same stage and to make sure they
          * get generated when they're needed
@@ -180,8 +184,8 @@ public final class BattleManager {
     private void retry() {
         player.resetBattleStates();
         enemy.resetBattleStates();
-        player.resetHp();
-        enemy.resetHp();
+        player.health.resetHp();
+        enemy.health.resetHp();
 
         setCombatButtonsVisibility(true);
         setGameOverButtonsVisibility(false);
@@ -213,11 +217,11 @@ public final class BattleManager {
     }
 
     private BattleState validateBattle() {
-        if (enemy.getHp() <= 0) {
+        if (enemy.health.getHp() <= 0) {
             Util.log("the player won");
             return BattleState.WON;
         }
-        if (player.getHp() <= 0) {
+        if (player.health.getHp() <= 0) {
             Util.log("the player lost");
             return BattleState.LOST;
         }
