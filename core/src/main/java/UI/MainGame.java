@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -24,6 +26,7 @@ public class MainGame implements Screen {
     private OrthographicCamera camera;
     private ObjectsManager objects;
     private Stage stage;
+    private World world;
 
     @SuppressWarnings("unused")
     private Game game;
@@ -34,7 +37,8 @@ public class MainGame implements Screen {
         debug = new Debug();
         batch = new SpriteBatch();
 
-        TextManager.setAction(16, () -> BattleManager.launchBattle(objects.hero, objects.gateKeeper, stage));
+        TextManager.setAction(16, () -> new BattleManager(stage).launchBattle(objects.hero, objects.gateKeeper));
+        world = new World(new Vector2(9.11f, 0), true);
     }
 
     @Override
@@ -55,6 +59,7 @@ public class MainGame implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         objects.update(delta);
+        world.step(delta, 6,2);
 
         camera.position.set(objects.hero.hitBox.x + 350, 300, 0);
         camera.update();
@@ -100,6 +105,7 @@ public class MainGame implements Screen {
 
     @Override
     public void dispose() {
+        world.dispose();
         stage.dispose();
         batch.dispose();
         debug.dispose();
