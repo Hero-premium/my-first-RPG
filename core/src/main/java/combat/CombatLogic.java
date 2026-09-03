@@ -13,7 +13,7 @@ public class CombatLogic {
     }
 
     public static void calculateDamage(CombatEntity target, CombatEntity user, int damage) {
-
+        if (target == user) throw new IllegalArgumentException("the user " + user.name + " cannot also be the target");
         damage *= 10;
         int poisonDamage = 0;
 

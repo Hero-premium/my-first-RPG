@@ -79,8 +79,8 @@ public final class BattleManager {
             buttons[i].addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    action.accept(enemy);
-                    handleBattleState(validateBattle());
+                    action.accept(other(entity));
+                    handleBattleState(validateBattle(entity), entity);
                 }
             });
             buttonsTable.add(buttons[i]).row();
@@ -95,7 +95,6 @@ public final class BattleManager {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     action.run();
-                    handleBattleState(validateBattle());
                 }
             });
             buttonsTable.add(buttons[i]).row();
@@ -122,25 +121,25 @@ public final class BattleManager {
         Util.log("GUI generated successfully");
     }
 
-    private void handleBattleState(BattleState state) {
+    private void handleBattleState(BattleState state, CombatEntity entity) {
         switch (state) {
             case WON -> {
                 endBattle();
-                player.movementLocked = false;
-                enemy.moveGold(enemy.getGold(), player);
+                entity.movementLocked = false;
+                other(entity).moveGold(other(entity).getGold(), entity);
             }
             case LOST -> {
                 endBattle();
                 setGameOverButtonsVisibility(true);
             }
             case GOING -> {
-                enemy.takeTurn(player);
+                other(entity).takeTurn(entity);
 
                 /*
                  * the line below triggers when the player losses, in using validateBattle
                  * knowing it will return lost just so I can get it's side effects (the prints)
                  */
-                if (player.health.getHp() <= 0) handleBattleState(validateBattle());
+                if (entity.health.getHp() <= 0) handleBattleState(validateBattle(entity), entity);
             }
             default -> throw new AssertionError("The returned enum \"" + state + "\" was unexpected");
         }
@@ -216,14 +215,14 @@ public final class BattleManager {
         enemyHp.setText(buildHpText(enemy));
     }
 
-    private BattleState validateBattle() {
-        if (enemy.health.getHp() <= 0) {
-            Util.log("the player won");
-            return BattleState.WON;
-        }
-        if (player.health.getHp() <= 0) {
+    private BattleState validateBattle(CombatEntity entity) {
+        if (entity.health.getHp() <= 0) {
             Util.log("the player lost");
             return BattleState.LOST;
+        }
+        if (other(entity).health.getHp() <= 0) {
+            Util.log("the player won");
+            return BattleState.WON;
         }
         return BattleState.GOING;
     }
@@ -232,4 +231,7 @@ public final class BattleManager {
         GOING, WON, LOST
     }
 
+    private CombatEntity other(CombatEntity entity) {
+        return entity == player ? enemy : player;
+    }
 }

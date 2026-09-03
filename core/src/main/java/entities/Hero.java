@@ -16,7 +16,7 @@ public class Hero extends CombatEntity {
 
     public Hero() {
         super(10, "Hero", 32f, new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
-        super.isGUIBased = false;
+        isGUIBased = false;
     }
 
     private void dodge(CombatEntity enemy) {
