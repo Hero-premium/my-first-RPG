@@ -10,7 +10,7 @@ public class Touchable {
 
     public final int maxUsage;
     public final Texture texture;
-    public int useages;
+    public int usages;
     public final Rectangle hitBox;
     public boolean entityInside = false;
 
@@ -18,7 +18,7 @@ public class Touchable {
 
         this.texture = texture;
         this.maxUsage = maxUsage;
-        this.useages = useages;
+        this.usages = useages;
         this.hitBox = hitBox;
     }
 
