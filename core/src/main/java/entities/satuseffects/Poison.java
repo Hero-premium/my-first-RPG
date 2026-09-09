@@ -1,38 +1,22 @@
-package entities;
+package entities.satuseffects;
 
-// TODO present me believes this class needs a rework, future me gets to decide
+public class Poison extends Effect {
 
-public class Stats {
-    private int poisonDuration;
-    public boolean isDodging;
-    public boolean isDefending;
-    public boolean isFocused;
-
-    Stats() {
-        this.poisonDuration = 0;
-        this.isDefending = false;
-        this.isFocused = false;
-        this.isDodging = false;
+    public Poison() {
     }
 
-    /**
-     * Sets isDodging, isDefending, isFocused to false and sets poisonDuration to 0.
-     */
-    public void resetBattleStates() {
-        setPoisonDuration(0);
-        isDodging = false;
-        isDefending = false;
-        isFocused = false;
-
+    @Override
+    public void onTick(){
+        entity.health.modifyHp(-10);
+        value--;
     }
-
     /**
      * poisonDuration cannot go under 0 or above 10, to prevent game breaking bugs'
      *
      * @return entity current poisonDuration
      */
     public int getPoisonDuration() {
-        return poisonDuration;
+        return value;
     }
 
     /**
@@ -45,7 +29,7 @@ public class Stats {
     public void setPoisonDuration(int poisonDuration) {
         if (poisonDuration >= 10)
             throw new IllegalStateException("balance breaking bug, poison been set for/more than 10 turns");
-        this.poisonDuration = Math.max(poisonDuration, 0);
+        this.value = Math.max(poisonDuration, 0);
     }
 
     /**
