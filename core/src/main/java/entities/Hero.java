@@ -16,12 +16,12 @@ public class Hero extends CombatEntity {
 
     public Hero() {
         super(10, "Hero", 32f, new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
-        isGUIBased = false;
+        isPlayable = false;
     }
 
     private void dodge(CombatEntity enemy) {
         Util.log(name + " used dodge");
-        stats.isDodging = Util.RANDOM.nextBoolean();
+        statusEffectsManager.isDodging = Util.RANDOM.nextBoolean();
         int damage = 1;
         CombatLogic.calculateDamage(enemy, this, damage);
         firstMove();
@@ -71,10 +71,10 @@ public class Hero extends CombatEntity {
     private void takeControl() {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-            speed *= 1.5;
+            speed *= 1.5f;
         }
         if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
-            speed /= 1.5;
+            speed /= 1.5F;
         }
 
         if (!movementLocked) {
@@ -129,8 +129,8 @@ public class Hero extends CombatEntity {
     @Override
     public void takeTurn(CombatEntity entity) {
         //TODO give hero his own AI instead of the testing GateKeeper's AI
-        if (isGUIBased) throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
-        int choice = !stats.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
+        if (isPlayable) throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
+        int choice = !statusEffectsManager.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
 
         switch (choice) {
             case 0 -> kick(entity);
@@ -143,8 +143,8 @@ public class Hero extends CombatEntity {
 
     @Override
     protected void registerMoves() {
-        movesManager.addNewMove("kick", (CombatEntity e) -> kick(e));
-        movesManager.addNewMove("swordSlash", (CombatEntity e) -> swordSlash(e));
-        movesManager.addNewMove("dodge", (CombatEntity e) -> dodge(e));
+        movesManager.addNewMove("kick", this::kick);
+        movesManager.addNewMove("swordSlash", this::swordSlash);
+        movesManager.addNewMove("dodge", this::dodge);
     }
 }

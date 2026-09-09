@@ -24,10 +24,10 @@ public class Ghost extends Entity implements Flyable {
     private void move() {
         if (!hero.possessed) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-                speed *= 1.5;
+                speed *= 1.5f;
             }
             if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
-                speed /= 1.5;
+                speed /= 1.5f;
             }
 
             if (!movementLocked) {

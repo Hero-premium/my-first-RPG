@@ -3,6 +3,7 @@ package entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import entities.satuseffects.StatusEffectsManager;
 
 import java.util.function.Consumer;
 
@@ -11,7 +12,7 @@ public abstract class CombatEntity extends Entity {
     /**
      * The object responsible for holding combat stats
      */
-    public final Stats stats;
+    public final StatusEffectsManager statusEffectsManager;
     /**
      * The object responsible for registering and storing combat moves
      */
@@ -21,7 +22,7 @@ public abstract class CombatEntity extends Entity {
      *
      * @see combat.BattleManager
      */
-    public boolean isGUIBased;
+    public boolean isPlayable;
     /**
      * carries hp and all its related methods
      */
@@ -32,8 +33,8 @@ public abstract class CombatEntity extends Entity {
 
         this.health = new Health(hp);
         this.movesManager = new CombatMovesManager();
-        this.stats = new Stats();
-        this.isGUIBased = false;
+        this.isPlayable = false;
+        this.statusEffectsManager = new StatusEffectsManager(this);
     }
 
     /**
@@ -64,6 +65,7 @@ public abstract class CombatEntity extends Entity {
         /**
          *
          * @return a copy of the current moves list
+         * @throws IllegalStateException if registerMoves() run but registers zero moves
          */
         public Array<Move> getMoves() {
             if (!movesRegistered) {

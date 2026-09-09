@@ -2,6 +2,7 @@ package UI;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,16 +21,16 @@ import util.ObjectsManager;
 public class MainGame implements Screen {
 
     // private final float floorLevel = 50;
-    private SpriteBatch batch;
-    private Debug debug;
+    private final SpriteBatch batch;
+    private final Debug debug;
     private FitViewport viewport;
     private OrthographicCamera camera;
     private ObjectsManager objects;
     private Stage stage;
-    private World world;
+    private final World world;
 
     @SuppressWarnings("unused")
-    private Game game;
+    private final Game game;
 
     public MainGame(Game game) {
         this.game = game;
@@ -61,6 +62,9 @@ public class MainGame implements Screen {
         objects.update(delta);
         world.step(delta, 6,2);
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F6)){
+            System.out.println(Input.Keys.F6 + " f6 is pressed");
+        }
         camera.position.set(objects.hero.hitBox.x + 350, 300, 0);
         camera.update();
 

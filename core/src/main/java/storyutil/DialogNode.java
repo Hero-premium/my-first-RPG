@@ -25,6 +25,6 @@ class DialogNode {
     void setAction(Runnable action) {
         if (this.action != null)
             throw new IllegalStateException("The action linked with the text " + text + " cannot be reassigned");
-        this.action = action;
+        this.action = Objects.requireNonNull(action);
     }
 }
