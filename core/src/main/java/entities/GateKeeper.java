@@ -4,44 +4,45 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Assets;
 
 import combat.CombatLogic;
+import entities.satuseffects.Poison;
 import util.Util;
 
 public class GateKeeper extends CombatEntity {
 
     public GateKeeper() {
         super(20, "GateKeeper", 12f, new Rectangle(200f, 200f, 64f, 64f), 250, Assets.gateKeeper);
-        isGUIBased = true;
+        isPlayable = true;
     }
 
     private void fireWand(CombatEntity player) {
         Util.log(name + " used fireWand");
         CombatLogic.calculateDamage(player, this, 2);
-        player.stats.setPoisonDuration(3);
+        player.statusEffectsManager.allEffect.get(Poison.class).setPoisonDuration(3);
     }
 
     private void focus() {
         Util.log(name + " used focus");
-        stats.isFocused = true;
+        statusEffectsManager.isFocused = true;
         Util.log(name + " is focusing on his attack... you may attack.");
     }
 
     private void shield(CombatEntity player) {
         Util.log(name + " used Shield");
         CombatLogic.calculateDamage(player, this, 2);
-        stats.isDefending = true;
+        statusEffectsManager.isDefending = true;
     }
 
     // TODO add a smarter AI -# psttttt make it self aware
     @Override
     public void takeTurn(CombatEntity player) {
-        if (isGUIBased)
+        if (isPlayable)
             throw new IllegalStateException("cannot call AI based combat while the GateKeeper is fighting in GUI");
         if (health.getHp() <= 0) {
             Util.log("the gateKeeper tried attacking from the grave");
             return;
         }
 
-        int choice = !stats.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
+        int choice = !statusEffectsManager.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
 
         switch (choice) {
             case 0 -> focus();

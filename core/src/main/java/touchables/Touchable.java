@@ -9,9 +9,9 @@ import entities.Entity;
 public class Touchable {
 
     public final int maxUsage;
-    public Texture texture;
+    public final Texture texture;
     public int useages;
-    public Rectangle hitBox;
+    public final Rectangle hitBox;
     public boolean entityInside = false;
 
     public Touchable(Texture texture, int maxUsage, int useages, Rectangle hitBox) {

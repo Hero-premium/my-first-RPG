@@ -18,9 +18,9 @@ public class Debug {
 
 
     public boolean isdebug = false;
-    private Vector2 textPos = new Vector2();
-    private BitmapFont debugfont = new BitmapFont();
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final Vector2 textPos = new Vector2();
+    private final BitmapFont debugfont = new BitmapFont();
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     public void dispose() {
         debugfont.dispose();

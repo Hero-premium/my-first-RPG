@@ -9,8 +9,8 @@ import com.mygdx.game.GameLauncher;
 
 public class LoadingScreen extends ScreenAdapter {
     private final GameLauncher game;
-    private SpriteBatch batch;
-    private BitmapFont font;
+    private final SpriteBatch batch;
+    private final BitmapFont font;
 
     public LoadingScreen(GameLauncher game) {
         this.game = game;
