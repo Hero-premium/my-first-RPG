@@ -1,6 +1,6 @@
 package combat;
 
-import entities.satuseffects.Poison;
+import entities.statuseffects.Poison;
 import entities.CombatEntity;
 import util.Util;
 

@@ -3,7 +3,7 @@ package entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import entities.satuseffects.StatusEffectsManager;
+import entities.statuseffects.StatusEffectsManager;
 
 import java.util.function.Consumer;
 
