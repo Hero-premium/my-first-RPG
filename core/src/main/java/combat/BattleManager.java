@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Assets;
-
 import entities.CombatEntity;
 import storyutil.TextManager;
 import util.Util;
@@ -18,10 +17,11 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 // TODO add slight delay between each move
+
 public final class BattleManager {
 
-    private final TextButton[] gameOverButtons = new TextButton[2];
-    private final TextButton[] combatButtons = new TextButton[3];
+    private final TextButton[] gameOverButtons = new TextButton[2],
+        combatButtons = new TextButton[3];
     private final CombatEntity[] fighter = new CombatEntity[2];
     private Label playerHp, enemyHp;
     private final Stage stage;
@@ -55,8 +55,8 @@ public final class BattleManager {
             this::retry, //
             () -> Gdx.app.exit()}; //
 
-        generateButton(buttonsTable, combatButtons, entity);
-        generateButton(buttonsTable, gameOverButtonNames, gameOverActions, gameOverButtons);
+        generateButtons(buttonsTable, combatButtons, entity);
+        generateButtons(buttonsTable, gameOverButtonNames, gameOverActions, gameOverButtons);
 
         setGameOverButtonsVisibility(false);
 
@@ -64,35 +64,36 @@ public final class BattleManager {
 
     }
 
-    private void generateButton(Table buttonsTable, TextButton[] buttons, CombatEntity entity) {
+    private void generateButtons(Table buttonsTable, TextButton[] buttons, CombatEntity entity) {
         Array<CombatEntity.CombatMovesManager.Move> moves = entity.movesManager.getMoves();
         for (int i = 0; i < moves.size; i++) {
-            Consumer<CombatEntity> action = moves.get(i).move();
-            buttons[i] = new TextButton(moves.get(i).name(), Assets.skin);
-            buttons[i].addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    action.accept(BattleUtils.other(entity, fighter));
-                    handleBattleState(BattleUtils.validateBattle(entity, fighter), entity);
-                }
-            });
-            buttonsTable.add(buttons[i]).row();
+            Consumer<CombatEntity> moveAction = moves.get(i).move();
+            Runnable action = () -> {
+                moveAction.accept(BattleUtils.other(entity, fighter));
+                handleBattleState(BattleUtils.validateBattle(entity, fighter), entity);
+            };
+            buttons[i] = generateButton(buttonsTable, moves.get(i).name(), action);
         }
     }
 
-    private void generateButton(Table buttonsTable, String[] buttonNames, Runnable[] actions, TextButton[] buttons) {
+    private void generateButtons(Table buttonsTable, String[] buttonNames, Runnable[] actions, TextButton[] buttons) {
         for (int i = 0; i < buttons.length; i++) {
-            Runnable action = actions[i];
-            buttons[i] = new TextButton(buttonNames[i], Assets.skin);
-            buttons[i].addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    action.run();
-                }
-            });
-            buttonsTable.add(buttons[i]).row();
+            buttons[i] = generateButton(buttonsTable, buttonNames[i], actions[i]);
         }
     }
+
+    private TextButton generateButton(Table buttonsTable, String name, Runnable action) {
+        TextButton buttons = new TextButton(name, Assets.skin);
+        buttons.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                action.run();
+            }
+        });
+        buttonsTable.add(buttons).row();
+        return buttons;
+    }
+
 
     private void generateLabels() {
 
@@ -152,7 +153,7 @@ public final class BattleManager {
             Util.log(fighter.name + " has " + fighter.health.getHp() + " hit points");
         }
 
-        if (!AnyFighterIsPlayable()) {
+        if (!anyFighterIsPlayable()) {
             new AiBattleManager().launchBattle(fighter[0], fighter[1]);
             return;
         }
@@ -163,7 +164,7 @@ public final class BattleManager {
         }
     }
 
-    private boolean AnyFighterIsPlayable() {
+    private boolean anyFighterIsPlayable() {
         for (CombatEntity fighter : fighter) {
             if (fighter.isPlayable) return true;
         }
