@@ -1,6 +1,7 @@
 package util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Logger;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +12,7 @@ public final class Util {
     public static final Random RANDOM = new Random();
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static boolean isPressed = false;
+    private static final Logger logger = new Logger("", Logger.DEBUG);
 
     private Util() {
         throw new AssertionError("No util.Util instance for you!");
@@ -30,12 +32,15 @@ public final class Util {
     }
 
     public static void log(Object obj) {
-        String time = LocalDateTime.now().format(FORMAT);
-        System.out.println("[" + time + "] " + obj);
+        logger.info(logFormat(obj));
+    }
+
+    private static String logFormat(Object obj) {
+        return "[" + LocalDateTime.now().format(FORMAT) + "] " + obj;
     }
 
     public static void logWarn(Object obj) {
-        log("\u001B[33m" + "WARNING - " + obj + "\u001B[0m");
+        logger.error(logFormat("WARNING - " + obj));
     }
 
     public static int requireNonNegative(int number) {
