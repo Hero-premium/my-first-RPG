@@ -73,7 +73,7 @@ public class ObjectsManager {
                 touchable.update(entity);
 
                 if (touchable == stopPlayer && touchable.isEntityInside(hero)) {
-                    stopPlayer.useages = stopPlayer.maxUsage;
+                    stopPlayer.usages = stopPlayer.maxUsage;
                     hero.movementLocked = true;
                     storyDisplay.setStoryActive(true);
                     gateKeeper.facingLeft = true;
@@ -86,7 +86,7 @@ public class ObjectsManager {
 
         for (int i = 0; i < touchables.size; i++) {
             Touchable touchable = touchables.get(i);
-            if (touchable.useages >= touchable.maxUsage) {
+            if (touchable.usages >= touchable.maxUsage) {
                 touchables.removeIndex(i);
                 i--;
             }

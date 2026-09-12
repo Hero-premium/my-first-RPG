@@ -17,13 +17,13 @@ import touchables.Touchable;
 public class Debug {
 
 
-    public boolean isdebug = false;
+    public boolean isDebug = false;
     private final Vector2 textPos = new Vector2();
-    private final BitmapFont debugfont = new BitmapFont();
+    private final BitmapFont debugFont = new BitmapFont();
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     public void dispose() {
-        debugfont.dispose();
+        debugFont.dispose();
         shapeRenderer.dispose();
     }
 
@@ -35,7 +35,7 @@ public class Debug {
     }
 
     public void showHitboxes(OrthographicCamera camera, Array<Entity> objects, Array<Touchable> touchables) {
-        if (isdebug) {
+        if (isDebug) {
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
@@ -54,18 +54,18 @@ public class Debug {
 
     public void showInformations(SpriteBatch batch, Entity player, FitViewport viewport, OrthographicCamera camera) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
-            isdebug = !isdebug;
+            isDebug = !isDebug;
         }
 
         getCamera(camera, viewport, 0);
-        if (isdebug) {
+        if (isDebug) {
 
-            debugfont.draw(batch, "Player x " + player.hitBox.x + " / Player y " + player.hitBox.y, textPos.x,
+            debugFont.draw(batch, "Player x " + player.hitBox.x + " / Player y " + player.hitBox.y, textPos.x,
                 getCamera(camera, viewport, 20).y);
 
-            debugfont.draw(batch, "FPS " + Gdx.graphics.getFramesPerSecond(), textPos.x,
+            debugFont.draw(batch, "FPS " + Gdx.graphics.getFramesPerSecond(), textPos.x,
                 textPos.y = getCamera(camera, viewport, 35).y);
-            debugfont.draw(batch, "Player velocityX " + player.velocity.x + " / Player velocityY " + player.velocity.y,
+            debugFont.draw(batch, "Player velocityX " + player.velocity.x + " / Player velocityY " + player.velocity.y,
                 textPos.x, getCamera(camera, viewport, 50).y);
         }
     }
