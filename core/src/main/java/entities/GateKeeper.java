@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Assets;
 
 import combat.CombatLogic;
-import entities.satuseffects.Poison;
+import entities.statuseffects.Poison;
 import util.Util;
 
 public class GateKeeper extends CombatEntity {
