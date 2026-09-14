@@ -1,6 +1,7 @@
 package storyutil;
 
 import java.util.Objects;
+import java.util.Optional;
 
 class DialogNode {
 
@@ -18,8 +19,8 @@ class DialogNode {
         return nextNodes != null ? nextNodes.clone() : null;
     }
 
-    Runnable getAction() {
-        return this.action;
+    Optional<Runnable> getAction() {
+        return Optional.ofNullable(action);
     }
 
     void setAction(Runnable action) {
