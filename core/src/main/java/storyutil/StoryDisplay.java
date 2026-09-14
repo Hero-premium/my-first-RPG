@@ -136,9 +136,7 @@ public class StoryDisplay {
     }
 
     private void runNodesAction() {
-        Runnable action = TextManager.getAction(index);
-        if (action != null)
-            action.run();
+        TextManager.getAction(index).ifPresent(Runnable::run);
     }
 
     /**

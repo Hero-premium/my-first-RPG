@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.I18NBundle;
 import util.Util;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class TextManager {
 
@@ -122,13 +119,13 @@ public final class TextManager {
      * to get the action of the id you're trying to get
      *
      * @param id the ID of the line you want to get the action of
-     * @return Runnable - the action you called
+     * @return <span style="color:#589DF6">{@code Optional<Runnable>}</span>} the action you called
      * <p>
      * or null - if the action being called hasn't been set yet
      * @throws IllegalArgumentException if the ID you passed doesn't exist
      * @throws NullPointerException     if a null was passed
      */
-    public static Runnable getAction(Integer id) {
+    public static Optional<Runnable> getAction(Integer id) {
         return resolveNode(id).getAction();
     }
 
