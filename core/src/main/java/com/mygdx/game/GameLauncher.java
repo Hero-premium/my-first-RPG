@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import UI.LoadingScreen;
+import com.mygdx.game.UI.LoadingScreen;
 import com.badlogic.gdx.Game;
 
 public class GameLauncher extends Game {
