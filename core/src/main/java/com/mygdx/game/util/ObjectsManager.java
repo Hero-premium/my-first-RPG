@@ -57,10 +57,10 @@ public class ObjectsManager {
             @Override
             public void update(Entity player){
                 if (isEntityInside(hero)) {
-                    stopPlayer.usages = stopPlayer.maxUsage;
-                    hero.movementLocked = true;
+                    usages = maxUsage;
+                    hero.movement.movementLocked = true;
                     storyDisplay.setStoryActive(true);
-                    gateKeeper.facingLeft = true;
+                    gateKeeper.movement.facingLeft = true;
                 }
             }
         };

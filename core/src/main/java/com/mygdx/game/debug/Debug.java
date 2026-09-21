@@ -42,7 +42,7 @@ public class Debug {
             shapeRenderer.setColor(Color.RED);
 
             for (Entity object : objects) {
-                shapeRenderer.rect(object.hitBox.x, object.hitBox.y, object.hitBox.width, object.hitBox.height);
+                shapeRenderer.rect(object.movement.hitBox.x, object.movement.hitBox.y, object.movement.hitBox.width, object.movement.hitBox.height);
 
             }
             for (Touchable object : touchables) {
@@ -60,12 +60,12 @@ public class Debug {
         getCamera(camera, viewport, 0);
         if (isDebug) {
 
-            debugFont.draw(batch, "Player x " + player.hitBox.x + " / Player y " + player.hitBox.y, textPos.x,
+            debugFont.draw(batch, "Player x " + player.movement.hitBox.x + " / Player y " + player.movement.hitBox.y, textPos.x,
                 getCamera(camera, viewport, 20).y);
 
             debugFont.draw(batch, "FPS " + Gdx.graphics.getFramesPerSecond(), textPos.x,
                 textPos.y = getCamera(camera, viewport, 35).y);
-            debugFont.draw(batch, "Player velocityX " + player.velocity.x + " / Player velocityY " + player.velocity.y,
+            debugFont.draw(batch, "Player velocityX " + player.movement.velocity.x + " / Player velocityY " + player.movement.velocity.y,
                 textPos.x, getCamera(camera, viewport, 50).y);
         }
     }

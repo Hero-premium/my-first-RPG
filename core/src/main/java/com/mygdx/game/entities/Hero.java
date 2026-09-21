@@ -68,7 +68,7 @@ public class Hero extends CombatEntity {
 
     }
 
-    private void superSecretMove(CombatEntity entity){
+    private void superSecretMove(CombatEntity entity) {
         entity.health.modifyHp(-1000);
         Util.log("you used the super secret move, if this was a real build shame on you!");
     }
@@ -76,28 +76,28 @@ public class Hero extends CombatEntity {
     private void takeControl() {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-            speed *= 1.5f;
+            movement.speed = movement.speed * 1.5f;
         }
         if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
-            speed /= 1.5F;
+            movement.speed = movement.speed / 1.5F;
         }
 
-        if (!movementLocked) {
+        if (!movement.movementLocked) {
 
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                facingLeft = true;
-                velocity.x -= speed;
+                movement.facingLeft = true;
+                movement.velocity.x -= movement.speed;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                facingLeft = false;
-                velocity.x += speed;
+                movement.facingLeft = false;
+                movement.velocity.x += movement.speed;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && onGround) {
-                velocity.y = 450;
-                onGround = false;
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && movement.onGround) {
+                movement.velocity.y = 450;
+                movement.onGround = false;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                velocity.x += facingLeft ? -450 : 450;
+                movement.velocity.x += movement.facingLeft ? -450 : 450;
 
             }
         }
@@ -110,15 +110,14 @@ public class Hero extends CombatEntity {
     }
 
     public void secondMove() {
-        float movement = 1000;
-        velocity.x += movement;
+        float toMove = 1000;
+        movement.velocity.x += toMove;
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                velocity.x -= movement;
+                movement.velocity.x -= toMove;
             }
         }, 2.5f);
-
     }
 
     public void thirdMove() {
@@ -134,15 +133,15 @@ public class Hero extends CombatEntity {
     @Override
     public void takeTurn(CombatEntity entity) {
         //TODO give hero his own AI instead of the testing GateKeeper's AI
-        if (isPlayable) throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
+        if (isPlayable)
+            throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
         int choice = !statusEffectsManager.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
 
         switch (choice) {
             case 0 -> kick(entity);
             case 1 -> swordSlash(entity);
             case 2 -> dodge(entity);
-            default ->
-                throw new AssertionError("the switch in entities.Hero takeTurn ran into an unexpected case");
+            default -> throw new AssertionError("the switch in entities.Hero takeTurn ran into an unexpected case");
         }
     }
 

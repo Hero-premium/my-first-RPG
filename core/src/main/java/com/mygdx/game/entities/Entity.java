@@ -3,33 +3,25 @@ package com.mygdx.game.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.entities.componants.Movement;
 import com.mygdx.game.util.Util;
 
 import java.util.Objects;
 
 public abstract class Entity {
 
-    public final Vector2 velocity;
-    public final Rectangle hitBox;
     public final transient Texture texture;
     public String name;
-    public boolean facingLeft;
-    public boolean onGround;
-    public boolean movementLocked;
-    public float speed;
     private int gold;
 
+    /**
+     * resposable for holding the entities position and movement informations and methods
+     */
+    public final Movement movement;
     protected Entity(int gold, String name, float speed, Rectangle hitBox, Texture texture) {
-
+        this.movement = new Movement(hitBox, speed);
         this.gold = Util.requireNonNegative(gold);
         this.name = Objects.requireNonNull(name);
-        this.facingLeft = false;
-        this.onGround = false;
-        this.movementLocked = false;
-        this.velocity = new Vector2();
-        this.speed = Util.requireNonNegative(speed);
-        this.hitBox = Objects.requireNonNull(hitBox);
         this.texture = Objects.requireNonNull(texture);
     }
 
@@ -41,8 +33,8 @@ public abstract class Entity {
      * @throws IllegalStateException if this was called before SpriteBatch.begin
      */
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, hitBox.x, hitBox.y, hitBox.width, hitBox.height, 0, 0, texture.getWidth(),
-            texture.getHeight(), !facingLeft, false);
+        batch.draw(texture, movement.hitBox.x, movement.hitBox.y, movement.hitBox.width, movement.hitBox.height, 0, 0, texture.getWidth(),
+            texture.getHeight(), !movement.facingLeft, false);
     }
 
     /**
@@ -80,8 +72,8 @@ public abstract class Entity {
      * Clamps all entities x and y velocity to 2000
      */
     public void velocityClamp() {
-        velocity.x = Math.clamp(velocity.x, -2000, 2000);
-        velocity.y = Math.clamp(velocity.y, -2000, 2000);
+        movement.velocity.x = Math.clamp(movement.velocity.x, -2000, 2000);
+        movement.velocity.y = Math.clamp(movement.velocity.y, -2000, 2000);
     }
 
     public abstract void update();

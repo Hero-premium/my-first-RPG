@@ -130,7 +130,7 @@ public final class BattleManager {
         switch (state) {
             case WON -> {
                 endBattle();
-                entity.movementLocked = false;
+                entity.movement.movementLocked = false;
                 otherEntity.moveGold(otherEntity.getGold(), entity);
             }
             case LOST -> {

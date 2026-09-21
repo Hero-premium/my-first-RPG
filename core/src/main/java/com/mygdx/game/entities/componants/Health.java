@@ -1,4 +1,4 @@
-package com.mygdx.game.entities;
+package com.mygdx.game.entities.componants;
 
 import com.mygdx.game.util.Util;
 
