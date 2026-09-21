@@ -6,13 +6,12 @@ import com.badlogic.gdx.math.Rectangle;
 
 import com.mygdx.game.entities.Entity;
 
-public class Touchable {
+public abstract class Touchable {
 
     public final int maxUsage;
     public final Texture texture;
     public int usages;
     public final Rectangle hitBox;
-    public boolean entityInside = false;
 
     public Touchable(Texture texture, int maxUsage, int useages, Rectangle hitBox) {
 
@@ -27,8 +26,7 @@ public class Touchable {
     }
 
     // to be overridden
-    public void update(Entity entity) {
-    }
+    public abstract void update(Entity entity);
 
     public void draw(SpriteBatch batch) {
         if (texture != null)
