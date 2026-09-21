@@ -53,7 +53,17 @@ public class ObjectsManager {
 
         wall = new Wall();
 
-        stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800)));
+        stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800))){
+            @Override
+            public void update(Entity player){
+                if (isEntityInside(hero)) {
+                    stopPlayer.usages = stopPlayer.maxUsage;
+                    hero.movementLocked = true;
+                    storyDisplay.setStoryActive(true);
+                    gateKeeper.facingLeft = true;
+                }
+            }
+        };
 
         // TEMP remove ones you start using tiles or give it its own method
         wall.hitBox.set(-350, 50, 200, 700);
@@ -71,13 +81,6 @@ public class ObjectsManager {
         for (Touchable touchable : touchables) {
             for (Entity entity : entities) {
                 touchable.update(entity);
-
-                if (touchable == stopPlayer && touchable.isEntityInside(hero)) {
-                    stopPlayer.usages = stopPlayer.maxUsage;
-                    hero.movementLocked = true;
-                    storyDisplay.setStoryActive(true);
-                    gateKeeper.facingLeft = true;
-                }
             }
 
         }
