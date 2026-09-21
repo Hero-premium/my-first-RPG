@@ -1,0 +1,68 @@
+package com.mygdx.game.entities;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.Assets;
+
+import com.mygdx.game.combat.CombatLogic;
+import com.mygdx.game.entities.statuseffects.Poison;
+import com.mygdx.game.util.Util;
+
+public class GateKeeper extends CombatEntity {
+
+    public GateKeeper() {
+        super(20, "GateKeeper", 12f, new Rectangle(200f, 200f, 64f, 64f), 250, Assets.gateKeeper);
+        isPlayable = false;
+    }
+
+    private void fireWand(CombatEntity player) {
+        Util.log(name + " used fireWand");
+        CombatLogic.calculateDamage(player, this, 2);
+        player.statusEffectsManager.allEffect.get(Poison.class).applyPoison(3, 10);
+    }
+
+    private void focus() {
+        Util.log(name + " used focus");
+        statusEffectsManager.isFocused = true;
+        Util.log(name + " is focusing on his attack... you may attack.");
+    }
+
+    private void shield(CombatEntity player) {
+        Util.log(name + " used Shield");
+        CombatLogic.calculateDamage(player, this, 2);
+        statusEffectsManager.isDefending = true;
+    }
+
+    // TODO add a smarter AI -# psttttt make it self aware
+    @Override
+    public void takeTurn(CombatEntity player) {
+        if (isPlayable)
+            throw new IllegalStateException("cannot call AI based combat while the GateKeeper is fighting in GUI");
+        if (health.getHp() <= 0) {
+            Util.logWarn("the gateKeeper tried attacking from the grave");
+            return;
+        }
+
+        int choice = !statusEffectsManager.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
+
+        switch (choice) {
+            case 0 -> focus();
+            case 1 -> fireWand(player);
+            case 2 -> shield(player);
+            default ->
+                throw new AssertionError("the switch in entities.GateKeeper takeTurn ran into an unexpected case");
+        }
+    }
+
+    @Override
+    protected void registerMoves() {
+        movesManager.addNewMove("focus", (CombatEntity _) -> focus());
+        movesManager.addNewMove("fireWand", this::fireWand);
+        movesManager.addNewMove("shield", this::shield);
+    }
+
+    @Override
+    public void update() {
+        // no-op, yet
+    }
+
+}
