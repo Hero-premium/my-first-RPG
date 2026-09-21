@@ -2,8 +2,8 @@ package com.mygdx.game.UI;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -58,19 +58,16 @@ public class MainGame implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(Color.BLACK);
         objects.update(delta);
         world.step(delta, 6,2);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F6)){
-            System.out.println(Input.Keys.F6 + " f6 is pressed");
-        }
-        camera.position.set(objects.hero.hitBox.x + 350, 300, 0);
+        camera.position.set(objects.hero.movement.hitBox.x + 350, 300, 0);
         camera.update();
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(Assets.backGround, objects.hero.hitBox.x - 50, 0, viewport.getWorldWidth(),
+        batch.draw(Assets.backGround, objects.hero.movement.hitBox.x - 50, 0, viewport.getWorldWidth(),
             viewport.getWorldHeight());
 
         objects.draw(batch);

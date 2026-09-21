@@ -36,28 +36,28 @@ public final class Physics {
     public static void applyPhysics(Array<Entity> entities, float delta, float floorLevel) {
         for (Entity object : entities) {
             object.velocityClamp();
-            object.velocity.x = dampFloats(object.velocity.x, AIR, delta);
-            object.hitBox.x += object.velocity.x * delta;
+            object.movement.velocity.x = dampFloats(object.movement.velocity.x, AIR, delta);
+            object.movement.hitBox.x += object.movement.velocity.x * delta;
 
             if (!(object instanceof Flyable)) {
                 gravity(object, delta, floorLevel);
             } else {
-                object.velocity.y = dampFloats(object.velocity.y, GRAVITY, delta);
-                object.hitBox.y += object.velocity.y * delta;
+                object.movement.velocity.y = dampFloats(object.movement.velocity.y, GRAVITY, delta);
+                object.movement.hitBox.y += object.movement.velocity.y * delta;
             }
         }
     }
 
     private static void gravity(Entity entity, float deltaTime, float floorLevel) {
 
-        entity.velocity.y -= GRAVITY * deltaTime;
+        entity.movement.velocity.y -= GRAVITY * deltaTime;
 
-        entity.hitBox.y += entity.velocity.y * deltaTime;
+        entity.movement.hitBox.y += entity.movement.velocity.y * deltaTime;
 
-        if (entity.hitBox.y < floorLevel) {
-            entity.hitBox.y = floorLevel;
-            entity.velocity.y = 0f;
-            entity.onGround = true;
+        if (entity.movement.hitBox.y < floorLevel) {
+            entity.movement.hitBox.y = floorLevel;
+            entity.movement.velocity.y = 0f;
+            entity.movement.onGround = true;
         }
     }
 

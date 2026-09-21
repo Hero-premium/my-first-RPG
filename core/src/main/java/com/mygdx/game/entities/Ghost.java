@@ -24,31 +24,31 @@ public class Ghost extends Entity implements Flyable {
     private void move() {
         if (!hero.possessed) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-                speed *= 1.5f;
+                movement.speed = movement.speed * 1.5f;
             }
             if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
-                speed /= 1.5f;
+                movement.speed = movement.speed / 1.5f;
             }
 
-            if (!movementLocked) {
+            if (!movement.movementLocked) {
 
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                    facingLeft = true;
-                    velocity.x -= speed;
+                    movement.facingLeft = true;
+                    movement.velocity.x -= movement.speed;
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                    facingLeft = false;
-                    velocity.x += speed;
+                    movement.facingLeft = false;
+                    movement.velocity.x += movement.speed;
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                    velocity.y += speed;
+                    movement.velocity.y += movement.speed;
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                    velocity.y -= speed;
+                    movement.velocity.y -= movement.speed;
                 }
 
                 if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-                    velocity.x += facingLeft ? -450 : 450;
+                    movement.velocity.x += movement.facingLeft ? -450 : 450;
 
                 }
             }

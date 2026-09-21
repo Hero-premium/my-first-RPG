@@ -22,7 +22,7 @@ public class Wall extends Touchable {
             return;
         }
 
-        Rectangle e = entity.hitBox;
+        Rectangle e = entity.movement.hitBox;
 
         float overlapLeft = (e.x + e.width) - hitBox.x;
         float overlapRight = (hitBox.x + hitBox.width) - e.x;

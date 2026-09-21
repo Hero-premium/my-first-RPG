@@ -13,19 +13,17 @@ public abstract class Touchable {
     public int usages;
     public final Rectangle hitBox;
 
-    public Touchable(Texture texture, int maxUsage, int useages, Rectangle hitBox) {
-
+    public Touchable(Texture texture, int maxUsage, int usages, Rectangle hitBox) {
         this.texture = texture;
         this.maxUsage = maxUsage;
-        this.usages = useages;
+        this.usages = usages;
         this.hitBox = hitBox;
     }
 
     public boolean isEntityInside(Entity entity) {
-        return (entity.hitBox.overlaps(hitBox));
+        return entity.movement.hitBox.overlaps(hitBox);
     }
 
-    // to be overridden
     public abstract void update(Entity entity);
 
     public void draw(SpriteBatch batch) {
