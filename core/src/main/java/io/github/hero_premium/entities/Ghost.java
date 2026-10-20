@@ -24,27 +24,27 @@ public class Ghost extends Entity implements Flyable {
     private void move() {
         if (!hero.possessed) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-                movement.speed = movement.speed * 1.5f;
+                movement.setSpeedModifier(1.5F);
             }
             if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
-                movement.speed = movement.speed / 1.5f;
+                movement.setSpeedModifier(1);
             }
 
             if (!movement.movementLocked) {
 
                 if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                     movement.facingLeft = true;
-                    movement.velocity.x -= movement.speed;
+                    movement.velocity.x -= movement.getSpeed();
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                     movement.facingLeft = false;
-                    movement.velocity.x += movement.speed;
+                    movement.velocity.x += movement.getSpeed();
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                    movement.velocity.y += movement.speed;
+                    movement.velocity.y += movement.getSpeed();
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                    movement.velocity.y -= movement.speed;
+                    movement.velocity.y -= movement.getSpeed();
                 }
 
                 if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {

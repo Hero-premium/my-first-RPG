@@ -69,21 +69,21 @@ public class Hero extends CombatEntity {
     private void takeControl() {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-            movement.speed = movement.speed * 1.5f;
+            movement.setSpeedModifier(1.5F);
         }
         if (Util.isKeyJustReleased(Input.Keys.SHIFT_LEFT)) {
-            movement.speed = movement.speed / 1.5F;
+            movement.setSpeedModifier(1);
         }
 
         if (!movement.movementLocked) {
 
             if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 movement.facingLeft = true;
-                movement.velocity.x -= movement.speed;
+                movement.velocity.x -= movement.getSpeed();
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 movement.facingLeft = false;
-                movement.velocity.x += movement.speed;
+                movement.velocity.x += movement.getSpeed();
             }
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && movement.onGround) {
                 movement.velocity.y = 450;
