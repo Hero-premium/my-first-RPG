@@ -1,8 +1,7 @@
 package io.github.hero_premium.world;
 
 import com.badlogic.gdx.utils.Array;
-
-import io.github.hero_premium.entities.Entity;
+import io.github.hero_premium.entities.components.Movement;
 
 public final class Physics {
 
@@ -25,39 +24,39 @@ public final class Physics {
     }
 
     /**
-     * applies airResistance and velocity clamping to all entities and applies
-     * gravity to all non-flying entities
+     * applies airResistance and velocity clamping to all movements and applies
+     * gravity to all non-flying movements
      *
-     * @param entities   the list containing all entities
+     * @param movements   the list containing all movements
      * @param delta      deltaTime to prevent movement issues on higher FPS
      * @param floorLevel the floor level this screen uses, no entity can go below it
      *                   unless it can fly
      */
-    public static void applyPhysics(Array<Entity> entities, float delta, float floorLevel) {
-        for (Entity object : entities) {
-            object.velocityClamp();
-            object.movement.velocity.x = dampFloats(object.movement.velocity.x, AIR, delta);
-            object.movement.hitBox.x += object.movement.velocity.x * delta;
+    public static void applyPhysics(Array<Movement> movements, float delta, float floorLevel) {
+        for (Movement m : movements) {
+            m.velocityClamp();
+            m.velocity.x = dampFloats(m.velocity.x, AIR, delta);
+            m.hitBox.x += m.velocity.x * delta;
 
-            if (!(object instanceof Flyable)) {
-                gravity(object, delta, floorLevel);
+            if (m.canFly) {
+                m.velocity.y = dampFloats(m.velocity.y, GRAVITY, delta);
+                m.hitBox.y += m.velocity.y * delta;
             } else {
-                object.movement.velocity.y = dampFloats(object.movement.velocity.y, GRAVITY, delta);
-                object.movement.hitBox.y += object.movement.velocity.y * delta;
+                gravity(m, delta, floorLevel);
             }
         }
     }
 
-    private static void gravity(Entity entity, float deltaTime, float floorLevel) {
+    private static void gravity(Movement movement, float deltaTime, float floorLevel) {
 
-        entity.movement.velocity.y -= GRAVITY * deltaTime;
+        movement.velocity.y -= GRAVITY * deltaTime;
 
-        entity.movement.hitBox.y += entity.movement.velocity.y * deltaTime;
+        movement.hitBox.y += movement.velocity.y * deltaTime;
 
-        if (entity.movement.hitBox.y < floorLevel) {
-            entity.movement.hitBox.y = floorLevel;
-            entity.movement.velocity.y = 0f;
-            entity.movement.onGround = true;
+        if (movement.hitBox.y < floorLevel) {
+            movement.hitBox.y = floorLevel;
+            movement.velocity.y = 0f;
+            movement.onGround = true;
         }
     }
 

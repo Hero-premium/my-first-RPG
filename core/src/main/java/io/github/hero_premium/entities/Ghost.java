@@ -6,14 +6,14 @@ import com.badlogic.gdx.math.Rectangle;
 import io.github.hero_premium.Assets;
 
 import io.github.hero_premium.util.Util;
-import io.github.hero_premium.world.Flyable;
 
-public class Ghost extends Entity implements Flyable {
+public class Ghost extends Entity {
     private final Hero hero;
 
     public Ghost(Hero hero) {
         super(0, "", 32, (new Rectangle(0f, 0f, 50f, 60f)), Assets.placeHolder);
         this.hero = hero;
+        movement.canFly = true;
     }
 
     @Override

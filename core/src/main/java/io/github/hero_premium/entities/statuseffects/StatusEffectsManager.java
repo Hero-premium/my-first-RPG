@@ -36,7 +36,7 @@ public class StatusEffectsManager {
             });
 
         } catch (ServiceConfigurationError e) {
-            LOGGER.error("no tools were loaded: " + e.getMessage());
+            LOGGER.error("no effects were loaded: " + e.getMessage());
         }
     }
 

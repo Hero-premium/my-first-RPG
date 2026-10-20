@@ -70,15 +70,6 @@ public abstract class Entity {
         return true;
     }
 
-
-    /**
-     * Clamps all entities x and y velocity to 2000
-     */
-    public void velocityClamp() {
-        movement.velocity.x = Math.clamp(movement.velocity.x, -2000, 2000);
-        movement.velocity.y = Math.clamp(movement.velocity.y, -2000, 2000);
-    }
-
     public abstract void update();
 
 }

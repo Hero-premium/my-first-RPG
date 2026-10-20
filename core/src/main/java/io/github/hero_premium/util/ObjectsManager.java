@@ -11,6 +11,7 @@ import io.github.hero_premium.entities.Entity;
 import io.github.hero_premium.entities.GateKeeper;
 import io.github.hero_premium.entities.Ghost;
 import io.github.hero_premium.entities.Hero;
+import io.github.hero_premium.entities.components.Movement;
 import io.github.hero_premium.storyutil.StoryDisplay;
 import io.github.hero_premium.touchables.Touchable;
 import io.github.hero_premium.touchables.Wall;
@@ -53,9 +54,9 @@ public class ObjectsManager {
 
         wall = new Wall();
 
-        stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800))){
+        stopPlayer = new Touchable(null, 1, 0, (new Rectangle(100, 100, 200, 800))) {
             @Override
-            public void update(Entity player){
+            public void update(Entity player) {
                 if (isEntityInside(hero)) {
                     usages = maxUsage;
                     hero.movement.movementLocked = true;
@@ -72,8 +73,15 @@ public class ObjectsManager {
         touchables.add(stopPlayer);
     }
 
+    private Array<Movement> movements;
+
     public void update(float delta) {
-        Physics.applyPhysics(entities, delta, 50);
+        // i figured a null check is cheaper than an isEmpty but that's just a guess
+        if (movements == null) {
+            movements = new Array<>();
+            entities.forEach(entity -> movements.add(entity.movement));
+        }
+        Physics.applyPhysics(movements, delta, 50);
         for (Entity object : entities) {
             object.update();
         }

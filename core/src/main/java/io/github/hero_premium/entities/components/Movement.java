@@ -13,6 +13,7 @@ public class Movement {
     public boolean onGround;
     public boolean movementLocked;
     public boolean facingLeft;
+    public boolean canFly;
 
     public Movement(Rectangle hitBox, float speed) {
         this.velocity = new Vector2();
@@ -35,4 +36,13 @@ public class Movement {
     public void setSpeedModifier(float speedModifier) {
         this.speedModifier = speedModifier;
     }
+
+    /**
+     * Clamps all entities x and y velocity to 2000
+     */
+    public void velocityClamp() {
+        velocity.x = Math.clamp(velocity.x, -2000, 2000);
+        velocity.y = Math.clamp(velocity.y, -2000, 2000);
+    }
+
 }

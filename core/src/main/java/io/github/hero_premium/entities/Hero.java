@@ -10,7 +10,7 @@ import io.github.hero_premium.util.Util;
 
 public class Hero extends CombatEntity {
     private static final Logger LOGGER = new Logger(Hero.class.getName(), Util.LOGGING_LEVEL);
-    boolean possessed = true;
+    boolean possessed = false;
 
     public Hero() {
         super(10, "Hero", 32f, new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
