@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.Assets;
 import io.github.hero_premium.combat.CombatLogic;
+import io.github.hero_premium.entities.statuseffects.Dodging;
 import io.github.hero_premium.util.Util;
 
 public class Hero extends CombatEntity {
@@ -19,7 +20,7 @@ public class Hero extends CombatEntity {
 
     private void dodge(CombatEntity enemy) {
         LOGGER.info(name + " used dodge");
-        statusEffectsManager.isDodging = Util.RANDOM.nextBoolean();
+        if (Util.RANDOM.nextBoolean()) statusEffectsManager.allEffects.get(Dodging.class).setActive();
         CombatLogic.calculateDamage(enemy, this, 1);
     }
 
@@ -107,7 +108,7 @@ public class Hero extends CombatEntity {
         //TODO give hero his own AI instead of the testing GateKeeper's AI
         if (isPlayable)
             throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
-        int choice = !statusEffectsManager.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
+        int choice = Util.RANDOM.nextInt(3);
 
         switch (choice) {
             case 0 -> kick(entity);

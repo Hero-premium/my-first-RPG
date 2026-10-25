@@ -1,1 +1,4 @@
 io.github.hero_premium.entities.statuseffects.Poison
+io.github.hero_premium.entities.statuseffects.Defending
+io.github.hero_premium.entities.statuseffects.Focused
+io.github.hero_premium.entities.statuseffects.Dodging

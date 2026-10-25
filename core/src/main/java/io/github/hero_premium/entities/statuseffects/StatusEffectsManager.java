@@ -45,8 +45,4 @@ public class StatusEffectsManager {
             effect.onTurn(entity);
         }
     }
-
-    public boolean isDodging = false;
-    public boolean isDefending = false;
-    public boolean isFocused = false;
 }

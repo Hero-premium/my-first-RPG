@@ -5,6 +5,8 @@ import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.Assets;
 
 import io.github.hero_premium.combat.CombatLogic;
+import io.github.hero_premium.entities.statuseffects.Defending;
+import io.github.hero_premium.entities.statuseffects.Focused;
 import io.github.hero_premium.entities.statuseffects.Poison;
 import io.github.hero_premium.util.Util;
 
@@ -24,14 +26,14 @@ public class GateKeeper extends CombatEntity {
 
     private void focus() {
         LOGGER.info(name + " used focus");
-        statusEffectsManager.isFocused = true;
+        statusEffectsManager.allEffects.get(Focused.class).setActive();
         LOGGER.info(name + " is focusing on his attack... you may attack.");
     }
 
     private void shield(CombatEntity player) {
         LOGGER.info(name + " used Shield");
         CombatLogic.calculateDamage(player, this, 2);
-        statusEffectsManager.isDefending = true;
+        statusEffectsManager.allEffects.get(Defending.class).setActive();
     }
 
     // TODO add a smarter AI -# psttttt make it self aware
@@ -44,7 +46,7 @@ public class GateKeeper extends CombatEntity {
             return;
         }
 
-        int choice = !statusEffectsManager.isFocused ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
+        int choice = !statusEffectsManager.allEffects.get(Focused.class).isActive() ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
 
         switch (choice) {
             case 0 -> focus();
