@@ -8,8 +8,12 @@ public class Poison extends Effect {
 
     private static final Logger LOGGER = new Logger(Poison.class.getName(), Util.LOGGING_LEVEL);
 
+    public Poison() {
+        super(true);
+    }
+
     @Override
-    public void onTick(CombatEntity entity) {
+    public void onTurn(CombatEntity entity) {
         if (getPoisonDuration() <= 0) {
             value = 0;
             return;
@@ -17,6 +21,13 @@ public class Poison extends Effect {
         entity.health.modifyHp(-value);
         modifyPoisonDuration(-1);
         LOGGER.info(entity.name + "took " + value + " of poison damage");
+    }
+
+    @Override
+    void reset() {
+        duration = 0;
+        value = 0;
+        isActive = false;
     }
 
     /**

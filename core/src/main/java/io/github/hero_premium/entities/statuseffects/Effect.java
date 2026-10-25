@@ -8,12 +8,14 @@ public abstract class Effect {
     protected int value;
 
     boolean isActive;
-    boolean canByPassDefences;
+    final boolean canByPassDefences;
 
-    public Effect() {
+    public Effect(boolean canByPassDefences) {
+        this.canByPassDefences = canByPassDefences;
     }
 
-    abstract void onTick(CombatEntity entity);
+    abstract void onTurn(CombatEntity entity);
+    abstract void reset();
 
     @Override
     public String toString(){

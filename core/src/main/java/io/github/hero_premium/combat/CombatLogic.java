@@ -14,8 +14,8 @@ public class CombatLogic {
 
     public static void calculateDamage(CombatEntity target, CombatEntity user, int damage) {
         if (target == user) throw new IllegalArgumentException("the user " + user.name + " cannot also be the target");
-        target.statusEffectsManager.onTick();
-        user.statusEffectsManager.onTick();
+        target.statusEffectsManager.onTurn();
+        user.statusEffectsManager.onTurn();
         applyDamage(target, damage);
     }
 }
