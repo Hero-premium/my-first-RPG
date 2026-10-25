@@ -19,8 +19,8 @@ public final class Physics {
         if (Math.abs(velocity) < friction * deltaTime) {
             return 0;
         }
-        float air = friction * Math.signum(velocity);
-        return velocity - air * deltaTime;
+        float rate = friction * Math.signum(velocity);
+        return velocity - rate * deltaTime;
     }
 
     /**
@@ -34,16 +34,20 @@ public final class Physics {
      */
     public static void applyPhysics(Array<Movement> movements, float delta, float floorLevel) {
         for (Movement m : movements) {
-            m.velocityClamp();
-            m.velocity.x = dampFloats(m.velocity.x, AIR, delta);
-            m.hitBox.x += m.velocity.x * delta;
+            applyPhysics(m, delta, floorLevel);
+        }
+    }
 
-            if (m.canFly) {
-                m.velocity.y = dampFloats(m.velocity.y, GRAVITY, delta);
-                m.hitBox.y += m.velocity.y * delta;
-            } else {
-                gravity(m, delta, floorLevel);
-            }
+    public static void applyPhysics(Movement m, float delta, float floorLevel) {
+        m.velocityClamp();
+        m.velocity.x = dampFloats(m.velocity.x, AIR, delta);
+        m.hitBox.x += m.velocity.x * delta;
+
+        if (m.canFly) {
+            m.velocity.y = dampFloats(m.velocity.y, GRAVITY, delta);
+            m.hitBox.y += m.velocity.y * delta;
+        } else {
+            gravity(m, delta, floorLevel);
         }
     }
 

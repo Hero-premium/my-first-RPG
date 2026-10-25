@@ -5,13 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-
 import io.github.hero_premium.debug.Debug;
 import io.github.hero_premium.entities.Entity;
 import io.github.hero_premium.entities.GateKeeper;
 import io.github.hero_premium.entities.Ghost;
 import io.github.hero_premium.entities.Hero;
-import io.github.hero_premium.entities.components.Movement;
 import io.github.hero_premium.storyutil.StoryDisplay;
 import io.github.hero_premium.touchables.Touchable;
 import io.github.hero_premium.touchables.Wall;
@@ -73,15 +71,12 @@ public class ObjectsManager {
         touchables.add(stopPlayer);
     }
 
-    private Array<Movement> movements;
-
     public void update(float delta) {
         // i figured a null check is cheaper than an isEmpty but that's just a guess
-        if (movements == null) {
-            movements = new Array<>();
-            entities.forEach(entity -> movements.add(entity.movement));
+        for (Entity entity : entities) {
+            Physics.applyPhysics(entity.movement, delta, 50);
         }
-        Physics.applyPhysics(movements, delta, 50);
+
         for (Entity object : entities) {
             object.update();
         }

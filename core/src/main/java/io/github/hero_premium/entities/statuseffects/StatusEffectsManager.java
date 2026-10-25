@@ -41,24 +41,24 @@ public class StatusEffectsManager {
     }
 
     private final CombatEntity entity;
-    private final ObjectMap<Class<? extends Effect>, Effect> allEffects;
+    private final ObjectMap<Class<? extends Effect>, Effect> allEffectsPrivate;
 
     /**
      * the list containing all effects and their data per entity
      *
      * @see Effect
      */
-    public final ReadOnlyMap<Effect> allEffect;
+    public final ReadOnlyMap<Effect> allEffects;
 
 
     public StatusEffectsManager(CombatEntity entity) {
         this.entity = Objects.requireNonNull(entity, "entity cannot be null");
-        this.allEffects = new ObjectMap<>();
+        this.allEffectsPrivate = new ObjectMap<>();
         for (Class<? extends Effect> key : ALL_EFFECTS.keys()) {
             try {
                 Constructor<? extends Effect> ctor = key.getDeclaredConstructor();
                 ctor.setAccessible(true);
-                allEffects.put(key, ctor.newInstance());
+                allEffectsPrivate.put(key, ctor.newInstance());
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(key + " has no no-arg constructor", e);
             } catch (InstantiationException e) {
@@ -69,14 +69,14 @@ public class StatusEffectsManager {
                 throw new RuntimeException(key + " constructor threw an exception", e.getCause());
             }
         }
-        allEffect = new ReadOnlyMap<>(allEffects);
+        allEffects = new ReadOnlyMap<>(allEffectsPrivate);
     }
 
     public void resetBattleStates() {
     }
 
     public void onTick() {
-        for (Effect effect : allEffects.values()) {
+        for (Effect effect : allEffectsPrivate.values()) {
             effect.onTick(entity);
         }
     }
