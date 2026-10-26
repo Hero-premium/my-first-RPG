@@ -13,6 +13,7 @@ import io.github.hero_premium.Assets;
 import io.github.hero_premium.entities.CombatEntity;
 import io.github.hero_premium.storyutil.TextManager;
 import io.github.hero_premium.util.Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -38,7 +39,8 @@ public final class BattleManager {
         this.stage = Objects.requireNonNull(stage, "stage cannot be null");
     }
 
-    private String buildHpText(CombatEntity entity) {
+    @NotNull
+    private String buildHpText(@NotNull CombatEntity entity) {
         return entity.name + " Health: " + entity.health.getHp();
     }
 
@@ -70,7 +72,8 @@ public final class BattleManager {
         stage.addActor(buttonsTable);
     }
 
-    private TextButton[] generateButtons(Table buttonsTable, CombatEntity entity) {
+    @NotNull
+    private TextButton[] generateButtons(Table buttonsTable, @NotNull CombatEntity entity) {
         Array<CombatEntity.CombatMovesManager.Move> moves = entity.movesManager.getMoves();
         TextButton[] buttons = new TextButton[moves.size];
 
@@ -85,7 +88,8 @@ public final class BattleManager {
         return buttons;
     }
 
-    private TextButton[] generateButtons(Table buttonsTable, String[] buttonNames, Runnable[] actions) {
+    @NotNull
+    private TextButton[] generateButtons(Table buttonsTable, @NotNull String[] buttonNames, @NotNull Runnable[] actions) {
         if (buttonNames.length != actions.length)
             throw new IllegalArgumentException("the amount of names passed does not match the amount of actions passed with");
         TextButton[] buttons = new TextButton[actions.length];
@@ -95,18 +99,23 @@ public final class BattleManager {
         return buttons;
     }
 
-    private TextButton generateButton(Table buttonsTable, String name, Runnable action) {
+    @NotNull
+    private TextButton generateButton(@NotNull Table buttonsTable, String name, Runnable action) {
         TextButton button = new TextButton(name, Assets.skin);
-        button.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                action.run();
-            }
-        });
+        button.addListener(createListener(action));
         buttonsTable.add(button).row();
         return button;
     }
 
+    @NotNull
+    private static ChangeListener createListener(Runnable action) {
+        return new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                action.run();
+            }
+        };
+    }
 
     private void generateLabels() {
         Table labelsTable = new Table();
@@ -127,7 +136,7 @@ public final class BattleManager {
         LOGGER.info("GUI generated successfully");
     }
 
-    private void handleBattleState(BattleUtils.BattleState state, CombatEntity entity) {
+    private void handleBattleState(@NotNull BattleUtils.BattleState state, CombatEntity entity) {
         CombatEntity otherEntity = BattleUtils.other(entity, fighters);
         switch (state) {
             case WON -> {
@@ -152,20 +161,21 @@ public final class BattleManager {
     /**
      * Launches a battle between two combat entities.
      *
-     * @param player one of the fighters.
-     * @param enemy  one of the fighters.
+     * @param fighter1 one of the fighters.
+     * @param fighter2  one of the fighters.
      * @throws NullPointerException if one of the fighters was null.
      */
-    public void launchBattle(CombatEntity player, CombatEntity enemy) {
-        fighters[0] = Objects.requireNonNull(player, "hero cannot be null");
-        fighters[1] = Objects.requireNonNull(enemy, "enemy cannot be null");
-
+    public void launchBattle(CombatEntity fighter1, CombatEntity fighter2) {
+        fighters[0] = Objects.requireNonNull(fighter1, "fighter1 cannot be null");
+        fighters[1] = Objects.requireNonNull(fighter2, "fighter2 cannot be null");
+        if (fighters[0].equals(fighters[1]))
+            throw new IllegalArgumentException("2 fighters cannot be the same");
         LOGGER.info("_______ battle starts! _______");
         for (CombatEntity fighter : fighters) {
             LOGGER.info(fighter.name + " has " + fighter.health.getHp() + " hit points");
         }
 
-        if (!anyFighterIsPlayable()) {
+        if (!BattleUtils.anyFighterIsPlayable(fighters)) {
             new AiBattleManager().launchBattle(fighters[0], fighters[1]);
             return;
         }
@@ -176,18 +186,8 @@ public final class BattleManager {
         }
     }
 
-    private boolean anyFighterIsPlayable() {
-        for (CombatEntity fighter : fighters) {
-            if (fighter.isPlayable) return true;
-        }
-        return false;
-    }
-
     private void retry() {
-        for (CombatEntity fighter : fighters) {
-            fighter.statusEffectsManager.resetBattleStates();
-            fighter.health.resetHp();
-        }
+        BattleUtils.resetFightersStates(fighters);
 
         setButtonsVisibility(combatButtons, true);
         setButtonsVisibility(gameOverButtons, false);
