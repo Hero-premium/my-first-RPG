@@ -9,12 +9,16 @@ public class Dodging extends Effect {
 
     @Override
     void onTurn(CombatEntity entity) {
-
+        entity.health.setDamageModifier(0);
     }
 
     @Override
     void reset() {
+    }
 
+    @Override
+    void onAfterTurn(CombatEntity entity) {
+        entity.health.setDamageModifier(1);
     }
 
     public void setActive() {

@@ -15,6 +15,15 @@ dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
 
+  dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:6.1.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+  test {
+    useJUnitPlatform()
+  }
+}
+
 jar {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

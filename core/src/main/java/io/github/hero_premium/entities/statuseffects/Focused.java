@@ -18,6 +18,11 @@ public class Focused extends Effect {
 
     }
 
+    @Override
+    void onAfterTurn(CombatEntity entity) {
+
+    }
+
     public void setActive() {
         duration = 1;
     }

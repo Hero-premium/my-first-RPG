@@ -21,7 +21,7 @@ public class Hero extends CombatEntity {
     private void dodge(CombatEntity enemy) {
         LOGGER.info(name + " used dodge");
         if (Util.RANDOM.nextBoolean()) statusEffectsManager.allEffects.get(Dodging.class).setActive();
-        CombatLogic.calculateDamage(enemy, this, 1);
+        CombatLogic.doTurn(enemy, this, 1);
     }
 
     private void heroAi() {
@@ -32,7 +32,7 @@ public class Hero extends CombatEntity {
     private void kick(CombatEntity enemy) {
         LOGGER.info(name + " used kick");
         int damage = Util.RANDOM.nextInt(2) + 3;
-        CombatLogic.calculateDamage(enemy, this, damage);
+        CombatLogic.doTurn(enemy, this, damage);
     }
 
     @Override
@@ -51,14 +51,14 @@ public class Hero extends CombatEntity {
         if (80 <= Util.RANDOM.nextInt(100)) {
             damage = 8;
             LOGGER.info(name + " landed a critical hit with sword slash");
-            CombatLogic.calculateDamage(enemy, this, damage);
+            CombatLogic.doTurn(enemy, this, damage);
 
         } else {
             damage = Util.RANDOM.nextInt(3);
             if (damage == 0) {
                 LOGGER.info(name + " did " + damage + " (aka missed)");
             }
-            CombatLogic.calculateDamage(enemy, this, damage);
+            CombatLogic.doTurn(enemy, this, damage);
         }
     }
 

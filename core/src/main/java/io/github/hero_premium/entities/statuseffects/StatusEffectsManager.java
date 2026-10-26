@@ -45,4 +45,10 @@ public class StatusEffectsManager {
             effect.onTurn(entity);
         }
     }
+
+    public void onAfterTurn() {
+        for (Effect effect : allEffectsPrivate.values()) {
+            effect.onAfterTurn(entity);
+        }
+    }
 }

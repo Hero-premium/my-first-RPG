@@ -15,10 +15,13 @@ public abstract class Effect {
     }
 
     abstract void onTurn(CombatEntity entity);
+
     abstract void reset();
 
+    abstract void onAfterTurn(CombatEntity entity);
+
     @Override
-    public String toString(){
+    public String toString() {
         return getClass().getSimpleName() + " effect";
     }
 }

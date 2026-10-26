@@ -12,10 +12,11 @@ public class CombatLogic {
         LOGGER.info(target.name + " now has " + target.health.getHp());
     }
 
-    public static void calculateDamage(CombatEntity target, CombatEntity user, int damage) {
+    public static void doTurn(CombatEntity target, CombatEntity user, int damage) {
         target.statusEffectsManager.onTurn();
         user.statusEffectsManager.onTurn();
         applyDamage(target, damage);
+        target.statusEffectsManager.onAfterTurn();
+        user.statusEffectsManager.onAfterTurn();
     }
 }
-

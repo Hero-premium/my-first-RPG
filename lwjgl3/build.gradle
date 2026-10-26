@@ -4,7 +4,7 @@ buildscript {
   }
   dependencies {
     classpath "io.github.fourlastor:construo:2.1.0"
-    if(enableGraalNative == 'true') {
+    if (enableGraalNative == 'true') {
       classpath "org.graalvm.buildtools.native:org.graalvm.buildtools.native.gradle.plugin:0.9.28"
     }
   }
@@ -18,14 +18,14 @@ plugins {
 
 // import io.github.fourlastor.construo.Target
 
-sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
+sourceSets.main.resources.srcDirs += [rootProject.file('assets').path]
 application.mainClass = 'io.github.some_example_name.lwjgl3.Lwjgl3Launcher'
 application.applicationName = appName
 eclipse.project.name = appName + '-lwjgl3'
 java.sourceCompatibility = 26
 java.targetCompatibility = 26
 if (JavaVersion.current().isJava9Compatible()) {
-        compileJava.options.release.set(26)
+  compileJava.options.release.set(26)
 }
 
 dependencies {
@@ -34,12 +34,12 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   implementation project(':core')
 
-  if(enableGraalNative == 'true') {
+  if (enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:$graalHelperVersion"
 
   }
   // Forces LWJGL3 to use at least $lwjgl3Version, currently 3.4.1, to avoid problems on Java 25 and up.
-  constraints{
+  constraints {
     implementation("org.lwjgl:lwjgl:$lwjgl3Version")
     implementation("org.lwjgl:lwjgl-glfw:$lwjgl3Version")
     implementation("org.lwjgl:lwjgl-jemalloc:$lwjgl3Version")
@@ -162,7 +162,7 @@ tasks.withType(JavaExec.class).configureEach {
   environment("__GL_THREADED_OPTIMIZATIONS", 0)
 }
 
-if(enableGraalNative == 'true') {
+if (enableGraalNative == 'true') {
   apply from: file("nativeimage.gradle")
 }
 

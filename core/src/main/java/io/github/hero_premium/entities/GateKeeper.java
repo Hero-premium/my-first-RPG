@@ -20,7 +20,7 @@ public class GateKeeper extends CombatEntity {
 
     private void fireWand(CombatEntity player) {
         LOGGER.info(name + " used fireWand");
-        CombatLogic.calculateDamage(player, this, 2);
+        CombatLogic.doTurn(player, this, 2);
         player.statusEffectsManager.allEffects.get(Poison.class).applyPoison(3, 10);
     }
 
@@ -32,7 +32,7 @@ public class GateKeeper extends CombatEntity {
 
     private void shield(CombatEntity player) {
         LOGGER.info(name + " used Shield");
-        CombatLogic.calculateDamage(player, this, 2);
+        CombatLogic.doTurn(player, this, 2);
         statusEffectsManager.allEffects.get(Defending.class).setActive();
     }
 

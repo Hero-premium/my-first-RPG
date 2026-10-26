@@ -30,6 +30,11 @@ public class Poison extends Effect {
         isActive = false;
     }
 
+    @Override
+    void onAfterTurn(CombatEntity entity) {
+        --duration;
+    }
+
     /**
      * poisonDuration cannot go under 0 or above 9, to prevent game breaking bugs'
      *
