@@ -9,7 +9,7 @@ public class Dodging extends Effect {
 
     @Override
     void onTurn(CombatEntity entity) {
-        entity.health.setDamageModifier(0);
+        entity.health.addModifier(0);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class Dodging extends Effect {
 
     @Override
     void onAfterTurn(CombatEntity entity) {
-        entity.health.setDamageModifier(1);
+        entity.health.addModifier(1);
     }
 
     public void setActive() {

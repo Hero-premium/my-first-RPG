@@ -3,10 +3,10 @@ package io.github.hero_premium.util;
 import com.badlogic.gdx.utils.ObjectMap;
 
 
-public class ReadOnlyMap<T> {
+public class ReadOnlyClassMap<T> {
     private final ObjectMap<Class<? extends T>, T> array;
 
-    public ReadOnlyMap(ObjectMap<Class<?  extends T>, T> array) {
+    public ReadOnlyClassMap(ObjectMap<Class<? extends T>, T> array) {
         this.array = array;
     }
 
@@ -22,4 +22,8 @@ public class ReadOnlyMap<T> {
         return array.isEmpty();
     }
 
+    @Override
+    public String toString() {
+        return array.toString();
+    }
 }

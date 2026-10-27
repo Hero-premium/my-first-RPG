@@ -1,4 +1,4 @@
-package io.github.hero_premium.entities.components;
+package io.github.hero_premium.components;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;

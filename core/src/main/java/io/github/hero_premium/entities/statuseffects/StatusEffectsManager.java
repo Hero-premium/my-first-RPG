@@ -4,7 +4,7 @@ package io.github.hero_premium.entities.statuseffects;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
 import io.github.hero_premium.entities.CombatEntity;
-import io.github.hero_premium.util.ReadOnlyMap;
+import io.github.hero_premium.util.ReadOnlyClassMap;
 import io.github.hero_premium.util.Util;
 
 import java.util.Objects;
@@ -25,13 +25,13 @@ public class StatusEffectsManager {
      *
      * @see Effect
      */
-    public final ReadOnlyMap<Effect> allEffects;
+    public final ReadOnlyClassMap<Effect> allEffects;
 
 
     public StatusEffectsManager(CombatEntity entity) {
         this.entity = Objects.requireNonNull(entity, "entity cannot be null");
-        allEffectsPrivate = EffectsRegistry.getAllEffects();
-        allEffects = new ReadOnlyMap<>(allEffectsPrivate);
+        allEffectsPrivate = EffectsRegistry.effectsFactory();
+        allEffects = new ReadOnlyClassMap<>(allEffectsPrivate);
     }
 
     public void resetBattleStates() {

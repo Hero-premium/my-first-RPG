@@ -2,9 +2,9 @@ package io.github.hero_premium.entities.statuseffects;
 
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import io.github.hero_premium.util.Util;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class EffectsRegistry {
 
-    private static final ObjectMap<Class<? extends Effect>, Effect> ALL_EFFECTS = new ObjectMap<>();
+    private static final ObjectSet<Class<? extends Effect>> ALL_EFFECTS = new ObjectSet<>();
     private static final Logger LOGGER = new Logger(EffectsRegistry.class.getName(), Util.LOGGING_LEVEL);
 
     static {
@@ -20,9 +20,9 @@ public class EffectsRegistry {
             Stream<ServiceLoader.Provider<Effect>> effects = ServiceLoader.load(Effect.class).stream();
             effects.forEach(provider -> {
                 try {
-                    Effect effect = provider.get();
-                    ALL_EFFECTS.put(effect.getClass(), effect);
-                    LOGGER.info(effect + " has been added");
+                    Class<? extends Effect> effect = provider.type();
+                    ALL_EFFECTS.add(effect);
+                    LOGGER.info("Effect: " + effect.getSimpleName() + " has been added");
                 } catch (ServiceConfigurationError e) {
                     LOGGER.error("Could not be loaded: " + e.getMessage());
                 }
@@ -33,12 +33,11 @@ public class EffectsRegistry {
         }
     }
 
-    public static ObjectMap<Class<? extends Effect>, Effect> getAllEffects() {
+    public static ObjectMap<Class<? extends Effect>, Effect> effectsFactory() {
         ObjectMap<Class<? extends Effect>, Effect> allEffects = new ObjectMap<>();
-        for (Class<? extends Effect> key : ALL_EFFECTS.keys()) {
+        for (Class<? extends Effect> key : ALL_EFFECTS) {
             try {
-                Constructor<? extends Effect> ctor = key.getDeclaredConstructor();
-                allEffects.put(key, ctor.newInstance());
+                allEffects.put(key, key.getDeclaredConstructor().newInstance());
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(key + " has no no-arg constructor", e);
             } catch (InstantiationException e) {

@@ -1,7 +1,7 @@
 package io.github.hero_premium.world;
 
 import com.badlogic.gdx.utils.Array;
-import io.github.hero_premium.entities.components.Movement;
+import io.github.hero_premium.components.Movement;
 
 import java.util.Objects;
 

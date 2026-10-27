@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import io.github.hero_premium.combat.BattleManager;
-import io.github.hero_premium.entities.components.Health;
+import io.github.hero_premium.components.health.Health;
 import io.github.hero_premium.entities.statuseffects.StatusEffectsManager;
 
 import java.util.function.Consumer;

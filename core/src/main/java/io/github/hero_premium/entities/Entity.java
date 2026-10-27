@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
-import io.github.hero_premium.entities.components.Movement;
+import io.github.hero_premium.components.Movement;
 import io.github.hero_premium.util.Util;
 
 import java.util.Objects;
