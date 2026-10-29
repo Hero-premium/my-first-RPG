@@ -4,8 +4,8 @@ package io.github.hero_premium.entities.statuseffects;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
 import io.github.hero_premium.entities.CombatEntity;
-import io.github.hero_premium.util.ReadOnlyClassMap;
 import io.github.hero_premium.util.Util;
+import io.github.hero_premium.util.collections.ReadOnlyClassMap;
 
 import java.util.Objects;
 
@@ -42,13 +42,13 @@ public class StatusEffectsManager {
 
     public void onTurn() {
         for (Effect effect : allEffectsPrivate.values()) {
-            effect.onTurn(entity);
+            if (effect.isActive()) effect.onTurn(entity);
         }
     }
 
     public void onAfterTurn() {
         for (Effect effect : allEffectsPrivate.values()) {
-            effect.onAfterTurn(entity);
+            if (effect.isActive()) effect.onAfterTurn(entity);
         }
     }
 }

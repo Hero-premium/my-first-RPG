@@ -1,33 +1,34 @@
 package io.github.hero_premium.entities.statuseffects;
 
 import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.util.vault.Key;
 
-public class Focused extends Effect {
+public class Focused implements Effect {
+    private boolean isActive;
+    private final Key<Integer> key = new Key<>();
 
     public Focused() {
-        super(true);
     }
 
     @Override
-    void onTurn(CombatEntity entity) {
-
+    public void onTurn(CombatEntity entity) {
     }
 
     @Override
-    void reset() {
-
+    public void reset() {
+        isActive = false;
     }
 
     @Override
-    void onAfterTurn(CombatEntity entity) {
-
+    public void onAfterTurn(CombatEntity entity) {
+        isActive = false;
     }
 
     public void setActive() {
-        duration = 1;
+        isActive = true;
     }
 
     public boolean isActive() {
-        return duration >= 1;
+        return isActive;
     }
 }

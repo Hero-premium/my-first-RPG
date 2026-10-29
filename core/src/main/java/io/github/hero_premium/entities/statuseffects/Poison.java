@@ -4,35 +4,41 @@ import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.entities.CombatEntity;
 import io.github.hero_premium.util.Util;
 
-public class Poison extends Effect {
+public class Poison implements Effect {
 
     private static final Logger LOGGER = new Logger(Poison.class.getName(), Util.LOGGING_LEVEL);
 
+    private int duration;
+    private int damage;
+
     public Poison() {
-        super(true);
     }
 
     @Override
     public void onTurn(CombatEntity entity) {
         if (getPoisonDuration() <= 0) {
-            value = 0;
+            damage = 0;
             return;
         }
-        entity.health.modifyHp(-value);
-        modifyPoisonDuration(-1);
-        LOGGER.info(entity.name + "took " + value + " of poison damage");
+        entity.health.modifyHp(-damage);
+        LOGGER.info(entity.name + "took " + damage + " of poison damage");
     }
 
     @Override
-    void reset() {
+    public void reset() {
         duration = 0;
-        value = 0;
-        isActive = false;
+        damage = 0;
     }
 
     @Override
-    void onAfterTurn(CombatEntity entity) {
-        --duration;
+    public void onAfterTurn(CombatEntity entity) {
+        modifyPoisonDuration(-1);
+    }
+
+
+    @Override
+    public boolean isActive() {
+        return getPoisonDuration() >= 0;
     }
 
     /**
@@ -63,7 +69,7 @@ public class Poison extends Effect {
      * @param damage the new damage
      */
     public void setDamage(int damage) {
-        value = Math.max(value, damage);
+        this.damage = Math.max(this.damage, damage);
     }
 
     /**
@@ -86,6 +92,6 @@ public class Poison extends Effect {
      *                       remove from the duration
      */
     public void modifyPoisonDuration(int poisonDuration) {
-        applyPoison(getPoisonDuration() + poisonDuration, value);
+        applyPoison(getPoisonDuration() + poisonDuration, damage);
     }
 }

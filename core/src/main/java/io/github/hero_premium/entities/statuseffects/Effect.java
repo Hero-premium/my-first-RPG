@@ -2,26 +2,13 @@ package io.github.hero_premium.entities.statuseffects;
 
 import io.github.hero_premium.entities.CombatEntity;
 
-public abstract class Effect {
+public interface Effect {
 
-    protected int duration;
-    protected int value;
+    void onTurn(CombatEntity entity);
 
-    boolean isActive;
-    final boolean canByPassDefences;
+    void reset();
 
-    public Effect(boolean canByPassDefences) {
-        this.canByPassDefences = canByPassDefences;
-    }
+    void onAfterTurn(CombatEntity entity);
 
-    abstract void onTurn(CombatEntity entity);
-
-    abstract void reset();
-
-    abstract void onAfterTurn(CombatEntity entity);
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " effect";
-    }
+    boolean isActive();
 }

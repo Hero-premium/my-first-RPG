@@ -1,32 +1,40 @@
 package io.github.hero_premium.entities.statuseffects;
 
 import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.util.vault.Key;
+import org.jetbrains.annotations.NotNull;
 
-public class Dodging extends Effect {
+public class Dodging implements Effect {
+    private boolean isActive;
+    private final Key<Integer> key = new Key<>();
+
     public Dodging() {
-        super(true);
+
     }
 
     @Override
-    void onTurn(CombatEntity entity) {
-        entity.health.addModifier(0);
+    public void onTurn(CombatEntity entity) {
+        key.addValue(0);
+        entity.health.addModifier(key);
     }
 
     @Override
-    void reset() {
+    public void reset() {
+        isActive = false;
     }
 
     @Override
-    void onAfterTurn(CombatEntity entity) {
-        entity.health.addModifier(1);
+    public void onAfterTurn(@NotNull CombatEntity entity) {
+        key.removeValue(0);
+        isActive = false;
     }
 
     public void setActive() {
-        duration = 1;
+        isActive = true;
     }
 
     public boolean isActive() {
-        return duration >= 1;
+        return isActive;
     }
 
 }
