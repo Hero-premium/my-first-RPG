@@ -1,10 +1,13 @@
 package io.github.hero_premium.components.health;
 
-import com.badlogic.gdx.utils.IntArray;
 import io.github.hero_premium.util.Util;
+import io.github.hero_premium.util.vault.Key;
+import io.github.hero_premium.util.vault.Vault;
 
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * This class is typically used as a component in other classes to grant them health and its methods.
@@ -26,7 +29,7 @@ public class Health {
      * <P>
      * anything below 0 means weaker damage.
      **/
-    private final IntArray damageModifiers = new IntArray();
+     final Vault<Key<Integer>> damageModifiers = new Vault<>();
 
 
     /**
@@ -50,7 +53,7 @@ public class Health {
      * @throws IllegalArgumentException if hp was negative
      */
     public Health(int hp, int maxHp) {
-        this(hp, maxHp, new int[]{});
+        this(hp, maxHp, new HashSet<>());
     }
 
     /**
@@ -62,8 +65,10 @@ public class Health {
      * @throws IllegalArgumentException if hp > maxHp
      * @throws IllegalArgumentException if hp was negative
      */
-    public Health(int hp, int maxHp, int damageModifier) {
-        this(hp, maxHp, new int[]{damageModifier});
+    public Health(int hp, int maxHp, Key<Integer> damageModifier) {
+        Set<Key<Integer>> keys = new HashSet<>();
+        keys.add(damageModifier);
+        this(hp, maxHp, keys);
     }
 
     /**
@@ -75,7 +80,7 @@ public class Health {
      * @throws IllegalArgumentException if hp > maxHp
      * @throws IllegalArgumentException if hp was negative
      */
-    public Health(int hp, int maxHp, int[] damageModifiers) {
+    public Health(int hp, int maxHp, Set<Key<Integer>> damageModifiers) {
         if (hp > maxHp)
             throw new IllegalArgumentException("hp cannot be bigger than maxHp" + "hp: " + hp + "maxHp: " + maxHp);
         this.hp = Util.requireNonNegative(hp);
@@ -113,8 +118,8 @@ public class Health {
      * make sure you use {@link Health#modifyHp(int)} for the modifiers to take effect.
      * @param damageModifier the new damageModifier.
      */
-    public void addModifier(int damageModifier) {
-        damageModifiers.add(damageModifier);
+    public boolean addModifier(Key<Integer> damageModifier) {
+        return damageModifiers.add(damageModifier);
     }
 
     /**
@@ -122,8 +127,8 @@ public class Health {
      * @param damageModifier the modifier to be removed
      * @throws NoSuchElementException if the modifier is not there.
      */
-    public void removeModifier(int damageModifier) {
-        if (!damageModifiers.removeValue(damageModifier)) throw new NoSuchElementException("damageModifiers not found");
+    public void removeModifier(Key<Integer> damageModifier) {
+        damageModifiers.remove(damageModifier);
     }
 
     /**
@@ -139,20 +144,23 @@ public class Health {
      * @return the current damage modifier.
      */
     public int calculateDamageModifier() {
-        if (damageModifiers.size == 0) return 1;
-        if (damageModifiers.contains(0)) return 0;
+        if (damageModifiers.isEmpty()) return 1;
+        for (Key<Integer> damageModifier : damageModifiers) {
+            if (damageModifier.getValues().contains(0)) return 0;
+        }
         int highestDamageModifier = 0;
         int lowestDamageModifier = 0;
-        for (int i = 0; i < damageModifiers.size; i++) {
-            int damageModifier = damageModifiers.get(i);
+        for (Key<Integer> damageModifier : damageModifiers) {
+            for (int damageModifierValue : damageModifier.getValues()) {
+                if (damageModifierValue > 1 && damageModifierValue > highestDamageModifier) {
+                    highestDamageModifier = damageModifierValue;
+                }
 
-            if (damageModifier > 1 && damageModifier > highestDamageModifier) {
-                highestDamageModifier = damageModifier;
+                if (damageModifierValue < 0 && damageModifierValue < lowestDamageModifier) {
+                    lowestDamageModifier = damageModifierValue;
+                }
             }
 
-            if (damageModifier < 0 && damageModifier < lowestDamageModifier) {
-                lowestDamageModifier = damageModifier;
-            }
         }
 
         int damageModifierCalculated = highestDamageModifier + lowestDamageModifier;
@@ -168,13 +176,13 @@ public class Health {
      * @param hp how much you want to add - pass a negative number to deal damage.
      */
     public final void modifyHp(int hp) {
-        int highestDamageModifier = calculateDamageModifier();
-        if (highestDamageModifier == 0) {
+        int damageModifier = calculateDamageModifier();
+        if (damageModifier == 0) {
             return;
-        } else if (highestDamageModifier > 1) {
-            hp *= highestDamageModifier;
+        } else if (damageModifier > 1) {
+            hp *= damageModifier;
         } else {
-            hp /= Math.abs(highestDamageModifier);
+            hp /= Math.abs(damageModifier);
         }
         setHp(getHp() + hp);
     }
