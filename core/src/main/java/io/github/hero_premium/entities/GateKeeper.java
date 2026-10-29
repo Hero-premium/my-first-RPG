@@ -20,8 +20,8 @@ public class GateKeeper extends CombatEntity {
 
     private void fireWand(CombatEntity player) {
         LOGGER.info(name + " used fireWand");
-        CombatLogic.doTurn(player, this, 2);
         player.statusEffectsManager.allEffects.get(Poison.class).applyPoison(3, 10);
+        CombatLogic.doTurn(player, this, 2);
     }
 
     private void focus() {
@@ -32,8 +32,8 @@ public class GateKeeper extends CombatEntity {
 
     private void shield(CombatEntity player) {
         LOGGER.info(name + " used Shield");
-        CombatLogic.doTurn(player, this, 2);
         statusEffectsManager.allEffects.get(Defending.class).setActive();
+        CombatLogic.doTurn(player, this, 2);
     }
 
     // TODO add a smarter AI -# psttttt make it self aware

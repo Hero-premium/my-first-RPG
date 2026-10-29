@@ -11,7 +11,7 @@ import io.github.hero_premium.util.Util;
 
 public class Hero extends CombatEntity {
     private static final Logger LOGGER = new Logger(Hero.class.getName(), Util.LOGGING_LEVEL);
-    boolean possessed = false;
+    boolean possessed = true;
 
     public Hero() {
         super(10, "Hero", 32f, new Rectangle(0f, 0f, 50f, 60f), 200, Assets.player);
@@ -20,8 +20,9 @@ public class Hero extends CombatEntity {
 
     private void dodge(CombatEntity enemy) {
         LOGGER.info(name + " used dodge");
-        if (Util.RANDOM.nextBoolean()) statusEffectsManager.allEffects.get(Dodging.class).setActive();
         CombatLogic.doTurn(enemy, this, 1);
+        if (Util.RANDOM.nextBoolean()) statusEffectsManager.allEffects.get(Dodging.class).setActive();
+
     }
 
     private void heroAi() {
@@ -51,15 +52,14 @@ public class Hero extends CombatEntity {
         if (80 <= Util.RANDOM.nextInt(100)) {
             damage = 8;
             LOGGER.info(name + " landed a critical hit with sword slash");
-            CombatLogic.doTurn(enemy, this, damage);
 
         } else {
             damage = Util.RANDOM.nextInt(3);
             if (damage == 0) {
                 LOGGER.info(name + " did " + damage + " (aka missed)");
             }
-            CombatLogic.doTurn(enemy, this, damage);
         }
+        CombatLogic.doTurn(enemy, this, damage);
     }
 
     private void superSecretMove(CombatEntity entity) {
