@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.components.Movement;
 import io.github.hero_premium.util.Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -13,7 +14,7 @@ public abstract class Entity {
     private static final Logger LOGGER = new Logger(Entity.class.getName(), Util.LOGGING_LEVEL);
 
     public final transient Texture texture;
-    public String name;
+    private String name;
     private int gold;
 
     /**
@@ -21,7 +22,7 @@ public abstract class Entity {
      */
     public final Movement movement;
 
-    protected Entity(int gold, String name, float speed, Rectangle hitBox, Texture texture) {
+    protected Entity(int gold, @NotNull String name, float speed,@NotNull Rectangle hitBox, @NotNull Texture texture) {
         this.movement = new Movement(hitBox, speed);
         this.gold = Util.requireNonNegative(gold);
         this.name = Objects.requireNonNull(name);
@@ -35,7 +36,7 @@ public abstract class Entity {
      * @param batch the SpriteBatch used in this screen
      * @throws IllegalStateException if this was called before SpriteBatch.begin
      */
-    public void draw(SpriteBatch batch) {
+    public void draw(@NotNull SpriteBatch batch) {
         batch.draw(texture, movement.hitBox.x, movement.hitBox.y, movement.hitBox.width, movement.hitBox.height, 0, 0, texture.getWidth(),
             texture.getHeight(), !movement.facingLeft, false);
     }
@@ -72,4 +73,11 @@ public abstract class Entity {
 
     public abstract void update();
 
+    public @NotNull String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = Objects.requireNonNull(name, "name must not be null");
+    }
 }

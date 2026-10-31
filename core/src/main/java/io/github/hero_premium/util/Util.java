@@ -13,7 +13,7 @@ public final class Util {
     private static final Logger LOGGER = new Logger(Util.class.getName(), LOGGING_LEVEL);
 
     private Util() {
-        throw new AssertionError("No util.Util instance for you!");
+        throw new AssertionError("No io.github.hero_premium.util.Util instance for you!");
     }
 
     public static boolean isKeyJustReleased(int key) {

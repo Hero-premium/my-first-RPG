@@ -4,6 +4,7 @@ package io.github.hero_premium.entities.statuseffects;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
 import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.statuseffects.base.Effect;
 import io.github.hero_premium.util.Util;
 import io.github.hero_premium.util.collections.ReadOnlyClassMap;
 

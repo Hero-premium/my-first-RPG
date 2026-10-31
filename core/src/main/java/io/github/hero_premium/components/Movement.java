@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.Objects;
 
 public class Movement {
+
     public final Vector2 velocity;
     public final Rectangle hitBox;
     private final float speed;
