@@ -4,10 +4,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.Assets;
 
-import io.github.hero_premium.combat.CombatLogic;
-import io.github.hero_premium.entities.statuseffects.Defending;
-import io.github.hero_premium.entities.statuseffects.Focused;
-import io.github.hero_premium.entities.statuseffects.Poison;
+import io.github.hero_premium.entities.statuseffects.effects.Defending;
+import io.github.hero_premium.entities.statuseffects.effects.Focused;
+import io.github.hero_premium.entities.statuseffects.effects.Poison;
 import io.github.hero_premium.util.Util;
 
 public class GateKeeper extends CombatEntity {
@@ -18,43 +17,44 @@ public class GateKeeper extends CombatEntity {
         isPlayable = false;
     }
 
-    private void fireWand(CombatEntity player) {
-        LOGGER.info(name + " used fireWand");
+    private int fireWand(CombatEntity player) {
+        LOGGER.info(getName() + " used fireWand");
         player.statusEffectsManager.allEffects.get(Poison.class).applyPoison(3, 10);
-        CombatLogic.doTurn(player, this, 2);
+        return 2;
     }
 
-    private void focus() {
-        LOGGER.info(name + " used focus");
-        statusEffectsManager.allEffects.get(Focused.class).setActive();
-        LOGGER.info(name + " is focusing on his attack... you may attack.");
+    private int focus() {
+        LOGGER.info(getName() + " used focus");
+        statusEffectsManager.allEffects.get(Focused.class).setIsActive();
+        LOGGER.info(getName() + " is focusing on his attack... you may attack.");
+        return 0;
     }
 
-    private void shield(CombatEntity player) {
-        LOGGER.info(name + " used Shield");
-        statusEffectsManager.allEffects.get(Defending.class).setActive();
-        CombatLogic.doTurn(player, this, 2);
+    private int shield(CombatEntity player) {
+        LOGGER.info(getName() + " used Shield");
+        statusEffectsManager.allEffects.get(Defending.class).setIsActive();
+        return 2;
     }
 
     // TODO add a smarter AI -# psttttt make it self aware
     @Override
-    public void takeTurn(CombatEntity player) {
+    public int takeTurn(CombatEntity player) {
         if (isPlayable)
             throw new IllegalStateException("cannot call AI based combat while the GateKeeper is fighting in GUI");
         if (health.getHp() <= 0) {
             LOGGER.error("the gateKeeper tried attacking from the grave");
-            return;
+            return 0;
         }
 
         int choice = !statusEffectsManager.allEffects.get(Focused.class).isActive() ? Util.RANDOM.nextInt(3) : Util.RANDOM.nextInt(2) + 1;
 
-        switch (choice) {
+        return switch (choice) {
             case 0 -> focus();
             case 1 -> fireWand(player);
             case 2 -> shield(player);
             default ->
                 throw new AssertionError("the switch in entities.GateKeeper takeTurn ran into an unexpected case");
-        }
+        };
     }
 
     @Override

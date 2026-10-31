@@ -5,8 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.Assets;
-import io.github.hero_premium.combat.CombatLogic;
-import io.github.hero_premium.entities.statuseffects.Dodging;
+import io.github.hero_premium.entities.statuseffects.effects.Dodging;
 import io.github.hero_premium.util.Util;
 
 public class Hero extends CombatEntity {
@@ -18,11 +17,10 @@ public class Hero extends CombatEntity {
         isPlayable = true;
     }
 
-    private void dodge(CombatEntity enemy) {
-        LOGGER.info(name + " used dodge");
-        CombatLogic.doTurn(enemy, this, 1);
-        if (Util.RANDOM.nextBoolean()) statusEffectsManager.allEffects.get(Dodging.class).setActive();
-
+    private int dodge(CombatEntity enemy) {
+        LOGGER.info(getName() + " used dodge");
+        if (Util.RANDOM.nextBoolean()) statusEffectsManager.allEffects.get(Dodging.class).setIsActive();
+        return 1;
     }
 
     private void heroAi() {
@@ -30,10 +28,9 @@ public class Hero extends CombatEntity {
 
     }
 
-    private void kick(CombatEntity enemy) {
-        LOGGER.info(name + " used kick");
-        int damage = Util.RANDOM.nextInt(2) + 3;
-        CombatLogic.doTurn(enemy, this, damage);
+    private int kick(CombatEntity enemy) {
+        LOGGER.info(getName() + " used kick");
+        return Util.RANDOM.nextInt(2) + 3;
     }
 
     @Override
@@ -46,25 +43,26 @@ public class Hero extends CombatEntity {
 
     }
 
-    private void swordSlash(CombatEntity enemy) {
-        LOGGER.info(name + " used swordSlash");
+    private int swordSlash(CombatEntity enemy) {
+        LOGGER.info(getName() + " used swordSlash");
         int damage;
         if (80 <= Util.RANDOM.nextInt(100)) {
             damage = 8;
-            LOGGER.info(name + " landed a critical hit with sword slash");
+            LOGGER.info(getName() + " landed a critical hit with sword slash");
 
         } else {
             damage = Util.RANDOM.nextInt(3);
             if (damage == 0) {
-                LOGGER.info(name + " did " + damage + " (aka missed)");
+                LOGGER.info(getName() + " did " + damage + " (aka missed)");
             }
         }
-        CombatLogic.doTurn(enemy, this, damage);
+        return damage;
     }
 
-    private void superSecretMove(CombatEntity entity) {
+    private int superSecretMove(CombatEntity entity) {
         entity.health.modifyHp(-1000);
         LOGGER.info("you used the super secret move, if this was a real build shame on you!");
+        return 1000;
     }
 
     private void takeControl() {
@@ -104,18 +102,18 @@ public class Hero extends CombatEntity {
      * @throws IllegalStateException if called when this entity isn't in a fighting state
      */
     @Override
-    public void takeTurn(CombatEntity entity) {
+    public int takeTurn(CombatEntity entity) {
         //TODO give hero his own AI instead of the testing GateKeeper's AI
         if (isPlayable)
             throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
         int choice = Util.RANDOM.nextInt(3);
 
-        switch (choice) {
+        return switch (choice) {
             case 0 -> kick(entity);
             case 1 -> swordSlash(entity);
             case 2 -> dodge(entity);
             default -> throw new AssertionError("the switch in entities.Hero takeTurn ran into an unexpected case");
-        }
+        };
     }
 
     @Override

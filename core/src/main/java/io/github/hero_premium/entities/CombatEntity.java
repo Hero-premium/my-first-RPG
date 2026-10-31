@@ -1,14 +1,12 @@
 package io.github.hero_premium.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import io.github.hero_premium.combat.BattleManager;
 import io.github.hero_premium.components.health.Health;
 import io.github.hero_premium.entities.statuseffects.StatusEffectsManager;
 
-import java.util.function.Consumer;
+import java.util.function.ToIntFunction;
 
 /**
  * Extend this class when you want this entity to participate in combat
@@ -30,7 +28,7 @@ public abstract class CombatEntity extends Entity {
     /**
      * Defines whether this entity currently fights via gui or AI based
      *
-     * @see BattleManager
+     * @see io.github.hero_premium.combat.BattleManager
      */
     public boolean isPlayable;
 
@@ -41,7 +39,7 @@ public abstract class CombatEntity extends Entity {
      * @param speed   the speed this entity will move by in the world
      * @param hitbox  the physical being of this entity other objects will use to interact with
      * @param hp      the amount of health this entity has, cannot be negative
-     * @param texture the texture being drawn on the screen, be sure to run {@link Entity#draw(SpriteBatch)} for it to display
+     * @param texture the texture being drawn on the screen, be sure to run {@link Entity#draw(com.badlogic.gdx.graphics.g2d.SpriteBatch)} for it to display
      * @throws IllegalArgumentException if the hp passed was negative
      * @throws IllegalArgumentException if the gold passed was negative
      * @throws IllegalArgumentException if the speed passed was negative
@@ -62,12 +60,13 @@ public abstract class CombatEntity extends Entity {
      * Performs this entity's turn against the specified entity.
      *
      * @param entity the entity being attacked
+     * @return the amount of damage done by this move
      */
-    public abstract void takeTurn(CombatEntity entity);
+    public abstract int takeTurn(CombatEntity entity);
 
 
     /**
-     * Call {@link CombatMovesManager#addNewMove(String, Consumer)} here to ensure they get added to the moves list.
+     * Call {@link CombatMovesManager#addNewMove(String, ToIntFunction)} here to ensure they get added to the moves list.
      */
     protected abstract void registerMoves();
 
@@ -83,7 +82,7 @@ public abstract class CombatEntity extends Entity {
          * @param name the display name of the move
          * @param move the actual function of the move, takes a combat entity as a target
          */
-        public record Move(String name, Consumer<CombatEntity> move) {
+        public record Move(String name, ToIntFunction<CombatEntity> move) {
         }
 
         private final Array<Move> moves;
@@ -114,7 +113,7 @@ public abstract class CombatEntity extends Entity {
          * @param name the name of the move
          * @param move the move itself
          */
-        protected void addNewMove(String name, Consumer<CombatEntity> move) {
+        protected void addNewMove(String name, ToIntFunction<CombatEntity> move) {
             moves.add((new Move(name, move)));
         }
     }

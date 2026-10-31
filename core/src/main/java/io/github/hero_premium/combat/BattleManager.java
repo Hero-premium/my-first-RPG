@@ -16,7 +16,6 @@ import io.github.hero_premium.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 // TODO add slight delay between each move
 
@@ -41,7 +40,7 @@ public final class BattleManager {
 
     @NotNull
     private String buildHpText(@NotNull CombatEntity entity) {
-        return entity.name + " Health: " + entity.health.getHp();
+        return entity.getName() + " Health: " + entity.health.getHp();
     }
 
     private void endBattle() {
@@ -78,18 +77,18 @@ public final class BattleManager {
         TextButton[] buttons = new TextButton[moves.size];
 
         for (int i = 0; i < moves.size; i++) {
-            Consumer<CombatEntity> moveAction = moves.get(i).move();
+            CombatEntity.CombatMovesManager.Move move = moves.get(i);
             Runnable action = () -> {
-                moveAction.accept(BattleUtils.other(entity, fighters));
+                BattleUtils.doAttacks(fighters, entity, move.move());
                 handleBattleState(BattleUtils.validateBattle(entity, fighters), entity);
             };
-            buttons[i] = generateButton(buttonsTable, moves.get(i).name(), action);
+            buttons[i] = generateButton(buttonsTable, move.name(), action);
         }
         return buttons;
     }
 
-    @NotNull
-    private TextButton[] generateButtons(Table buttonsTable, @NotNull String[] buttonNames, @NotNull Runnable[] actions) {
+
+    private @NotNull TextButton[] generateButtons(Table buttonsTable, @NotNull String[] buttonNames, @NotNull Runnable[] actions) {
         if (buttonNames.length != actions.length)
             throw new IllegalArgumentException("the amount of names passed does not match the amount of actions passed with");
         TextButton[] buttons = new TextButton[actions.length];
@@ -99,16 +98,16 @@ public final class BattleManager {
         return buttons;
     }
 
-    @NotNull
-    private TextButton generateButton(@NotNull Table buttonsTable, String name, Runnable action) {
+
+    private @NotNull TextButton generateButton(@NotNull Table buttonsTable, String name, Runnable action) {
         TextButton button = new TextButton(name, Assets.skin);
         button.addListener(createListener(action));
         buttonsTable.add(button).row();
         return button;
     }
 
-    @NotNull
-    private static ChangeListener createListener(Runnable action) {
+
+    private static @NotNull ChangeListener createListener(Runnable action) {
         return new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -149,7 +148,7 @@ public final class BattleManager {
                 setButtonsVisibility(gameOverButtons, true);
             }
             case GOING -> {
-                otherEntity.takeTurn(entity);
+                BattleUtils.doAttacks(fighters, otherEntity, otherEntity::takeTurn);
 
                 if (entity.health.getHp() <= 0) handleBattleState(BattleUtils.BattleState.LOST, entity);
             }
@@ -172,7 +171,7 @@ public final class BattleManager {
             throw new IllegalArgumentException("2 fighters cannot be the same");
         LOGGER.info("_______ battle starts! _______");
         for (CombatEntity fighter : fighters) {
-            LOGGER.info(fighter.name + " has " + fighter.health.getHp() + " hit points");
+            LOGGER.info(fighter.getName() + " has " + fighter.health.getHp() + " hit points");
         }
 
         if (!BattleUtils.anyFighterIsPlayable(fighters)) {

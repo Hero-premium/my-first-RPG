@@ -5,6 +5,8 @@ import io.github.hero_premium.entities.CombatEntity;
 import io.github.hero_premium.util.Util;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.ToIntFunction;
+
 class BattleUtils {
     private static final Logger LOGGER = new Logger(BattleUtils.class.getName(), Util.LOGGING_LEVEL);
 
@@ -37,6 +39,11 @@ class BattleUtils {
             fighter.statusEffectsManager.resetBattleStates();
             fighter.health.resetHp();
         }
+    }
+
+    static void doAttacks(CombatEntity[] fighters, @NotNull CombatEntity entity, @NotNull ToIntFunction<CombatEntity> moveAction) {
+        CombatEntity target = other(entity, fighters);
+        CombatLogic.doTurn(target, entity, moveAction.applyAsInt(target));
     }
 
     enum BattleState {
