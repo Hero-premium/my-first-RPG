@@ -1,12 +1,13 @@
-package io.github.hero_premium.entities.statuseffects;
+package io.github.hero_premium.entities.statuseffects.effects;
 
 import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.statuseffects.base.TogglableEffect;
 import io.github.hero_premium.util.vault.Key;
 import org.jetbrains.annotations.NotNull;
 
-public class Defending implements Effect {
+public class Defending extends TogglableEffect {
+
     private final Key<Integer> key = new Key<>();
-    private boolean isActive;
 
     @Override
     public void onTurn(@NotNull CombatEntity entity) {
@@ -15,22 +16,8 @@ public class Defending implements Effect {
     }
 
     @Override
-    public void reset() {
-        isActive = false;
-    }
-
-    @Override
     public void onAfterTurn(CombatEntity entity) {
         key.removeValue(-2);
-        isActive = false;
-    }
-
-    public void setActive() {
-        isActive = true;
-    }
-
-    @Override
-    public boolean isActive() {
-        return isActive;
+        super.onAfterTurn(entity);
     }
 }

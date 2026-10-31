@@ -1,16 +1,12 @@
-package io.github.hero_premium.entities.statuseffects;
+package io.github.hero_premium.entities.statuseffects.effects;
 
 import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.statuseffects.base.TogglableEffect;
 import io.github.hero_premium.util.vault.Key;
 import org.jetbrains.annotations.NotNull;
 
-public class Dodging implements Effect {
-    private boolean isActive;
+public class Dodging extends TogglableEffect {
     private final Key<Integer> key = new Key<>();
-
-    public Dodging() {
-
-    }
 
     @Override
     public void onTurn(CombatEntity entity) {
@@ -18,23 +14,10 @@ public class Dodging implements Effect {
         entity.health.addModifier(key);
     }
 
-    @Override
-    public void reset() {
-        isActive = false;
-    }
 
     @Override
     public void onAfterTurn(@NotNull CombatEntity entity) {
         key.removeValue(0);
-        isActive = false;
+        super.onAfterTurn(entity);
     }
-
-    public void setActive() {
-        isActive = true;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
 }

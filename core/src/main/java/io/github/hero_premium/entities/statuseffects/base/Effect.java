@@ -1,4 +1,4 @@
-package io.github.hero_premium.entities.statuseffects;
+package io.github.hero_premium.entities.statuseffects.base;
 
 import io.github.hero_premium.entities.CombatEntity;
 

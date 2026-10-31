@@ -1,8 +1,10 @@
-package io.github.hero_premium.entities.statuseffects;
+package io.github.hero_premium.entities.statuseffects.effects;
 
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.statuseffects.base.Effect;
 import io.github.hero_premium.util.Util;
+import org.jetbrains.annotations.NotNull;
 
 public class Poison implements Effect {
 
@@ -11,17 +13,10 @@ public class Poison implements Effect {
     private int duration;
     private int damage;
 
-    public Poison() {
-    }
-
     @Override
-    public void onTurn(CombatEntity entity) {
-        if (getPoisonDuration() <= 0) {
-            damage = 0;
-            return;
-        }
+    public void onTurn(@NotNull CombatEntity entity) {
         entity.health.modifyHp(-damage);
-        LOGGER.info(entity.name + "took " + damage + " of poison damage");
+        LOGGER.info(entity.getName() + " took " + damage + " of poison damage");
     }
 
     @Override
@@ -33,12 +28,13 @@ public class Poison implements Effect {
     @Override
     public void onAfterTurn(CombatEntity entity) {
         modifyPoisonDuration(-1);
+        if (!isActive()) damage = 0;
     }
 
 
     @Override
     public boolean isActive() {
-        return getPoisonDuration() >= 0;
+        return getPoisonDuration() > 0;
     }
 
     /**
