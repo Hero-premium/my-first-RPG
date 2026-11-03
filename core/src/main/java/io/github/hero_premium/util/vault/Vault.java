@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class Vault<T extends Key<?>> implements Iterable<T> {
 
@@ -41,6 +42,10 @@ public class Vault<T extends Key<?>> implements Iterable<T> {
 
     public boolean contains(T key) {
         return keys.contains(key);
+    }
+
+    public Stream<T> stream() {
+        return keys.stream();
     }
 
     @Override

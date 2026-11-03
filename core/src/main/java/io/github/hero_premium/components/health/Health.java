@@ -18,7 +18,6 @@ public class Health {
      * value.
      */
     public final int maxHp;
-    private int hp;
 
     /**
      * 1 means you do normal damage.
@@ -29,8 +28,8 @@ public class Health {
      * <P>
      * anything below 0 means weaker damage.
      **/
-     final Vault<Key<Integer>> damageModifiers = new Vault<>();
-
+    private final Vault<Key<Integer>> damageModifiers = new Vault<>();
+    private int hp;
 
     /**
      * Creates a Health object,
@@ -145,23 +144,26 @@ public class Health {
      */
     public int calculateDamageModifier() {
         if (damageModifiers.isEmpty()) return 1;
+
         for (Key<Integer> damageModifier : damageModifiers) {
             if (damageModifier.getValues().contains(0)) return 0;
         }
-        int highestDamageModifier = 0;
-        int lowestDamageModifier = 0;
-        for (Key<Integer> damageModifier : damageModifiers) {
-            for (int damageModifierValue : damageModifier.getValues()) {
-                if (damageModifierValue > 1 && damageModifierValue > highestDamageModifier) {
-                    highestDamageModifier = damageModifierValue;
-                }
 
-                if (damageModifierValue < 0 && damageModifierValue < lowestDamageModifier) {
-                    lowestDamageModifier = damageModifierValue;
-                }
-            }
+        int lowestDamageModifier = damageModifiers.stream()
+            .flatMap(Key::stream)
+            .mapToInt(Integer::intValue)
+            .filter(value -> value <= 0)
+            .min()
+            .orElse(0);
 
-        }
+
+        int highestDamageModifier = damageModifiers.stream()
+            .flatMap(Key::stream)
+            .mapToInt(Integer::intValue)
+            .filter(value -> value >= 1)
+            .max()
+            .orElse(0);
+
 
         int damageModifierCalculated = highestDamageModifier + lowestDamageModifier;
         return damageModifierCalculated == 0 ? 1 : damageModifierCalculated;

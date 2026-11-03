@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class Key<T> {
 
@@ -20,7 +21,7 @@ public class Key<T> {
 
     public void removeValue(T value) {
         if (!values.remove(Objects.requireNonNull(value, "value must not be null"))) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("value " + value + " not found");
         }
     }
 
@@ -30,5 +31,9 @@ public class Key<T> {
 
     public int size() {
         return values.size();
+    }
+
+    public Stream<T> stream() {
+        return values.stream();
     }
 }
