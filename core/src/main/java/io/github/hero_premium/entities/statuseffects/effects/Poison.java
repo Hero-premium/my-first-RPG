@@ -51,7 +51,6 @@ public class Poison implements Effect {
      *
      * @param poisonDuration the duration this entity will be on poison for
      * @param damage         the amount of damage this entity will receive each tick
-     * @throws IllegalStateException if duration exceeds {@code 9} for balancing reasons
      */
     public void applyPoison(int poisonDuration, int damage) {
         setPoisonDuration(poisonDuration);
@@ -72,12 +71,8 @@ public class Poison implements Effect {
      * sets poisonDuration to given amount
      *
      * @param poisonDuration the new poisonDuration
-     * @throws IllegalStateException if poisonDuration was >= 10 to prevent game
-     *                               breaking bugs
      */
     public void setPoisonDuration(int poisonDuration) {
-        if (poisonDuration >= 10)
-            throw new IllegalStateException("balance breaking bug, poison been set for/more than 10 turns");
         this.duration = Math.max(poisonDuration, 0);
     }
 
