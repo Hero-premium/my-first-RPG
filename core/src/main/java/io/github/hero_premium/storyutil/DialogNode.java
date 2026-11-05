@@ -6,16 +6,16 @@ import java.util.Optional;
 class DialogNode {
 
     final String text;
-    private final Integer[] nextNodes;
+    private final int[] nextNodes;
     private Runnable action;
 
-    DialogNode(String text, Integer[] nextNodes, Runnable action) {
+    DialogNode(String text, int[] nextNodes, Runnable action) {
         this.text = Objects.requireNonNull(text);
         this.nextNodes = nextNodes;
         this.action = action;
     }
 
-    Integer[] getNextNodes() {
+    int[] getNextNodes() {
         return nextNodes != null ? nextNodes.clone() : null;
     }
 

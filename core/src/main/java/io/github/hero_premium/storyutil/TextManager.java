@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.util.Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -24,10 +25,8 @@ public final class TextManager {
         throw new AssertionError("No storyutil.TextManager instance for you!");
     }
 
-    private static void addNewNode(Integer id, String line, Integer[] nodesTree, Runnable action) {
-        if (id == null || line == null) {
-            throw new NullPointerException("the line or id are not applicant for being a null");
-        }
+    private static void addNewNode(int id, String line, int[] nodesTree, Runnable action) {
+        Objects.requireNonNull(line, "the line is not applicant for being a null");
         if (story.containsKey(id)) {
             throw new IllegalArgumentException("the id :" + id + " already exists");
         }
@@ -40,7 +39,7 @@ public final class TextManager {
                     + " are larger than the amounts of buttons we have");
             }
         }
-        if (!id.equals(internalID)) {
+        if (id != internalID) {
             LOGGER.info("the ID passed " + id + " does not match the internal ID " + internalID
                 + " make sure you did not make a mistake");
         }
@@ -48,16 +47,16 @@ public final class TextManager {
         internalID++;
     }
 
-    private static void addNewNode(Integer id, String line) {
+    private static void addNewNode(int id, String line) {
         addNewNode(id, line, null, null);
     }
 
     @SuppressWarnings("unused")
-    private static void addNewNode(Integer id, String line, Runnable action) {
+    private static void addNewNode(int id, String line, Runnable action) {
         addNewNode(id, line, null, action);
     }
 
-    private static void addNewNode(Integer id, String line, Integer[] nodes) {
+    private static void addNewNode(int id, String line, int[] nodes) {
         addNewNode(id, line, nodes, null);
     }
 
@@ -67,16 +66,16 @@ public final class TextManager {
         addNewNode(3, "kick");
         addNewNode(4, "swordSlash");
         addNewNode(5, "dodge");
-        addNewNode(6, "", new Integer[]{7});
-        addNewNode(7, "gatekeeper.welcome", new Integer[]{8});
-        addNewNode(8, "player.motivation", new Integer[]{9});
-        addNewNode(9, "gatekeeper.ask_name", new Integer[]{10});
-        addNewNode(10, "gatekeeper.warn_mission", new Integer[]{11});
-        addNewNode(11, "player.explain_moves", new Integer[]{12});
-        addNewNode(12, "gatekeeper.askAbilities", new Integer[]{13});
-        addNewNode(13, "player.dash", new Integer[]{14});
-        addNewNode(14, "player.swordSlash", new Integer[]{15});
-        addNewNode(15, "player.kick", new Integer[]{16});
+        addNewNode(6, "", new int[]{7});
+        addNewNode(7, "gatekeeper.welcome", new int[]{8});
+        addNewNode(8, "player.motivation", new int[]{9});
+        addNewNode(9, "gatekeeper.ask_name", new int[]{10});
+        addNewNode(10, "gatekeeper.warn_mission", new int[]{11});
+        addNewNode(11, "player.explain_moves", new int[]{12});
+        addNewNode(12, "gatekeeper.askAbilities", new int[]{13});
+        addNewNode(13, "player.dash", new int[]{14});
+        addNewNode(14, "player.swordSlash", new int[]{15});
+        addNewNode(15, "player.kick", new int[]{16});
         addNewNode(16, "gatekeeper.challenge");
     }
 
@@ -88,17 +87,16 @@ public final class TextManager {
      * @return Integer[] the ID of the line that links for the lines you called -
      * or {@code null} if there's no next node
      * @throws IllegalArgumentException if the ID you passed doesn't exist
-     * @throws NullPointerException     if a null was passed
      */
-    public static Integer[] getNextNodes(Integer id) {
+    public static int[] getNextNodes(int id) {
         return resolveNode(id).getNextNodes();
     }
 
-    private static DialogNode resolveNode(Integer id) {
-        Objects.requireNonNull(id, "id cannot be null");
+
+    private static @NotNull DialogNode resolveNode(int id) {
         DialogNode node = story.get(id);
         if (node == null) {
-            throw new IllegalArgumentException("the id " + id + " doesn't exist");
+            throw new NoSuchElementException("the id " + id + " doesn't exist");
         }
         return node;
     }
@@ -110,9 +108,8 @@ public final class TextManager {
      * @param id the ID of the line you want to show
      * @return String - the line you called
      * @throws IllegalArgumentException if the ID you passed doesn't exist
-     * @throws NullPointerException     if a null was passed
      */
-    public static String getText(Integer id) {
+    public static String getText(int id) {
         return bundle.get(resolveNode(id).text);
     }
 
@@ -124,9 +121,8 @@ public final class TextManager {
      * <p>
      * or null - if the action being called hasn't been set yet
      * @throws IllegalArgumentException if the ID you passed doesn't exist
-     * @throws NullPointerException     if a null was passed
      */
-    public static Optional<Runnable> getAction(Integer id) {
+    public static Optional<Runnable> getAction(int id) {
         return resolveNode(id).getAction();
     }
 
@@ -137,12 +133,11 @@ public final class TextManager {
      *
      * @param id     the ID of the line you want to set the action of
      * @param action the new action
-     * @throws IllegalArgumentException if the ID you passed doesn't exist
-     * @throws NullPointerException     if a null was passed
+     * @throws NoSuchElementException if the ID you passed doesn't exist
      * @throws IllegalStateException    if you called this on a node that has been
      *                                  already set
      */
-    public static void setAction(Integer id, Runnable action) {
+    public static void setAction(int id, Runnable action) {
         resolveNode(id).setAction(action);
     }
 }

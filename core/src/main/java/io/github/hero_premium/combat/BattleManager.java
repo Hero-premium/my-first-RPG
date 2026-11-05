@@ -61,7 +61,8 @@ public final class BattleManager {
 
         Runnable[] gameOverActions = { //
             this::retry, //
-            () -> Gdx.app.exit()};
+            Gdx.app::exit //
+        };
 
         combatButtons = generateButtons(buttonsTable, entity);
         gameOverButtons = generateButtons(buttonsTable, gameOverButtonNames, gameOverActions);
@@ -161,7 +162,7 @@ public final class BattleManager {
      * Launches a battle between two combat entities.
      *
      * @param fighter1 one of the fighters.
-     * @param fighter2  one of the fighters.
+     * @param fighter2 one of the fighters.
      * @throws NullPointerException if one of the fighters was null.
      */
     public void launchBattle(CombatEntity fighter1, CombatEntity fighter2) {

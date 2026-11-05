@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.Assets;
 import io.github.hero_premium.util.Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -31,7 +32,7 @@ public class StoryDisplay {
     private int index;
     private Label dialogLabel;
     private TextField takeInput;
-    private Integer[] nextNodes;
+    private int[] nextNodes;
 
     private boolean firstTime = true;
     private boolean storyActive = false;
@@ -66,7 +67,8 @@ public class StoryDisplay {
         this.index = index;
     }
 
-    private Table generateTable(Stage stage) {
+
+    private @NotNull Table generateTable(@NotNull Stage stage) {
         Table dialogsGUI = new Table();
         dialogsGUI.setFillParent(true);
         dialogsGUI.bottom();
@@ -82,7 +84,7 @@ public class StoryDisplay {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if (event.getListenerActor().getUserObject() != null) {
-                        index = (Integer) event.getListenerActor().getUserObject();
+                        index = (int) event.getListenerActor().getUserObject();
                         displayOptions();
                     }
                 }
@@ -92,7 +94,7 @@ public class StoryDisplay {
         }
     }
 
-    private void buildDialogWidgets(Stage stage, Table dialogsGUI) {
+    private void buildDialogWidgets(@NotNull Stage stage, @NotNull Table dialogsGUI) {
         dialogLabel = new Label("", Assets.skin);
         dialogLabel.setWrap(true);
 
