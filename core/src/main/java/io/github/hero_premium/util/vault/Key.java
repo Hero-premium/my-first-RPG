@@ -1,12 +1,11 @@
 package io.github.hero_premium.util.vault;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
 import java.util.stream.Stream;
 
-public class Key<T> {
+public class Key<T> implements Iterable<T> {
 
     private final List<T> values = new ArrayList<>();
 
@@ -35,5 +34,15 @@ public class Key<T> {
 
     public Stream<T> stream() {
         return values.stream();
+    }
+
+    public boolean contains(T value) {
+        return values.contains(value);
+    }
+
+
+    @Override
+    public @NotNull Iterator<T> iterator() {
+        return values.iterator();
     }
 }

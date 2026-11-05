@@ -29,6 +29,7 @@ public class Health {
      * anything below 0 means weaker damage.
      **/
     private final Vault<Key<Integer>> damageModifiers = new Vault<>();
+
     private int hp;
 
     /**
@@ -146,7 +147,7 @@ public class Health {
         if (damageModifiers.isEmpty()) return 1;
 
         for (Key<Integer> damageModifier : damageModifiers) {
-            if (damageModifier.getValues().contains(0)) return 0;
+            if (damageModifier.contains(0)) return 0;
         }
 
         int lowestDamageModifier = damageModifiers.stream()

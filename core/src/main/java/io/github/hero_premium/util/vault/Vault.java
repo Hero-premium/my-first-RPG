@@ -2,55 +2,33 @@ package io.github.hero_premium.util.vault;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Stream;
 
-public class Vault<T extends Key<?>> implements Iterable<T> {
-
-    private final Set<T> keys;
+public class Vault<T extends Key<?>> extends HashSet<T> {
 
     public Vault() {
-        this(new HashSet<>());
+        super();
     }
 
-    public Vault(Set<T> keys) {
-        this.keys = keys;
-    }
-
-    public boolean add(T key) {
-        return keys.add(key);
-    }
-
-    public boolean addAll(Set<T> keys) {
-        return this.keys.addAll(keys);
-    }
-
-    public void remove(T key) {
-        if (!keys.remove(key)) throw new NoSuchElementException();
-    }
-
-    public int size() {
-        return keys.size();
-    }
-
-    public boolean isEmpty() {
-        return keys.isEmpty();
-    }
-
-    public boolean contains(T key) {
-        return keys.contains(key);
-    }
-
-    public Stream<T> stream() {
-        return keys.stream();
+    public Vault(Collection<? extends T> c) {
+        super(c);
     }
 
     @Override
-    @NotNull
-    public Iterator<T> iterator() {
-        return keys.iterator();
+    public boolean remove(Object key) {
+        if (!super.remove(key)) throw new NoSuchElementException("key " + key + " not found");
+        return true;
+    }
+
+    @Override
+    public boolean removeAll(@NotNull Collection<?> c) {
+        Set<?> unique = new HashSet<>(c);
+        for (Object key : unique) {
+            if (!contains(key)) throw new NoSuchElementException("key " + key + " not found");
+        }
+        return super.removeAll(unique);
     }
 }
