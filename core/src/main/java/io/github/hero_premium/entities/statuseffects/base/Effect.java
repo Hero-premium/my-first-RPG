@@ -1,6 +1,6 @@
 package io.github.hero_premium.entities.statuseffects.base;
 
-import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.combat.CombatEntity;
 
 public interface Effect {
 

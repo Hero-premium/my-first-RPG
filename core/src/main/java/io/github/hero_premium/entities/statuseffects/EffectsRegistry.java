@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import io.github.hero_premium.entities.statuseffects.base.Effect;
 import io.github.hero_premium.util.Util;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ServiceConfigurationError;
@@ -32,9 +33,12 @@ public class EffectsRegistry {
         } catch (ServiceConfigurationError e) {
             LOGGER.error("no effects were loaded: " + e.getMessage());
         }
+        if (ALL_EFFECTS.isEmpty()) {
+            LOGGER.error("No effects were loaded, (check the service file?)");
+        }
     }
 
-    public static ObjectMap<Class<? extends Effect>, Effect> effectsFactory() {
+    public static @NotNull ObjectMap<Class<? extends Effect>, Effect> effectsFactory() {
         ObjectMap<Class<? extends Effect>, Effect> allEffects = new ObjectMap<>();
         for (Class<? extends Effect> key : ALL_EFFECTS) {
             try {

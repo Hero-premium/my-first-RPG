@@ -1,12 +1,18 @@
-package io.github.hero_premium.entities;
+package io.github.hero_premium.entities.combat;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
-import io.github.hero_premium.components.health.Health;
+import io.github.hero_premium.components.Health;
+import io.github.hero_premium.entities.Entity;
+import io.github.hero_premium.entities.combat.moves.Move;
+import io.github.hero_premium.entities.combat.moves.MoveAttack;
 import io.github.hero_premium.entities.statuseffects.StatusEffectsManager;
+import io.github.hero_premium.util.Attributes;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.ToIntFunction;
+import java.util.function.Function;
 
 /**
  * Extend this class when you want this entity to participate in combat
@@ -14,17 +20,21 @@ import java.util.function.ToIntFunction;
 public abstract class CombatEntity extends Entity {
 
     /**
+     * The object responsible for registering and storing combat moves
+     */
+    protected final CombatMovesManager movesManager;
+    /**
      * The object responsible for holding combat stats
      */
     public final StatusEffectsManager statusEffectsManager;
     /**
-     * The object responsible for registering and storing combat moves
-     */
-    public final CombatMovesManager movesManager;
-    /**
      * carries hp and all its related methods
      */
     public final Health health;
+    /**
+     *
+     */
+    public final Attributes damageAttributes;
     /**
      * Defines whether this entity currently fights via gui or AI based
      *
@@ -54,6 +64,7 @@ public abstract class CombatEntity extends Entity {
         this.statusEffectsManager = new StatusEffectsManager(this);
         this.movesManager = new CombatMovesManager();
         this.isPlayable = false;
+        this.damageAttributes = new Attributes();
     }
 
     /**
@@ -62,29 +73,27 @@ public abstract class CombatEntity extends Entity {
      * @param entity the entity being attacked
      * @return the amount of damage done by this move
      */
-    public abstract int takeTurn(CombatEntity entity);
-
+    public abstract MoveAttack takeTurn(CombatEntity entity);
 
     /**
-     * Call {@link CombatMovesManager#addNewMove(String, ToIntFunction)} here to ensure they get added to the moves list.
+     * Call {@link CombatMovesManager#addNewMove(String, Function)} here to ensure they get added to the moves list.
      */
     protected abstract void registerMoves();
+
+    /**
+     *
+     * @return a copy of the current moves list
+     * @throws IllegalStateException if {@link registerMoves()} run but registers zero moves
+     */
+    public Array<Move> getMoves() {
+        return movesManager.getMoves();
+    }
 
     /**
      * responsible for loading moves via {@link CombatEntity#registerMoves()} and storing and exposing them.
      */
     public class CombatMovesManager {
         private boolean movesRegistered = false;
-
-        /**
-         * defining what a move is
-         *
-         * @param name the display name of the move
-         * @param move the actual function of the move, takes a combat entity as a target
-         */
-        public record Move(String name, ToIntFunction<CombatEntity> move) {
-        }
-
         private final Array<Move> moves;
 
         private CombatMovesManager() {
@@ -94,9 +103,11 @@ public abstract class CombatEntity extends Entity {
         /**
          *
          * @return a copy of the current moves list
-         * @throws IllegalStateException if registerMoves() run but registers zero moves
+         * @throws IllegalStateException if {@link registerMoves()} run but registers zero moves
          */
-        public Array<Move> getMoves() {
+
+        @Contract(" -> new")
+        private @NotNull Array<Move> getMoves() {
             if (!movesRegistered) {
                 registerMoves();
                 movesRegistered = true;
@@ -113,7 +124,7 @@ public abstract class CombatEntity extends Entity {
          * @param name the name of the move
          * @param move the move itself
          */
-        protected void addNewMove(String name, ToIntFunction<CombatEntity> move) {
+        public void addNewMove(String name, Function<CombatEntity, MoveAttack> move) {
             moves.add((new Move(name, move)));
         }
     }

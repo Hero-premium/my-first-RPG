@@ -14,6 +14,7 @@ import io.github.hero_premium.storyutil.StoryDisplay;
 import io.github.hero_premium.touchables.Touchable;
 import io.github.hero_premium.touchables.Wall;
 import io.github.hero_premium.world.Physics;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjectsManager {
 
@@ -72,7 +73,6 @@ public class ObjectsManager {
     }
 
     public void update(float delta) {
-        // i figured a null check is cheaper than an isEmpty but that's just a guess
         for (Entity entity : entities) {
             Physics.applyPhysics(entity.movement, delta, 50);
         }
@@ -85,7 +85,6 @@ public class ObjectsManager {
             for (Entity entity : entities) {
                 touchable.update(entity);
             }
-
         }
 
         storyDisplay.runStory();
@@ -108,7 +107,7 @@ public class ObjectsManager {
         }
     }
 
-    public void showHitboxes(OrthographicCamera camera, Debug debug) {
+    public void showHitboxes(OrthographicCamera camera, @NotNull Debug debug) {
         debug.showHitboxes(camera, entities, touchables);
     }
 }

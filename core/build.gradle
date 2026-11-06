@@ -1,35 +1,47 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
+  id 'org.jetbrains.kotlin.jvm'
 }
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
+
+repositories {
+  mavenCentral()
+}
+
+configurations {
+  mockitoAgent
+}
+
+def mockitoVersion = '5.24.0'
 
 dependencies {
   api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
   api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-  if(enableGraalNative == 'true') {
+  if (enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+
+  testImplementation 'org.jetbrains.kotlin:kotlin-test'
+  testImplementation 'org.junit.jupiter:junit-jupiter:6.1.0'
+  testImplementation "org.mockito:mockito-core:$mockitoVersion"
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+  mockitoAgent("org.mockito:mockito-core:$mockitoVersion") { transitive = false }
 }
 
-  dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:6.1.0'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-  test {
-    useJUnitPlatform()
-  }
+test {
+  useJUnitPlatform()
+  jvmArgs "-javaagent:${configurations.mockitoAgent.asPath}"
+  jvmArgs "-javaagent:${configurations.mockitoAgent.asPath}", '-Xshare:off'
 }
 
 jar {
   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-repositories {
-    mavenCentral()
-}
+
 kotlin {
-    jvmToolchain(26)
+  jvmToolchain(26)
 }

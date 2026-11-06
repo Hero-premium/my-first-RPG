@@ -2,6 +2,7 @@ package io.github.hero_premium.world;
 
 import com.badlogic.gdx.utils.Array;
 import io.github.hero_premium.components.Movement;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ public final class Physics {
         return velocity - rate * deltaTime;
     }
 
-    private static void gravity(Movement movement, float deltaTime, float floorLevel) {
+    private static void gravity(@NotNull Movement movement, float deltaTime, float floorLevel) {
 
         movement.velocity.y -= GRAVITY * deltaTime;
 
@@ -43,8 +44,10 @@ public final class Physics {
      * @param delta      deltaTime to prevent movement issues on higher FPS
      * @param floorLevel the floor level this screen uses, no entity can go below it
      *                   unless it can fly
+     * @throws NullPointerException if {@code movements} was null
+     * @throws NullPointerException if any {@code movement} in {@code movements} was null
      */
-    public static void applyPhysics(Array<Movement> movements, float delta, float floorLevel) {
+    public static void applyPhysics(@NotNull Array<Movement> movements, float delta, float floorLevel) {
         Objects.requireNonNull(movements, "movements must not be null");
         for (Movement m : movements) {
             applyPhysics(m, delta, floorLevel);
@@ -59,7 +62,7 @@ public final class Physics {
      * @param delta      deltaTime to prevent movement issues on higher FPS
      * @param floorLevel the floor level this screen uses, no entity can go below it
      *                   unless it can fly
-     * @throws NullPointerException if movement was null
+     * @throws NullPointerException if {@code movement} was null
      */
     public static void applyPhysics(Movement movement, float delta, float floorLevel) {
         Objects.requireNonNull(movement, "movement must not be null");

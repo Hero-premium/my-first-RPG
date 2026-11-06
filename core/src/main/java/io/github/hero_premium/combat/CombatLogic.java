@@ -1,7 +1,7 @@
 package io.github.hero_premium.combat;
 
 import com.badlogic.gdx.utils.Logger;
-import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.combat.CombatEntity;
 import io.github.hero_premium.util.Util;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,13 +14,13 @@ class CombatLogic {
         LOGGER.info(target.getName() + " now has " + target.health.getHp());
     }
 
-     static void doTurn(@NotNull CombatEntity target, @NotNull CombatEntity user, int damage) {
+    static void doTurn(@NotNull CombatEntity target, @NotNull CombatEntity user, int damage) {
         user.statusEffectsManager.onTurn();
-        applyDamage(target, damage);
+        applyDamage(target, user.damageAttributes.applyModifierToValue(damage));
         user.statusEffectsManager.onAfterTurn();
     }
 
     private CombatLogic() {
-        throw new AssertionError("no io.github.hero_premium.combat.CombatLogic instances for you!");
+        throw new AssertionError("no io.github.hero_premium.combat.CombatLogic instance for you!");
     }
 }

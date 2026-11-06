@@ -1,11 +1,12 @@
 package io.github.hero_premium.combat;
 
 import com.badlogic.gdx.utils.Logger;
-import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.combat.CombatEntity;
+import io.github.hero_premium.entities.combat.moves.MoveAttack;
 import io.github.hero_premium.util.Util;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.ToIntFunction;
+import java.util.function.Function;
 
 class BattleUtils {
     private static final Logger LOGGER = new Logger(BattleUtils.class.getName(), Util.LOGGING_LEVEL);
@@ -41,9 +42,10 @@ class BattleUtils {
         }
     }
 
-    static void doAttacks(CombatEntity[] fighters, @NotNull CombatEntity entity, @NotNull ToIntFunction<CombatEntity> moveAction) {
+    static void doAttack(@NotNull CombatEntity[] fighters, @NotNull CombatEntity entity,
+                         @NotNull Function<CombatEntity, MoveAttack> moveAction) {
         CombatEntity target = other(entity, fighters);
-        CombatLogic.doTurn(target, entity, moveAction.applyAsInt(target));
+        CombatLogic.doTurn(target, entity, moveAction.apply(target).damage());
     }
 
     enum BattleState {

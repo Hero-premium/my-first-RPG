@@ -1,4 +1,4 @@
-package io.github.hero_premium.components.health;
+package io.github.hero_premium.components;
 
 import io.github.hero_premium.util.vault.Key;
 import org.junit.jupiter.api.Test;
@@ -108,7 +108,7 @@ class HealthTest {
         key.addValue(5);
         key.addValue(9);
         key.addValue(2);
-        assertEquals(9, health.calculateDamageModifier());
+        assertEquals(9, health.damageModifiers.calculateModifier());
     }
 
     @Test
@@ -121,7 +121,7 @@ class HealthTest {
         key.addValue(5);
         key.addValue(-9);
         key.addValue(2);
-        assertEquals(0, health.calculateDamageModifier());
+        assertEquals(0, health.damageModifiers.calculateModifier());
     }
 
     @Test
@@ -133,13 +133,13 @@ class HealthTest {
         key.addValue(-5);
         key.addValue(-9);
         key.addValue(-2);
-        assertEquals(-9, health.calculateDamageModifier());
+        assertEquals(-9, health.damageModifiers.calculateModifier());
     }
 
     @Test
     void isEmpty() {
         Health health = new Health(10);
-        assertEquals(1, health.calculateDamageModifier());
+        assertEquals(1, health.damageModifiers.calculateModifier());
     }
 
     @Test
@@ -153,7 +153,7 @@ class HealthTest {
         key.addValue(-5);
         key.addValue(-9);
         key.addValue(-2);
-        assertEquals(1, health.calculateDamageModifier());
+        assertEquals(1, health.damageModifiers.calculateModifier());
     }
 
     @Test
@@ -167,7 +167,7 @@ class HealthTest {
         key.addValue(-5);
         key.addValue(-9);
         key.addValue(-2);
-        assertEquals(-2, health.calculateDamageModifier());
+        assertEquals(-2, health.damageModifiers.calculateModifier());
     }
 
     @Test
@@ -182,7 +182,7 @@ class HealthTest {
         key.addValue(-5);
         key.addValue(9);
         key.addValue(35);
-        assertEquals(2, health.calculateDamageModifier());
+        assertEquals(2, health.damageModifiers.calculateModifier());
     }
 
     @Test
@@ -197,7 +197,7 @@ class HealthTest {
         key.addValue(-5);
         key.removeValue(9);
         key.removeValue(-33);
-        assertEquals(-5, health.calculateDamageModifier());
+        assertEquals(-5, health.damageModifiers.calculateModifier());
     }
 
     @Test
@@ -217,7 +217,7 @@ class HealthTest {
         key.addValue(5);
         key.addValue(5);
         key.removeValue(5);
-        assertEquals(5, health.calculateDamageModifier());
+        assertEquals(5, health.damageModifiers.calculateModifier());
     }
 
     @Test
@@ -226,6 +226,6 @@ class HealthTest {
         Key<Integer> key = new Key<>();
         health.addModifier(key);
         key.addValue(1);
-        assertEquals(1, health.calculateDamageModifier());
+        assertEquals(1, health.damageModifiers.calculateModifier());
     }
 }

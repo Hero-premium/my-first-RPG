@@ -1,6 +1,6 @@
 package io.github.hero_premium.combat;
 
-import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.combat.CombatEntity;
 import org.jetbrains.annotations.NotNull;
 
 class AiBattleManager {

@@ -1,11 +1,10 @@
-package io.github.hero_premium.components.health;
+package io.github.hero_premium.components;
 
+import io.github.hero_premium.util.Attributes;
 import io.github.hero_premium.util.Util;
 import io.github.hero_premium.util.vault.Key;
-import io.github.hero_premium.util.vault.Vault;
 
 import java.util.HashSet;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 
@@ -28,7 +27,7 @@ public class Health {
      * <P>
      * anything below 0 means weaker damage.
      **/
-    private final Vault<Key<Integer>> damageModifiers = new Vault<>();
+    final Attributes damageModifiers = new Attributes();
 
     private int hp;
 
@@ -125,49 +124,10 @@ public class Health {
     /**
      * Removes the given modifier, keep in mind that it doesn't remove every modifier who shared this number
      * @param damageModifier the modifier to be removed
-     * @throws NoSuchElementException if the modifier is not there.
+     * @throws java.util.NoSuchElementException if the modifier is not there.
      */
-    public void removeModifier(Key<Integer> damageModifier) {
-        damageModifiers.remove(damageModifier);
-    }
-
-    /**
-     * 1 means you do normal damage.
-     * <P>
-     * 0 means all damage in negated.
-     * <P>
-     * anything above 1 deals extra damage.
-     * <P>
-     * anything below 0 means weaker damage.
-     * <P>
-     * make sure you use {@link Health#modifyHp(int)} for the modifiers to take effect.
-     * @return the current damage modifier.
-     */
-    public int calculateDamageModifier() {
-        if (damageModifiers.isEmpty()) return 1;
-
-        for (Key<Integer> damageModifier : damageModifiers) {
-            if (damageModifier.contains(0)) return 0;
-        }
-
-        int lowestDamageModifier = damageModifiers.stream()
-            .flatMap(Key::stream)
-            .mapToInt(Integer::intValue)
-            .filter(value -> value <= 0)
-            .min()
-            .orElse(0);
-
-
-        int highestDamageModifier = damageModifiers.stream()
-            .flatMap(Key::stream)
-            .mapToInt(Integer::intValue)
-            .filter(value -> value >= 1)
-            .max()
-            .orElse(0);
-
-
-        int damageModifierCalculated = highestDamageModifier + lowestDamageModifier;
-        return damageModifierCalculated == 0 ? 1 : damageModifierCalculated;
+    public boolean removeModifier(Key<Integer> damageModifier) {
+        return damageModifiers.remove(damageModifier);
     }
 
 
@@ -179,15 +139,7 @@ public class Health {
      * @param hp how much you want to add - pass a negative number to deal damage.
      */
     public final void modifyHp(int hp) {
-        int damageModifier = calculateDamageModifier();
-        if (damageModifier == 0) {
-            return;
-        } else if (damageModifier > 1) {
-            hp *= damageModifier;
-        } else {
-            hp /= Math.abs(damageModifier);
-        }
-        setHp(getHp() + hp);
+        setHp(getHp() + damageModifiers.applyModifierToValue(hp));
     }
 
     /**

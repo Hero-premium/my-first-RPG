@@ -5,8 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.Assets;
+import io.github.hero_premium.entities.combat.CombatEntity;
+import io.github.hero_premium.entities.combat.moves.MoveAttack;
 import io.github.hero_premium.entities.statuseffects.effects.Dodging;
 import io.github.hero_premium.util.Util;
+import org.jetbrains.annotations.NotNull;
 
 public class Hero extends CombatEntity {
     private static final Logger LOGGER = new Logger(Hero.class.getName(), Util.LOGGING_LEVEL);
@@ -17,20 +20,42 @@ public class Hero extends CombatEntity {
         isPlayable = true;
     }
 
-    private int dodge(CombatEntity enemy) {
-        LOGGER.info(getName() + " used dodge");
-        if (Util.RANDOM.nextBoolean()) statusEffectsManager.allEffects.get(Dodging.class).setIsActive();
-        return 1;
-    }
-
     private void heroAi() {
         // TODO give the hero wandering and movement ai ASAP
 
     }
 
-    private int kick(CombatEntity enemy) {
+    private @NotNull MoveAttack kick() {
         LOGGER.info(getName() + " used kick");
-        return Util.RANDOM.nextInt(2) + 3;
+        return new MoveAttack(Util.RANDOM.nextInt(2) + 3, getName() + " used kick");
+    }
+
+    private @NotNull MoveAttack dodge() {
+        LOGGER.info(getName() + " used dodge");
+        if (Util.RANDOM.nextBoolean()) statusEffectsManager.allEffects.get(Dodging.class).setIsActive();
+        return new MoveAttack(1, getName() + " used dodge");
+    }
+
+    private @NotNull MoveAttack swordSlash() {
+        LOGGER.info(getName() + " used swordSlash");
+        if (80 <= Util.RANDOM.nextInt(100)) {
+            LOGGER.info(getName() + " landed a critical hit with sword slash");
+            return new MoveAttack(8,
+                getName() + " used swordSlash" + "\n " + getName() + " landed a critical hit with sword slash");
+        }
+        int damage = Util.RANDOM.nextInt(3);
+        String isZero = "";
+        if (damage == 0) {
+            isZero = "\n" + getName() + " did 0 damage (aka missed)";
+            LOGGER.info(isZero);
+        }
+
+        return new MoveAttack(damage, getName() + " used swordSlash" + isZero);
+    }
+
+    private @NotNull MoveAttack superSecretMove() {
+        LOGGER.info("you used the super secret move, if this was a real build shame on you!");
+        return new MoveAttack(1000, "you used the super secret move, if this was a real build shame on you!");
     }
 
     @Override
@@ -41,28 +66,6 @@ public class Hero extends CombatEntity {
             heroAi();
         }
 
-    }
-
-    private int swordSlash(CombatEntity enemy) {
-        LOGGER.info(getName() + " used swordSlash");
-        int damage;
-        if (80 <= Util.RANDOM.nextInt(100)) {
-            damage = 8;
-            LOGGER.info(getName() + " landed a critical hit with sword slash");
-
-        } else {
-            damage = Util.RANDOM.nextInt(3);
-            if (damage == 0) {
-                LOGGER.info(getName() + " did " + damage + " (aka missed)");
-            }
-        }
-        return damage;
-    }
-
-    private int superSecretMove(CombatEntity entity) {
-        entity.health.modifyHp(-1000);
-        LOGGER.info("you used the super secret move, if this was a real build shame on you!");
-        return 1000;
     }
 
     private void takeControl() {
@@ -102,25 +105,26 @@ public class Hero extends CombatEntity {
      * @throws IllegalStateException if called when this entity isn't in a fighting state
      */
     @Override
-    public int takeTurn(CombatEntity entity) {
+    public @NotNull MoveAttack takeTurn(CombatEntity entity) {
         //TODO give hero his own AI instead of the testing GateKeeper's AI
         if (isPlayable)
             throw new IllegalStateException("cannot call AI based combat while the hero is fighting in GUI");
         int choice = Util.RANDOM.nextInt(3);
 
         return switch (choice) {
-            case 0 -> kick(entity);
-            case 1 -> swordSlash(entity);
-            case 2 -> dodge(entity);
-            default -> throw new AssertionError("the switch in entities.Hero takeTurn ran into an unexpected case");
+            case 0 -> kick();
+            case 1 -> swordSlash();
+            case 2 -> dodge();
+            default ->
+                throw new AssertionError("the switch in io.github.hero_premium.entities.Hero takeTurn ran into an unexpected case");
         };
     }
 
     @Override
     protected void registerMoves() {
-        movesManager.addNewMove("kick", this::kick);
-        movesManager.addNewMove("swordSlash", this::swordSlash);
-        movesManager.addNewMove("dodge", this::dodge);
-        movesManager.addNewMove("secret move", this::superSecretMove);
+        movesManager.addNewMove("kick", (CombatEntity _) -> kick());
+        movesManager.addNewMove("swordSlash", (CombatEntity _) -> swordSlash());
+        movesManager.addNewMove("dodge", (CombatEntity _) -> dodge());
+        movesManager.addNewMove("secret move", (CombatEntity _) -> superSecretMove());
     }
 }

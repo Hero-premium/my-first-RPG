@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import io.github.hero_premium.Assets;
-import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.combat.CombatEntity;
+import io.github.hero_premium.entities.combat.moves.Move;
 import io.github.hero_premium.storyutil.TextManager;
 import io.github.hero_premium.util.Util;
 import org.jetbrains.annotations.NotNull;
@@ -74,13 +75,13 @@ public final class BattleManager {
 
     @NotNull
     private TextButton[] generateButtons(Table buttonsTable, @NotNull CombatEntity entity) {
-        Array<CombatEntity.CombatMovesManager.Move> moves = entity.movesManager.getMoves();
+        Array<Move> moves = entity.getMoves();
         TextButton[] buttons = new TextButton[moves.size];
 
         for (int i = 0; i < moves.size; i++) {
-            CombatEntity.CombatMovesManager.Move move = moves.get(i);
+            Move move = moves.get(i);
             Runnable action = () -> {
-                BattleUtils.doAttacks(fighters, entity, move.move());
+                BattleUtils.doAttack(fighters, entity, move.move());
                 handleBattleState(BattleUtils.validateBattle(entity, fighters), entity);
             };
             buttons[i] = generateButton(buttonsTable, move.name(), action);
@@ -149,7 +150,7 @@ public final class BattleManager {
                 setButtonsVisibility(gameOverButtons, true);
             }
             case GOING -> {
-                BattleUtils.doAttacks(fighters, otherEntity, otherEntity::takeTurn);
+                BattleUtils.doAttack(fighters, otherEntity, otherEntity::takeTurn);
 
                 if (entity.health.getHp() <= 0) handleBattleState(BattleUtils.BattleState.LOST, entity);
             }

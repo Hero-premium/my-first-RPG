@@ -1,7 +1,7 @@
 package io.github.hero_premium.entities.statuseffects.effects;
 
 import com.badlogic.gdx.utils.Logger;
-import io.github.hero_premium.entities.CombatEntity;
+import io.github.hero_premium.entities.combat.CombatEntity;
 import io.github.hero_premium.entities.statuseffects.base.Effect;
 import io.github.hero_premium.util.Util;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +38,7 @@ public class Poison implements Effect {
     }
 
     /**
-     * poisonDuration cannot go under 0 or above 9, to prevent game breaking bugs'
+     * poisonDuration cannot go under 0.
      *
      * @return entity current poisonDuration
      */
